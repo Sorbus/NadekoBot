@@ -16,12 +16,24 @@
       }
     ],
     "Moves": [
-      "sonic boom",
-      "quick attack",
-      "doubleslap",
-      "headbutt"
+    	{
+    		"Name": "pound",
+    		"Type": "NORMAL"
+    	},
+    	{
+    		"Name": "scratch",
+    		"Type": "NORMAL"
+    	},
+    	{
+    		"Name": "body slam",
+    		"Type": "NORMAL"
+    	},
+    	{
+    		"Name": "hyper beam",
+    		"Type": "NORMAL"
+    	}
     ],
-    "Icon": "⭕️"
+    "Icon": ":white_circle:"
   },
   {
     "Name": "FIRE",
@@ -60,12 +72,24 @@
       }
     ],
     "Moves": [
-      "incinerate",
-      "ember",
-      "fire punch",
-      "fiery dance"
+    	{
+    		"Name": "fire fang",
+    		"Type": "FIRE"
+    	},
+    	{
+    		"Name": "ember",
+    		"Type": "FIRE"
+    	},
+    	{
+    		"Name": "heat wave",
+    		"Type": "FIRE"
+    	},
+    	{
+    		"Name": "fire blast",
+    		"Type": "FIRE"
+    	}
     ],
-    "Icon": "🔥"
+    "Icon": ":fire:"
   },
   {
     "Name": "WATER",
@@ -96,12 +120,24 @@
       }
     ],
     "Moves": [
-      "bubblebeam",
-      "dive",
-      "whirlpool",
-      "aqua tail"
+    	{
+    		"Name": "water gun",
+    		"Type": "WATER"
+    	},
+    	{
+    		"Name": "bubble",
+    		"Type": "WATER"
+    	},
+    	{
+    		"Name": "aqua tail",
+    		"Type": "WATER"
+    	},
+    	{
+    		"Name": "hydro pump",
+    		"Type": "WATER"
+    	}
     ],
-    "Icon": "💦"
+    "Icon": ":droplet:"
   },
   {
     "Name": "ELECTRIC",
@@ -132,12 +168,24 @@
       }
     ],
     "Moves": [
-      "nuzzle",
-      "thunderbolt",
-      "thundershock",
-      "discharge"
+    	{
+    		"Name": "spark",
+    		"Type": "ELECTRIC"
+    	},
+    	{
+    		"Name": "thunder punch",
+    		"Type": "ELECTRIC"
+    	},
+    	{
+    		"Name": "thunderbolt",
+    		"Type": "ELECTRIC"
+    	},
+    	{
+    		"Name": "thunder",
+    		"Type": "ELECTRIC"
+    	}
     ],
-    "Icon": "⚡"
+    "Icon": ":zap:"
   },
   {
     "Name": "GRASS",
@@ -184,12 +232,24 @@
       }
     ],
     "Moves": [
-      "absorb",
-      "mega drain",
-      "vine whip",
-      "razor leaf"
+    	{
+    		"Name": "vine whip",
+    		"Type": "GRASS"
+    	},
+    	{
+    		"Name": "razor leaf",
+    		"Type": "GRASS"
+    	},
+    	{
+    		"Name": "seed bomb",
+    		"Type": "GRASS"
+    	},
+    	{
+    		"Name": "solar beam",
+    		"Type": "GRASS"
+    	}
     ],
-    "Icon": "🍃"
+    "Icon": ":leaves:"
   },
   {
     "Name": "ICE",
@@ -228,12 +288,24 @@
       }
     ],
     "Moves": [
-      "ice ball",
-      "powder snow",
-      "avalanche",
-      "icy wind"
+    	{
+    		"Name": "frost breath",
+    		"Type": "ICE"
+    	},
+    	{
+    		"Name": "ice shard",
+    		"Type": "ICE"
+    	},
+    	{
+    		"Name": "ice beam",
+    		"Type": "ICE"
+    	},
+    	{
+    		"Name": "blizzard",
+    		"Type": "ICE"
+    	}
     ],
-    "Icon": "❄"
+    "Icon": ":snowflake:"
   },
   {
     "Name": "FIGHTING",
@@ -284,12 +356,24 @@
       }
     ],
     "Moves": [
-      "low kick",
-      "force palm",
-      "mach punch",
-      "double kick"
+    	{
+    		"Name": "mach punch",
+    		"Type": "FIGHTING"
+    	},
+    	{
+    		"Name": "karate chop",
+    		"Type": "FIGHTING"
+    	},
+    	{
+    		"Name": "seismic toss",
+    		"Type": "FIGHTING"
+    	},
+    	{
+    		"Name": "high jump kick",
+    		"Type": "FIGHTING"
+    	}
     ],
-    "Icon": "✊"
+    "Icon": ":fist:"
   },
   {
     "Name": "POISON",
@@ -324,12 +408,24 @@
       }
     ],
     "Moves": [
-      "acid",
-      "smog",
-      "sludge",
-      "poison jab"
+    	{
+    		"Name": "poison jab",
+    		"Type": "POISON"
+    	},
+    	{
+    		"Name": "gunk shot",
+    		"Type": "POISON"
+    	},
+    	{
+    		"Name": "sludge wave",
+    		"Type": "POISON"
+    	},
+    	{
+    		"Name": "acid",
+    		"Type": "POISON"
+    	}
     ],
-    "Icon": "☠"
+    "Icon": ":skull_crossbones:"
   },
   {
     "Name": "GROUND",
@@ -368,12 +464,24 @@
       }
     ],
     "Moves": [
-      "mud-slap",
-      "earthquake",
-      "bulldoze",
-      "dig"
+    	{
+    		"Name": "drill run",
+    		"Type": "GROUND"
+    	},
+    	{
+    		"Name": "dig",
+    		"Type": "GROUND"
+    	},
+    	{
+    		"Name": "mud-slap",
+    		"Type": "GROUND"
+    	},
+    	{
+    		"Name": "earthquake",
+    		"Type": "GROUND"
+    	}
     ],
-    "Icon": "🗻"
+    "Icon": ":mountain:"
   },
   {
     "Name": "FLYING",
@@ -404,12 +512,24 @@
       }
     ],
     "Moves": [
-      "peck",
-      "pluck",
-      "gust",
-      "aerial ace"
+    	{
+    		"Name": "wing attack",
+    		"Type": "FLYING"
+    	},
+    	{
+    		"Name": "peck",
+    		"Type": "FLYING"
+    	},
+    	{
+    		"Name": "aerial Ace",
+    		"Type": "FLYING"
+    	},
+    	{
+    		"Name": "hurricane",
+    		"Type": "FLYING"
+    	}
     ],
-    "Icon": "☁"
+    "Icon": ":cloud:"
   },
   {
     "Name": "PSYCHIC",
@@ -436,12 +556,24 @@
       }
     ],
     "Moves": [
-      "confusion",
-      "psybeam",
-      "psywave",
-      "heart stamp"
+    	{
+    		"Name": "psystrike",
+    		"Type": "PSYCHIC"
+    	},
+    	{
+    		"Name": "psychic",
+    		"Type": "PSYCHIC"
+    	},
+    	{
+    		"Name": "zen headbutt",
+    		"Type": "PSYCHIC"
+    	},
+    	{
+    		"Name": "psycho cut",
+    		"Type": "PSYCHIC"
+    	}
     ],
-    "Icon": "🔮"
+    "Icon": ":eye:"
   },
   {
     "Name": "BUG",
@@ -488,12 +620,24 @@
       }
     ],
     "Moves": [
-      "bug bite",
-      "infestation",
-      "x-scissors",
-      "twineedle"
+    	{
+    		"Name": "bug bite",
+    		"Type": "BUG"
+    	},
+    	{
+    		"Name": "fury cutter",
+    		"Type": "BUG"
+    	},
+    	{
+    		"Name": "bug buzz",
+    		"Type": "BUG"
+    	},
+    	{
+    		"Name": "megahorn",
+    		"Type": "BUG"
+    	}
     ],
-    "Icon": "🐛"
+    "Icon": ":bug:"
   },
   {
     "Name": "ROCK",
@@ -528,12 +672,24 @@
       }
     ],
     "Moves": [
-      "rock throw",
-      "rollout",
-      "rock tomb",
-      "rock blast"
+    	{
+    		"Name": "rock throw",
+    		"Type": "ROCK"
+    	},
+    	{
+    		"Name": "rock tomb",
+    		"Type": "ROCK"
+    	},
+    	{
+    		"Name": "rock slide",
+    		"Type": "ROCK"
+    	},
+    	{
+    		"Name": "stone edge",
+    		"Type": "ROCK"
+    	}
     ],
-    "Icon": "💎"
+    "Icon": ":gem:"
   },
   {
     "Name": "GHOST",
@@ -556,13 +712,24 @@
       }
     ],
     "Moves": [
-      "astonish",
-      "night shade",
-      "lick",
-      "ominous wind",
-      "hex"
+    	{
+    		"Name": "lick",
+    		"Type": "GHOST"
+    	},
+    	{
+    		"Name": "shadow claw",
+    		"Type": "GHOST"
+    	},
+    	{
+    		"Name": "ominous wind",
+    		"Type": "GHOST"
+    	},
+    	{
+    		"Name": "shadow ball",
+    		"Type": "GHOST"
+    	}
     ],
-    "Icon": "👻"
+    "Icon": ":ghost:"
   },
   {
     "Name": "DRAGON",
@@ -581,12 +748,24 @@
       }
     ],
     "Moves": [
-      "dragon tail",
-      "dragon rage",
-      "dragonbreath",
-      "twister"
+    	{
+    		"Name": "twister",
+    		"Type": "DRAGON"
+    	},
+    	{
+    		"Name": "dragon breath",
+    		"Type": "DRAGON"
+    	},
+    	{
+    		"Name": "dragon pulse",
+    		"Type": "DRAGON"
+    	},
+    	{
+    		"Name": "dragon claw",
+    		"Type": "DRAGON"
+    	}
     ],
-    "Icon": "🐉"
+    "Icon": ":dragon:"
   },
   {
     "Name": "DARK",
@@ -613,12 +792,24 @@
       }
     ],
     "Moves": [
-      "pursuit",
-      "assurance",
-      "bite",
-      "faint attack"
+    	{
+    		"Name": "bite",
+    		"Type": "DARK"
+    	},
+    	{
+    		"Name": "sucker punch",
+    		"Type": "DARK"
+    	},
+    	{
+    		"Name": "night slash",
+    		"Type": "DARK"
+    	},
+    	{
+    		"Name": "dark pulse",
+    		"Type": "DARK"
+    	}
     ],
-    "Icon": "✴"
+    "Icon": ":smiling_imp:"
   },
   {
     "Name": "STEEL",
@@ -653,12 +844,24 @@
       }
     ],
     "Moves": [
-      "bullet punch",
-      "metal burst",
-      "gear grind",
-      "magnet bomb"
+    	{
+    		"Name": "metal claw",
+    		"Type": "STEEL"
+    	},
+    	{
+    		"Name": "steel wing",
+    		"Type": "STEEL"
+    	},
+    	{
+    		"Name": "iron head",
+    		"Type": "STEEL"
+    	},
+    	{
+    		"Name": "flash cannon",
+    		"Type": "STEEL"
+    	}
     ],
-    "Icon": "🔩"
+    "Icon": ":gear:"
   },
   {
     "Name": "FAIRY",
@@ -689,11 +892,75 @@
       }
     ],
     "Moves": [
-      "fairy wind",
-      "draining kiss",
-      "dazzling gleam",
-      "play rough"
+    	{
+    		"Name": "dazzling gleam",
+    		"Type": "FAIRY"
+    	},
+    	{
+    		"Name": "draining kiss",
+    		"Type": "FAIRY"
+    	},
+    	{
+    		"Name": "play rough",
+    		"Type": "FAIRY"
+    	},
+    	{
+    		"Name": "moonblast",
+    		"Type": "FAIRY"
+    	}
     ],
-    "Icon": "💫"
+    "Icon": ":sparkles:"
+  },
+  {
+  	"Name": "DARK/FAIRY",
+  	"Multipliers": [
+  		{
+  			"Type": "POISON",
+  			"Multiplication": 0.5 
+  		},
+  		{
+  			"Type": "GHOST",
+  			"Multiplication": 2 
+  		},
+  		{
+  			"Type": "STEEL",
+  			"Multiplication": 0.5 
+  		},
+  		{
+  			"Type": "FIRE",
+  			"Multiplication": 0.5
+  		},
+  		{
+  			"Type": "PSYCHIC",
+  			"Multiplication": 2
+  		},
+  		{
+  			"Type": "DRAGON",
+  			"Multiplication": 2
+  		},
+  		{
+  			"Type": "FAIRY",
+  			"Multiplication": 0.5
+  		}
+  	],
+  	"Moves": [
+  		{
+    		"Name": "draining kiss",
+    		"Type": "FAIRY"
+    	},
+    	{
+    		"Name": "play rough",
+    		"Type": "FAIRY"
+    	},
+    	{
+    		"Name": "bite",
+    		"Type": "DARK"
+    	},
+    	{
+    		"Name": "night slash",
+    		"Type": "DARK"
+    	}
+  	],
+  	"Icon": ":sparkles:/:smiling_imp:"
   }
 ]

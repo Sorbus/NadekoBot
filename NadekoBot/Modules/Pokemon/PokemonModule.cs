@@ -23,13 +23,13 @@ namespace NadekoBot.Modules.Pokemon
 
         }
 
-        private int GetDamage(PokemonType usertype, PokemonType targetType)
+        private int GetDamage(PokemonType usertype, PokemonType targetType, string moveType)
         {
             var rng = new Random();
             int damage = rng.Next(40, 60);
             foreach (PokemonMultiplier Multiplier in usertype.Multipliers)
             {
-                if (Multiplier.Type == targetType.Name)
+                if (Multiplier.Type == moveType)
                 {
                     var multiplier = Multiplier.Multiplication;
                     damage = (int)(damage * multiplier);
@@ -137,7 +137,19 @@ namespace NadekoBot.Modules.Pokemon
                         PokemonType userType = GetPokeType(e.User.Id);
 
                         var enabledMoves = userType.Moves;
-                        if (!enabledMoves.Contains(move.ToLowerInvariant()))
+                        bool found = false;
+                        string moveType = "";
+
+                        foreach (PokemonMove m in enabledMoves)
+                        {
+                            if (m.Name.Contains(move.ToLowerInvariant()))
+                            {
+                                found = true;
+                                moveType = m.Type;
+                            }
+                        }
+
+                        if (!found)
                         {
                             await e.Channel.SendMessage($"{e.User.Mention} was not able to use **{move}**, use `{Prefix}ml` to see moves you can use").ConfigureAwait(false);
                             return;
@@ -146,7 +158,7 @@ namespace NadekoBot.Modules.Pokemon
                         //get target type
                         PokemonType targetType = GetPokeType(target.Id);
                         //generate damage
-                        int damage = GetDamage(userType, targetType);
+                        int damage = GetDamage(userType, targetType, moveType);
                         //apply damage to target
                         targetStats.Hp -= damage;
 
@@ -202,9 +214,9 @@ namespace NadekoBot.Modules.Pokemon
                         var userType = GetPokeType(e.User.Id);
                         var movesList = userType.Moves;
                         var str = $"**Moves for `{userType.Name}` type.**";
-                        foreach (string m in movesList)
+                        foreach (PokemonMove m in movesList)
                         {
-                            str += $"\n{userType.Icon}{m}";
+                            str += $"\n{userType.Icon}{m.Name}";
                         }
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
                     });
