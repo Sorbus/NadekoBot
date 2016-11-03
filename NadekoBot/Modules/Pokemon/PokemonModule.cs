@@ -28,9 +28,12 @@ namespace NadekoBot.Modules.Pokemon
             var rng = new Random();
             int damage = rng.Next(40, 60);
 
-            damage = (int)(damage * (targetType.Multipliers.Find(i => i.Type == move.Type.ToUpperInvariant()).Multiplication));
+            var multiplier = targetType.Multipliers.Find(i => i.Type == move.Type.ToUpperInvariant());
 
-
+            if (multiplier != null)
+            {
+                damage = (int)(damage * multiplier.Multiplication);
+            }
 
             return damage;
         }
