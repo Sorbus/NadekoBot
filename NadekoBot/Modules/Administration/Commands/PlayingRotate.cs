@@ -52,15 +52,25 @@ namespace NadekoBot.Modules.Administration.Commands
                     await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
                     try
                     {
-                        if (PlayingPlaceholders.Count == 0
-                            || NadekoBot.Config.RotatingStatuses.Count == 0
-                            || i >= NadekoBot.Config.RotatingStatuses.Count)
+                        if (!NadekoBot.Config.RandomRotationToggle)
                         {
-                            i = 0;
+                            if (PlayingPlaceholders.Count == 0
+                                || NadekoBot.Config.RotatingStatuses.Count == 0
+                                || i >= NadekoBot.Config.RotatingStatuses.Count)
+                            {
+                                i = 0;
+                            }
+                            status = NadekoBot.Config.RotatingStatuses[i];
+                            status = PlayingPlaceholders.Aggregate(status,
+                                (current, kvp) => current.Replace(kvp.Key, kvp.Value()));
                         }
-                        status = NadekoBot.Config.RotatingStatuses[i];
-                        status = PlayingPlaceholders.Aggregate(status,
-                            (current, kvp) => current.Replace(kvp.Key, kvp.Value()));
+                        else
+                        {
+                            var rng = new Random();
+                            status = NadekoBot.Config.RotatingStatuses[rng.Next(0, NadekoBot.Config.RotatingStatuses.Count)];
+                            status = PlayingPlaceholders.Aggregate(status,
+                                (current, kvp) => current.Replace(kvp.Key, kvp.Value()));
+                        }
                     }
                     finally { playingPlaceholderLock.Release(); }
                     if (string.IsNullOrWhiteSpace(status))
@@ -99,6 +109,34 @@ namespace NadekoBot.Modules.Administration.Commands
                 .AddCheck(SimpleCheckers.OwnerOnly())
                 .Do(DoFunc());
 
+            cgb.CreateCommand(Module.Prefix + "togglerandom")
+                .Alias(Module.Prefix + "torn")
+                .Description($"Toggles between random selection and sequential rotation when randomly rotating. **Bot Owner Only!** | `{Prefix}torn")
+                .AddCheck(SimpleCheckers.OwnerOnly())
+                .Do(async e =>
+                {
+                                //await playingPlaceholderLock.WaitAsync().ConfigureAwait(false);
+                                //try
+                                //{
+                                NadekoBot.Config.RandomRotationToggle = !NadekoBot.Config.RandomRotationToggle;
+                    await ConfigHandler.SaveConfig();
+                                //}
+                                //finally
+                                //{
+                                //    playingPlaceholderLock.Release();
+                                //}
+
+                                if (NadekoBot.Config.RandomRotationToggle)
+                    {
+                        await e.Channel.SendMessage("🆗 `Switched to random selection of playing strings.`").ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await e.Channel.SendMessage("🆗 `Switched to sequential rotation of playing strings.`").ConfigureAwait(false);
+                    }
+
+                });
+
             cgb.CreateCommand(Module.Prefix + "addplaying")
                 .Alias(Module.Prefix + "adpl")
                 .Description("Adds a specified string to the list of playing strings to rotate. " +
@@ -136,6 +174,11 @@ namespace NadekoBot.Modules.Administration.Commands
                     for (var i = 0; i < NadekoBot.Config.RotatingStatuses.Count; i++)
                     {
                         sb.AppendLine($"`{i + 1}.` {NadekoBot.Config.RotatingStatuses[i]}");
+                        if ((i > 0) & (i % 63 == 0) & (i + 1 != NadekoBot.Config.RotatingStatuses.Count))
+                        {
+                            await e.Channel.SendMessage(sb.ToString()).ConfigureAwait(false);
+                            sb = new StringBuilder();
+                        }
                     }
                     await e.Channel.SendMessage(sb.ToString()).ConfigureAwait(false);
                 });
