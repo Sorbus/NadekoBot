@@ -23,18 +23,14 @@ namespace NadekoBot.Modules.Pokemon
 
         }
 
-        private int GetDamage(PokemonType usertype, PokemonType targetType, string moveType)
+        private int GetDamage(PokemonType usertype, PokemonType targetType, PokemonMove move)
         {
             var rng = new Random();
             int damage = rng.Next(40, 60);
-            foreach (PokemonMultiplier Multiplier in usertype.Multipliers)
-            {
-                if (Multiplier.Type == moveType)
-                {
-                    var multiplier = Multiplier.Multiplication;
-                    damage = (int)(damage * multiplier);
-                }
-            }
+
+            damage = (int)(damage * (targetType.Multipliers.Find(i => i.Type == move.Type.ToUpperInvariant()).Multiplication));
+
+
 
             return damage;
         }
@@ -138,14 +134,14 @@ namespace NadekoBot.Modules.Pokemon
 
                         var enabledMoves = userType.Moves;
                         bool found = false;
-                        string moveType = "";
+                        PokemonMove moveObj = null;
 
                         foreach (PokemonMove m in enabledMoves)
                         {
                             if (m.Name.Contains(move.ToLowerInvariant()))
                             {
                                 found = true;
-                                moveType = m.Type;
+                                moveObj = m;
                             }
                         }
 
@@ -158,11 +154,11 @@ namespace NadekoBot.Modules.Pokemon
                         //get target type
                         PokemonType targetType = GetPokeType(target.Id);
                         //generate damage
-                        int damage = GetDamage(userType, targetType, moveType);
+                        int damage = GetDamage(userType, targetType, moveObj);
                         //apply damage to target
                         targetStats.Hp -= damage;
 
-                        var response = $"{e.User.Mention} used **{move}**{userType.Icon} on {target.Mention}{targetType.Icon} for **{damage}** damage";
+                        var response = $"{e.User.Mention}{userType.Icon} used **{move}**{NadekoBot.Config.PokemonTypes.Find(i => i.Name == moveObj.Type).Icon} on {target.Mention}{targetType.Icon} for **{damage}** damage";
 
                         //Damage type
                         if (damage < 40)
@@ -216,7 +212,7 @@ namespace NadekoBot.Modules.Pokemon
                         var str = $"**Moves for `{userType.Name}` type.**";
                         foreach (PokemonMove m in movesList)
                         {
-                            str += $"\n{userType.Icon}{m.Name}";
+                            str += $"\n{NadekoBot.Config.PokemonTypes.Find(i => i.Name == m.Type).Icon}{m.Name}";
                         }
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
                     });
