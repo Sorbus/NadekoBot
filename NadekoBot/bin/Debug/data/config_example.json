@@ -3,6 +3,7 @@
   "ForwardMessages": true,
   "ForwardToAllOwners": false,
   "IsRotatingStatus": false,
+  "RandomRotationToggle": true,
   "BufferSize": 4194304,
   "RaceAnimals": [
     "🐼",

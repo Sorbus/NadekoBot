@@ -112,6 +112,7 @@ namespace NadekoBot.Classes.JSONModels
         public bool ForwardMessages { get; set; } = true;
         public bool ForwardToAllOwners { get; set; } = false;
         public bool IsRotatingStatus { get; set; } = false;
+        public bool RandomRotationToggle { get; set; } = true;
         public int BufferSize { get; set; } = 4.MiB();
 
         public string[] RaceAnimals { get; internal set; } = {

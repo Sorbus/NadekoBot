@@ -79,6 +79,18 @@ namespace NadekoBot
 
             try
             {
+                Config.RotatingStatuses = JsonConvert.DeserializeObject<List<String>>(File.ReadAllText("data/statuses.json"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed loading configuration.");
+                Console.WriteLine(ex);
+                Console.ReadKey();
+                return;
+            }
+
+            try
+            {
                 //load credentials from credentials.json
                 Creds = JsonConvert.DeserializeObject<Credentials>(File.ReadAllText("credentials.json"));
             }
