@@ -6,6 +6,7 @@ using NadekoBot.DataModels;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Permissions.Classes;
 using System;
+using System.Text;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -303,7 +304,10 @@ namespace NadekoBot.Modules.Pokemon
                         var targetType = stringToPokemonType(targetTypeStr);
                         if (targetType == null)
                         {
-                            await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ", NadekoBot.Config.PokemonTypes.Select(t => t.Name.ToUpperInvariant()))).ConfigureAwait(false);
+
+                            await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ", 
+                                NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
+                                ).ConfigureAwait(false);
                             return;
                         }
                         if (targetType == GetPokeType(e.User.Id))
