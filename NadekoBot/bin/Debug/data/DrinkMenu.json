@@ -1,0 +1,26 @@
+[
+	{
+		"Name": "Mead",
+		"Cost": 1,
+		"Type": "Simple",
+		"Description": "A sweet honey wine",
+		"Flavor": "Your mead arrives in a outrageously ornamental stein, all bone and skulls and steel. It tastes sweet, almost cloying, but after a few moments the subtle flavor of honey comes through, flowers and nectar and freedom.",
+		"Image": ""
+	},
+	{
+		"Name": "Draft Lager",
+		"Cost": 1,
+		"Type": "Beer",
+		"Description": "I don't know, do you like beer?",
+		"Flavor": "It tastes like beer. I don't know, I can't stand the stuff. Give me a break.",
+		"Image": ""
+	},
+	{
+		"Name": "Sex on the Beach",
+		"Cost": 2,
+		"Type": "Cocktail",
+		"Description": "A provocatively named drink. Normally it's harmless and fruity, but our variant is a bit more fun.",
+		"Flavor": "The drink arrives in a tall highball glass, orange and inviting, condensation already beading its sides. It tastes of summer and the sun, of long days spent in idle relaxation. As you drink it the taste spreads throughout your body, leaving you relaxed and languid.",
+		"Image": ""
+	}
+]

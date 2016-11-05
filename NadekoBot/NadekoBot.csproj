@@ -136,7 +136,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Manatee.Trello, Version=0.0.0.0, Culture=neutral, PublicKeyToken=f502fcc17fc907d6, processorArchitecture=MSIL">
-      <HintPath>..\packages\Manatee.Trello.1.12.0\lib\net45\Manatee.Trello.dll</HintPath>
+      <HintPath>..\packages\Manatee.Trello.1.13.0\lib\net45\Manatee.Trello.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Manatee.Trello.ManateeJson, Version=0.0.0.0, Culture=neutral, PublicKeyToken=fbb8336f4f768592, processorArchitecture=MSIL">
@@ -215,6 +215,7 @@
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
+    <Compile Include="_Models\JSONModels\PokemonMove.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />
     <Compile Include="_Models\JSONModels\LocalizedStrings.cs" />
