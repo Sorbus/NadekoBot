@@ -55,6 +55,31 @@ namespace NadekoBot.Modules.Pokemon
             return NadekoBot.Config.PokemonTypes[remainder];
         }
 
+        private List<PokemonMove> GetUserMoves(ulong id)
+        {
+
+            var db = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+            Dictionary<long, string> setMoves = db.ToDictionary(x => x.UserId, y => y.moves);
+            if (setMoves.ContainsKey((long)id))
+            {
+                List<PokemonMove> lsmv = new List<PokemonMove>();
+
+                foreach (string m in setMoves[(long)id].Split(','))
+                {
+                    lsmv.Add(
+                        NadekoBot.Config.PokemonMoves.Find(t => t.Name == m)
+                        );
+                }
+                return lsmv;
+
+            }
+            int count = NadekoBot.Config.PokemonTypes.Count;
+
+            int remainder = Math.Abs((int)(id % (ulong)count));
+
+            return NadekoBot.Config.PokemonTypes[remainder].Moves;
+        }
+
 
 
         private PokemonType stringToPokemonType(string v)
@@ -134,25 +159,49 @@ namespace NadekoBot.Modules.Pokemon
                         }
 
                         //Check whether move can be used
-                        PokemonType userType = GetPokeType(e.User.Id);
 
-                        var enabledMoves = userType.Moves;
+                        var userType = GetPokeType(e.User.Id);
                         bool found = false;
                         PokemonMove moveObj = null;
 
-                        foreach (PokemonMove m in enabledMoves)
+                        var db = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+                        Dictionary<long, string> setMoves = db.ToDictionary(x => x.UserId, y => y.moves);
+
+                        if (setMoves.ContainsKey((long)e.User.Id))
                         {
-                            if (m.Name.Contains(move.ToLowerInvariant()))
+                            List<string> known_moves = new List<string>(setMoves[(long)e.User.Id].Split(','));
+
+                            if (known_moves.Contains(move.ToLowerInvariant()))
                             {
                                 found = true;
-                                moveObj = m;
+                                moveObj = NadekoBot.Config.PokemonMoves.Find(t => t.Name == move.ToLowerInvariant());
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage($"{e.User.Mention} was not able to use **{move}**, use `{Prefix}ml` to see moves you can use").ConfigureAwait(false);
+                                return;
                             }
                         }
-
-                        if (!found)
+                        else
                         {
-                            await e.Channel.SendMessage($"{e.User.Mention} was not able to use **{move}**, use `{Prefix}ml` to see moves you can use").ConfigureAwait(false);
-                            return;
+                            //PokemonType userType = GetPokeType(e.User.Id);
+
+                            var enabledMoves = userType.Moves;
+
+                            foreach (PokemonMove m in enabledMoves)
+                            {
+                                if (m.Name.Contains(move.ToLowerInvariant()))
+                                {
+                                    found = true;
+                                    moveObj = m;
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                await e.Channel.SendMessage($"{e.User.Mention} was not able to use **{move}**, use `{Prefix}ml` to see moves you can use").ConfigureAwait(false);
+                                return;
+                            }
                         }
 
                         //get target type
@@ -213,11 +262,13 @@ namespace NadekoBot.Modules.Pokemon
                     {
                         var userType = GetPokeType(e.User.Id);
                         var movesList = userType.Moves;
-                        var str = $"**Moves for `{userType.Name}` type.**";
-                        foreach (PokemonMove m in movesList)
+                        var str = $"**Moves which {e.User.Name} knows.**";
+
+                        foreach (PokemonMove m in GetUserMoves(e.User.Id))
                         {
                             str += $"\n{NadekoBot.Config.PokemonTypes.Find(i => i.Name == m.Type).Icon}{m.Name}";
                         }
+                        
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
                     });
 
@@ -304,15 +355,30 @@ namespace NadekoBot.Modules.Pokemon
                         var targetType = stringToPokemonType(targetTypeStr);
                         if (targetType == null)
                         {
+                            if (targetTypeStr.Contains("/"))
+                            {
+                                string[] switched = targetTypeStr.Split('/');
+                                targetType = stringToPokemonType(switched[1] + '/' + switched[0]);
 
-                            await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ", 
-                                NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
-                                ).ConfigureAwait(false);
-                            return;
+                                if (targetType == null)
+                                {
+                                    await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ",
+                                        NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
+                                        ).ConfigureAwait(false);
+                                    return;
+                                }
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ",
+                                    NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
+                                    ).ConfigureAwait(false);
+                                return;
+                            }
                         }
                         if (targetType == GetPokeType(e.User.Id))
                         {
-                            await e.Channel.SendMessage($"Your type is already {targetType.Name.ToLowerInvariant()}{targetType.Icon}").ConfigureAwait(false);
+                            await e.Channel.SendMessage($"Your type is already {targetType.Name.ToUpper()}{targetType.Icon}").ConfigureAwait(false);
                             return;
                         }
 
@@ -337,12 +403,153 @@ namespace NadekoBot.Modules.Pokemon
                         DbHandler.Instance.Connection.Insert(new UserPokeTypes
                         {
                             UserId = (long)e.User.Id,
-                            type = targetType.Name
+                            type = targetType.Name,
+                            moves = string.Join(",", targetType.Moves.Select(t => t.Name))
                         }, typeof(UserPokeTypes));
 
                         //Now for the response
 
                         await e.Channel.SendMessage($"Set type of {e.User.Mention} to {targetTypeStr}{targetType.Icon} for a {NadekoBot.Config.CurrencySign}").ConfigureAwait(false);
+                    });
+
+                cgb.CreateCommand(Prefix + "moves")
+                    .Description($"List all of the moves that you're able to learn | `{Prefix}moves`")
+                    .Do(async e =>
+                    {
+                        var userType = GetPokeType(e.User.Id);
+
+                        await e.Channel.SendMessage($"Sending you a list of learnable moves, {e.User.Mention}.").ConfigureAwait(false);
+
+                        var str = $"**Moves which {userType.Name}{userType.Icon} can learn.** [#] is cost.\n";
+                        int iter = 0;
+
+                        foreach (PokemonMove m in NadekoBot.Config.PokemonMoves.Where(t => userType.ValidMoves.Contains(t.Type)))
+                        {
+                            str += $"{NadekoBot.Config.PokemonTypes.Find(i => i.Name == m.Type).Icon}`{m.Name} [{m.Cost}]`";
+                            if (iter < 2)
+                            {
+                                str += new String(' ',2*(16 - m.Name.Length));
+                                iter += 1;
+                            }
+                            else
+                            {
+                                str += "\n";
+                                iter = 0;
+                                if(str.Length > 1800)
+                                {
+                                    await e.User.SendMessage(str).ConfigureAwait(false);
+                                    str = "";
+                                }
+                            }
+                        }
+                        await e.User.SendMessage(str).ConfigureAwait(false);
+                    });
+
+                cgb.CreateCommand(Prefix + "forget")
+                    .Description($"Forget a move so that you can learn a new one. | `{Prefix}forget \"karate chop\"`")
+                    .Parameter("move", ParameterType.Required)
+                    .Do(async e =>
+                    {
+                        var userType = GetPokeType(e.User.Id);
+
+                        var db = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+                        Dictionary<long, string> setMoves = db.ToDictionary(x => x.UserId, y => y.moves);
+
+                        if (setMoves.ContainsKey((long)e.User.Id))
+                        {
+                            List<string> new_moves = new List<string>(setMoves[(long)e.User.Id].Split(','));
+                            if (new_moves.Contains(e.GetArg("move")))
+                            {
+                                new_moves.Remove(e.GetArg("move"));
+
+                                var preTypes = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+                                Dictionary<long, int> Dict = preTypes.ToDictionary(x => x.UserId, y => y.Id.Value);
+                                if (Dict.ContainsKey((long)e.User.Id))
+                                {
+                                    //delete previous type
+                                    DbHandler.Instance.Delete<UserPokeTypes>(Dict[(long)e.User.Id]);
+                                }
+
+                                DbHandler.Instance.Connection.Insert(new UserPokeTypes
+                                {
+                                    UserId = (long)e.User.Id,
+                                    type = userType.Name,
+                                    moves = string.Join(",", new_moves)
+                                }, typeof(UserPokeTypes));
+
+                                await e.Channel.SendMessage($"You have forgotten how to {e.GetArg("move").ToLowerInvariant()}, {e.User.Mention}.");
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage($"You can't forget something that you don't know, {e.User.Mention}.");
+                            }
+                        }
+                    });
+
+                cgb.CreateCommand(Prefix + "learn")
+                    .Description($"Learn a new move, if you have an empty slot. | `{Prefix}learn \"lovely kiss\"`")
+                    .Parameter("move", ParameterType.Optional)
+                    .Do(async e =>
+                    {
+                        var userType = GetPokeType(e.User.Id);
+
+                        var db = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+                        Dictionary<long, string> setMoves = db.ToDictionary(x => x.UserId, y => y.moves);
+
+                        if (setMoves.ContainsKey((long)e.User.Id))
+                        {
+                            List<String> new_moves = setMoves[(long)e.User.Id].Split(',').ToList();
+                            if (new_moves.Contains(e.GetArg("move")))
+                            {
+                                await e.Channel.SendMessage($"You already know how to {e.GetArg("move").ToLowerInvariant()}, {e.User.Mention}.");
+                            }
+                            else if (new_moves.Count < 4)
+                            {
+                                PokemonMove target = NadekoBot.Config.PokemonMoves.Find(t => t.Name == e.GetArg("move"));
+                                if (userType.ValidMoves.Contains(target.Type))
+                                {
+                                    Console.WriteLine("hi");
+                                    //Payment~
+                                    var amount = (int)target.Cost;
+                                    var pts = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
+                                    if (pts < amount)
+                                    {
+                                        await e.Channel.SendMessage($"{e.User.Mention} you don't have enough {NadekoBot.Config.CurrencyName}s! \nYou still need {amount - pts} {NadekoBot.Config.CurrencySign} to be able to do this!").ConfigureAwait(false);
+                                        return;
+                                    }
+                                    await FlowersHandler.RemoveFlowers(e.User, $"learned how to **{target.Name}**", amount).ConfigureAwait(false);
+
+                                    new_moves.Add(target.Name);
+
+                                    var preTypes = DbHandler.Instance.GetAllRows<UserPokeTypes>();
+                                    Dictionary<long, int> Dict = preTypes.ToDictionary(x => x.UserId, y => y.Id.Value);
+                                    if (Dict.ContainsKey((long)e.User.Id))
+                                    {
+                                        //delete previous type
+                                        DbHandler.Instance.Delete<UserPokeTypes>(Dict[(long)e.User.Id]);
+                                    }
+
+                                    DbHandler.Instance.Connection.Insert(new UserPokeTypes
+                                    {
+                                        UserId = (long)e.User.Id,
+                                        type = userType.Name,
+                                        moves = string.Join(",", new_moves.ToArray())
+                                    }, typeof(UserPokeTypes));
+
+                                    await e.Channel.SendMessage($"You have learned how to {e.GetArg("move").ToLowerInvariant()}, {e.User.Mention}.");
+                                }
+                                else
+                                {
+                                    await e.Channel.SendMessage($"You can't learn {NadekoBot.Config.PokemonTypes.Find(i => i.Name == target.Type).Icon}{target.Type} moves, {e.User.Mention}. Use {Prefix}moves to check which ones you can.");
+                                }
+                                
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage($"You need to forget something first, {e.User.Mention}.");
+                            }
+                        }
+
                     });
             });
         }
