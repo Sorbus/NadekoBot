@@ -71,6 +71,7 @@ namespace NadekoBot
                 Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data/PokemonTypes.json"));
                 Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data/PokemonMoves.json"));
                 Config.DrinkMenu = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data/DrinkMenu.json"));
+                Config.ValidMorphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data/UserMorphs.json"));
             }
             catch (Exception ex)
             {

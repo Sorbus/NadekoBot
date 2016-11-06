@@ -19,7 +19,7 @@ namespace NadekoBot.Modules.Bartender
 
         public Random rng = new Random();
 
-        private ConcurrentDictionary<ulong, UserMorph> Morphs = new ConcurrentDictionary<ulong, UserMorph>();
+        // private ConcurrentDictionary<ulong, UserMorph> Morphs = new ConcurrentDictionary<ulong, UserMorph>();
 
         public override void Install(ModuleManager manager)
         {
@@ -208,10 +208,40 @@ namespace NadekoBot.Modules.Bartender
                     });
 
                 cgb.CreateCommand(Prefix + "change")
-                    .Description($"Change a user to a specific morph. **Bot owner only** | `{Prefix}set spider @somegal`")
+                    .Description($"Change a user to a specific morph. **Bot Owner Only!** | `{Prefix}set spider @somegal`")
+                    .Parameter("morph_type", ParameterType.Required)
+                    .Parameter("target", ParameterType.Unparsed)
+                    .AddCheck(SimpleCheckers.OwnerOnly())
                     .Do(async e =>
                     {
                         // see dbhandler.save
+
+                        var targetStr = e.GetArg("target")?.Trim();
+                        if (string.IsNullOrWhiteSpace(targetStr))
+                            return;
+                        var target = e.Server.FindUsers(targetStr).FirstOrDefault();
+                        if (target == null)
+                        {
+                            await e.Channel.SendMessage("No such person.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        //if (NadekoBot.Config.)
+
+                        try
+                        {
+                            var db = DbHandler.Instance.GetAllRows<UserMorph>();
+                            Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
+
+                            
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+
+                        await e.Channel.SendMessage($"{NadekoBot.Config.ValidMorphs[0].Code}").ConfigureAwait(false);
+                        await e.Channel.SendMessage($"All will be well when you wake, {target.Mention}. Relax and embrace the void.").ConfigureAwait(false);
                     });
             });     
         }
