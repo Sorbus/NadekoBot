@@ -24,6 +24,7 @@ using NadekoBot.Modules.Searches;
 using NadekoBot.Modules.Translator;
 using NadekoBot.Modules.Trello;
 using NadekoBot.Modules.Utility;
+using NadekoBot.Modules.Bartender;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -69,6 +70,7 @@ namespace NadekoBot
                 Config.Quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("data/quotes.json"));
                 Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data/PokemonTypes.json"));
                 Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data/PokemonMoves.json"));
+                Config.DrinkMenu = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data/DrinkMenu.json"));
             }
             catch (Exception ex)
             {
@@ -178,6 +180,7 @@ namespace NadekoBot
             modules.Add(new PokemonModule(), "Pokegame", ModuleFilter.None);
             modules.Add(new TranslatorModule(), "Translator", ModuleFilter.None);
             modules.Add(new CustomReactionsModule(), "Customreactions", ModuleFilter.None);
+            modules.Add(new Bartender(), "Bartender", ModuleFilter.None);
             if (!string.IsNullOrWhiteSpace(Creds.TrelloAppKey))
                 modules.Add(new TrelloModule(), "Trello", ModuleFilter.None);
 

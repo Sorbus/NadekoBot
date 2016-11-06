@@ -131,6 +131,7 @@ namespace NadekoBot.Classes.JSONModels
         [JsonIgnore]
         public List<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();
         public List<PokemonMove> PokemonMoves { get; set; } = new List<PokemonMove>();
+        public List<BarDrink> DrinkMenu { get; set; } = new List<BarDrink>();
 
         public string RemindMessageFormat { get; set; } = "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗";
 
@@ -222,6 +223,7 @@ Nadeko Support Server: <https://discord.gg/0ehQwTK2RBjAxzEY>";
         public string Programming { get; set; } = "%";
         public string Pokemon { get; set; } = ">";
         public string Utility { get; set; } = ".";
+        public string Bartender { get; set; } = "?";
     }
 
     public static class ConfigHandler

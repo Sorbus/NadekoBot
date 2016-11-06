@@ -189,6 +189,7 @@
     <Compile Include="Modules\Administration\Commands\CustomReactionsCommands.cs" />
     <Compile Include="Modules\Administration\Commands\SelfAssignedRolesCommand.cs" />
     <Compile Include="Modules\Administration\Commands\SelfCommands.cs" />
+    <Compile Include="Modules\Bartender\Bartender.cs" />
     <Compile Include="Modules\ClashOfClans\ClashOfClans.cs" />
     <Compile Include="Classes\DBHandler.cs" />
     <Compile Include="Classes\FlowersHandler.cs" />
@@ -214,7 +215,9 @@
     <Compile Include="SQLite.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
+    <Compile Include="_Models\DataModels\UserMorph.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
+    <Compile Include="_Models\JSONModels\BarDrink.cs" />
     <Compile Include="_Models\JSONModels\PokemonMove.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />
