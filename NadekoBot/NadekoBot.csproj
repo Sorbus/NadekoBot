@@ -215,6 +215,7 @@
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
+    <Compile Include="_Models\JSONModels\PlantModel.cs" />
     <Compile Include="_Models\JSONModels\PokemonMove.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />

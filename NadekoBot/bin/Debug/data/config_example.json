@@ -16,6 +16,7 @@
     "🦄"
   ],
   "PokemonMoves": [],
+  "Planters": null,
   "RemindMessageFormat": "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗",
   "CustomReactions": {
     "\\o\\": [

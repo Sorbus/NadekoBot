@@ -132,6 +132,8 @@ namespace NadekoBot.Classes.JSONModels
         public List<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();
         public List<PokemonMove> PokemonMoves { get; set; } = new List<PokemonMove>();
 
+        public PlantModel Planters { get; set; } = null;
+
         public string RemindMessageFormat { get; set; } = "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗";
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
