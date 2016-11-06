@@ -46,7 +46,7 @@ namespace NadekoBot.Modules.Games.Commands
                 if (config.GenerateCurrencyChannels.TryGetValue(e.Channel.Id, out cd))
                     if (!plantpickCooldowns.TryGetValue(e.Channel.Id, out lastSpawned) || (lastSpawned + new TimeSpan(0, cd, 0)) < now)
                     {
-                        var rnd = Math.Abs(rng.Next(0,101));
+                        var rnd = Math.Abs(rng.Next(0, 101));
                         if (rnd == 0)
                         {
                             var msgs = new[] { await e.Channel.SendFile(GetRandomCurrencyImagePath()), await e.Channel.SendMessage($"❗ A random {NadekoBot.Config.CurrencyName} appeared! Pick it up by typing `>pick`") };
@@ -60,12 +60,12 @@ namespace NadekoBot.Modules.Games.Commands
         //channelid/messageid pair
         ConcurrentDictionary<ulong, IEnumerable<Message>> plantedFlowerChannels = new ConcurrentDictionary<ulong, IEnumerable<Message>>();
 
-        private SemaphoreSlim locker = new SemaphoreSlim(1,1);
+        private SemaphoreSlim locker = new SemaphoreSlim(1, 1);
 
         internal override void Init(CommandGroupBuilder cgb)
         {
-            cgb.CreateCommand(Module.Prefix + "pick")
-                .Description($"Picks a flower planted in this channel. | `{Prefix}pick`")
+            cgb.CreateCommand(Module.Prefix + "sip")
+                .Description($"Sips a glass of beer poured down in this channel. | `{Prefix}sip`")
                 .Do(async e =>
                 {
                     IEnumerable<Message> msgs;
@@ -74,11 +74,11 @@ namespace NadekoBot.Modules.Games.Commands
                     if (!plantedFlowerChannels.TryRemove(e.Channel.Id, out msgs))
                         return;
 
-                    foreach(var msgToDelete in msgs)
+                    foreach (var msgToDelete in msgs)
                         await msgToDelete.Delete().ConfigureAwait(false);
 
-                    await FlowersHandler.AddFlowersAsync(e.User, "Picked a flower.", 1, true).ConfigureAwait(false);
-                    var msg = await e.Channel.SendMessage($"**{e.User.Name}** picked a {NadekoBot.Config.CurrencyName}!").ConfigureAwait(false);
+                    await FlowersHandler.AddFlowersAsync(e.User, ", here's your cold one!", 1, true).ConfigureAwait(false);
+                    var msg = await e.Channel.SendMessage($"**{e.User.Name}** , here's your cold one! Take that {NadekoBot.Config.CurrencyName}!").ConfigureAwait(false);
                     ThreadPool.QueueUserWorkItem(async (state) =>
                     {
                         try
@@ -90,8 +90,8 @@ namespace NadekoBot.Modules.Games.Commands
                     });
                 });
 
-            cgb.CreateCommand(Module.Prefix + "plant")
-                .Description($"Spend a flower to plant it in this channel. (If bot is restarted or crashes, flower will be lost) | `{Prefix}plant`")
+            cgb.CreateCommand(Module.Prefix + "pour")
+                .Description($"Spend a beer to pour it in this channel. (If bot is restarted or crashes, beers will be lost) | `{Prefix}pour`")
                 .Do(async e =>
                 {
                     await locker.WaitAsync().ConfigureAwait(false);
@@ -116,10 +116,10 @@ namespace NadekoBot.Modules.Games.Commands
                         else
                             msg = await e.Channel.SendFile(file).ConfigureAwait(false);
                         var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(NadekoBot.Config.CurrencyName[0]);
-                        var msg2 = await e.Channel.SendMessage($"Oh how Nice! **{e.User.Name}** planted {(vowelFirst ? "an" : "a")} {NadekoBot.Config.CurrencyName}. Pick it using {Module.Prefix}pick").ConfigureAwait(false);
+                        var msg2 = await e.Channel.SendMessage($"Oh how swell! **{e.User.Name}** poured {(vowelFirst ? "an" : "a")} {NadekoBot.Config.CurrencyName}. Pick it using {Module.Prefix}sip").ConfigureAwait(false);
                         plantedFlowerChannels.TryAdd(e.Channel.Id, new[] { msg, msg2 });
                     }
-                    finally { locker.Release();  }
+                    finally { locker.Release(); }
                 });
 
             cgb.CreateCommand(Prefix + "gencurrency")
