@@ -16,6 +16,8 @@ namespace NadekoBot.Modules.Pokemon
     class PokemonModule : DiscordModule
     {
         public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Pokemon;
+        public List<PokemonMove> PokemonMoves { get; } = NadekoBot.Config.PokemonMoves;
+        public List<PokemonType> PokemonTypes { get; } = NadekoBot.Config.PokemonTypes;
 
         private ConcurrentDictionary<ulong, PokeStats> Stats = new ConcurrentDictionary<ulong, PokeStats>();
 
@@ -48,11 +50,11 @@ namespace NadekoBot.Modules.Pokemon
             {
                 return stringToPokemonType(setTypes[(long)id]);
             }
-            int count = NadekoBot.Config.PokemonTypes.Count;
+            int count = PokemonTypes.Count;
 
             int remainder = Math.Abs((int)(id % (ulong)count));
 
-            return NadekoBot.Config.PokemonTypes[remainder];
+            return PokemonTypes[remainder];
         }
 
         private List<PokemonMove> GetUserMoves(ulong id)
@@ -67,17 +69,17 @@ namespace NadekoBot.Modules.Pokemon
                 foreach (string m in setMoves[(long)id].Split(','))
                 {
                     lsmv.Add(
-                        NadekoBot.Config.PokemonMoves.Find(t => t.Name == m)
+                        PokemonMoves.Find(t => t.Name == m)
                         );
                 }
                 return lsmv;
 
             }
-            int count = NadekoBot.Config.PokemonTypes.Count;
+            int count = PokemonTypes.Count;
 
             int remainder = Math.Abs((int)(id % (ulong)count));
 
-            return NadekoBot.Config.PokemonTypes[remainder].Moves;
+            return PokemonTypes[remainder].Moves;
         }
 
 
@@ -85,7 +87,7 @@ namespace NadekoBot.Modules.Pokemon
         private PokemonType stringToPokemonType(string v)
         {
             var str = v.ToUpperInvariant();
-            var list = NadekoBot.Config.PokemonTypes;
+            var list = PokemonTypes;
             foreach (PokemonType p in list)
             {
                 if (str == p.Name)
@@ -174,7 +176,7 @@ namespace NadekoBot.Modules.Pokemon
                             if (known_moves.Contains(move.ToLowerInvariant()))
                             {
                                 found = true;
-                                moveObj = NadekoBot.Config.PokemonMoves.Find(t => t.Name == move.ToLowerInvariant());
+                                moveObj = PokemonMoves.Find(t => t.Name == move.ToLowerInvariant());
                             }
                             else
                             {
@@ -211,7 +213,7 @@ namespace NadekoBot.Modules.Pokemon
                         //apply damage to target
                         targetStats.Hp -= damage;
 
-                        var response = $"{e.User.Mention}{userType.Icon} used **{move}**{NadekoBot.Config.PokemonTypes.Find(i => i.Name == moveObj.Type).Icon} on {target.Mention}{targetType.Icon} for **{damage}** damage";
+                        var response = $"{e.User.Mention}{userType.Icon} used **{move}**{PokemonTypes.Find(i => i.Name == moveObj.Type).Icon} on {target.Mention}{targetType.Icon} for **{damage}** damage";
 
                         //Damage type
                         if (damage < 40)
@@ -266,7 +268,7 @@ namespace NadekoBot.Modules.Pokemon
 
                         foreach (PokemonMove m in GetUserMoves(e.User.Id))
                         {
-                            str += $"\n{NadekoBot.Config.PokemonTypes.Find(i => i.Name == m.Type).Icon}{m.Name}";
+                            str += $"\n{PokemonTypes.Find(i => i.Name == m.Type).Icon}{m.Name}";
                         }
                         
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
@@ -363,7 +365,7 @@ namespace NadekoBot.Modules.Pokemon
                                 if (targetType == null)
                                 {
                                     await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ",
-                                        NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
+                                        PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
                                         ).ConfigureAwait(false);
                                     return;
                                 }
@@ -371,7 +373,7 @@ namespace NadekoBot.Modules.Pokemon
                             else
                             {
                                 await e.Channel.SendMessage("Invalid type specified. Type must be one of:\n" + string.Join(", ",
-                                    NadekoBot.Config.PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
+                                    PokemonTypes.Where(t => !t.Name.Contains("/")).Select(t => t.Name.ToUpperInvariant()))
                                     ).ConfigureAwait(false);
                                 return;
                             }
@@ -423,9 +425,9 @@ namespace NadekoBot.Modules.Pokemon
                         var str = $"**Moves which {userType.Name}{userType.Icon} can learn.** [#] is cost.\n";
                         int iter = 0;
 
-                        foreach (PokemonMove m in NadekoBot.Config.PokemonMoves.Where(t => userType.ValidMoves.Contains(t.Type)))
+                        foreach (PokemonMove m in PokemonMoves.Where(t => userType.ValidMoves.Contains(t.Type)))
                         {
-                            str += $"{NadekoBot.Config.PokemonTypes.Find(i => i.Name == m.Type).Icon}`{m.Name} [{m.Cost}]`";
+                            str += $"{PokemonTypes.Find(i => i.Name == m.Type).Icon}`{m.Name} [{m.Cost}]`";
                             if (iter < 2)
                             {
                                 str += new String(' ',2*(16 - m.Name.Length));
@@ -505,7 +507,7 @@ namespace NadekoBot.Modules.Pokemon
                             }
                             else if (new_moves.Count < 4)
                             {
-                                PokemonMove target = NadekoBot.Config.PokemonMoves.Find(t => t.Name == e.GetArg("move"));
+                                PokemonMove target = PokemonMoves.Find(t => t.Name == e.GetArg("move"));
                                 if (userType.ValidMoves.Contains(target.Type))
                                 {
                                     Console.WriteLine("hi");
@@ -540,7 +542,7 @@ namespace NadekoBot.Modules.Pokemon
                                 }
                                 else
                                 {
-                                    await e.Channel.SendMessage($"You can't learn {NadekoBot.Config.PokemonTypes.Find(i => i.Name == target.Type).Icon}{target.Type} moves, {e.User.Mention}. Use {Prefix}moves to check which ones you can.");
+                                    await e.Channel.SendMessage($"You can't learn {PokemonTypes.Find(i => i.Name == target.Type).Icon}{target.Type} moves, {e.User.Mention}. Use {Prefix}moves to check which ones you can.");
                                 }
                                 
                             }
