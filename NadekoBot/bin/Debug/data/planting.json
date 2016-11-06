@@ -1,2 +1,8 @@
 {
+	"PickCommand": "pick",
+	"PickMessage": "Picked a flower",
+	"PlantCommand": "plant",
+	"PlantMessage": "Oh how nice!",
+	"PickPast": "picked",
+	"PlantPast": "planted"
 }
