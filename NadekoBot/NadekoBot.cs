@@ -53,9 +53,9 @@ namespace NadekoBot
 
             try
             {
-                File.WriteAllText("data" + System.IO.Path.PathSeparator + "config_example.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
-                if (!File.Exists("data" + System.IO.Path.PathSeparator + "config.json"))
-                    File.Copy("data" + System.IO.Path.PathSeparator + "config_example.json", "data/config.json");
+                File.WriteAllText("data" + System.IO.Path.DirectorySeparatorChar + "config_example.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
+                if (!File.Exists("data" + System.IO.Path.DirectorySeparatorChar + "config.json"))
+                    File.Copy("data" + System.IO.Path.DirectorySeparatorChar + "config_example.json", "data/config.json");
                 File.WriteAllText("credentials_example.json", JsonConvert.SerializeObject(new Credentials(), Formatting.Indented));
 
             }

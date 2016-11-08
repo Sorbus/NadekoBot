@@ -8,8 +8,9 @@ namespace NadekoBot.Classes.JSONModels
 {
     public class BarDrink
     {
-        public BarDrink(string n, int c, string t, string d, string f, string i, bool s, bool w, string[] h)
+        public BarDrink(string p, string n, int c, string t, string d, string f, string i, bool s, bool w, string[] h)
         {
+            Code = p;
             Name = n;
             Cost = c;
             Type = t;
@@ -20,6 +21,7 @@ namespace NadekoBot.Classes.JSONModels
             Transformative = w;
             HairMod = h;
         }
+        public string Code { get; set; }
         public string Name { get; set; }
         public int Cost { get; set; }
         public string Type { get; set; }

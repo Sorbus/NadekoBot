@@ -58,5 +58,7 @@ namespace NadekoBot.DataModels
         public int EarCount { get; set; }
         public int TongueLength { get; set; }
         public int EyeCount { get; set; }
+
+        public int MorphCount { get; set; }
     }
 }

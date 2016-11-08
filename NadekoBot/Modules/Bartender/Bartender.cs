@@ -22,9 +22,11 @@ namespace NadekoBot.Modules.Bartender
         // private ConcurrentDictionary<ulong, UserMorph> Morphs = new ConcurrentDictionary<ulong, UserMorph>();
 
         private List<TFMorph> Valid = NadekoBot.Config.ValidMorphs;
+        private List<BarDrink> Drinks = NadekoBot.Config.DrinkMenu;
         private String[] PronounObjective = new String[3]  { "their", "her", "his" };
         private String[] PronounHas = new String[3]  { "have", "has", "has" };
         private String[] Pronoun = new String[3] { "they", "she", "he" };
+        private String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
 
         // from https://stackoverflow.com/a/2730393
         public static string NumberToWords(int number)
@@ -161,7 +163,7 @@ namespace NadekoBot.Modules.Bartender
                 commands.ForEach(cmd => cmd.Init(cgb));
 
                 cgb.CreateCommand(Prefix + "menu")
-                    .Description($"List items in one of the drink menu's categories. | `{Prefix}move beer`")
+                    .Description($"List items in one of the drink menu's categories. | `{Prefix}menu \"beer\"`")
                     .Parameter("move", ParameterType.Required)
                     .Parameter("category", ParameterType.Unparsed)
                     .Do(async e =>
@@ -180,7 +182,53 @@ namespace NadekoBot.Modules.Bartender
                     .Parameter("drink", ParameterType.Required)
                     .Do(async e =>
                     {
-                        Console.WriteLine("1");
+                        BarDrink drink;
+
+                        drink = Drinks.Find(t => t.Code.Equals(e.GetArg("drink").ToLowerInvariant()));
+
+                        var db = DbHandler.Instance.GetAllRows<UserMorph>();
+                        Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
+
+                        if (drink == null)
+                        {
+                            await e.Channel.SendMessage($"Sorry, {e.User.Mention}, that's not on the menu.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        if (drink.Transformative == true)
+                        {
+                            await e.Channel.SendMessage($"Sorry, {e.User.Mention}, but you can't buy that for someone else.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        //Payment~
+                        var amount = drink.Cost;
+                        var pts = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
+                        if (pts < amount)
+                        {
+                            await e.Channel.SendMessage($"{e.User.Mention} you don't have enough {NadekoBot.Config.CurrencyName}s! \nYou still need {amount - pts} {NadekoBot.Config.CurrencySign} to be able to do this!").ConfigureAwait(false);
+                            return;
+                        }
+                        await FlowersHandler.RemoveFlowers(e.User, $"bought a {drink.Code}", amount).ConfigureAwait(false);
+
+                        await e.User.SendMessage($"{drink.Flavor}").ConfigureAwait(false);
+
+                        if (morphs.ContainsKey((long)e.User.Id))
+                        {
+                            UserMorph morph = morphs[(long)e.User.Id];
+                            if (drink.Name != null)
+                            { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
+                            else
+                            { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
+                        }
+                        else
+                        {
+                            if (drink.Name != null)
+                            { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[0]} {(vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
+                            else
+                            { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[0]} {(vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
+                        }
+
                     });
 
                 cgb.CreateCommand(Prefix + "buy")
@@ -189,7 +237,46 @@ namespace NadekoBot.Modules.Bartender
                     .Parameter("target", ParameterType.Unparsed)
                     .Do(async e =>
                     {
-                        Console.WriteLine("2");
+                        var targetStr = e.GetArg("target")?.Trim();
+                        if (string.IsNullOrWhiteSpace(targetStr))
+                            return;
+                        var target = e.Server.FindUsers(targetStr).FirstOrDefault();
+                        if (target == null)
+                        {
+                            await e.Channel.SendMessage("No such person.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        BarDrink drink;
+
+                        drink = Drinks.Find(t => t.Code.Equals(e.GetArg("drink").ToLowerInvariant()));
+
+                        if (drink == null)
+                        {
+                            await e.Channel.SendMessage($"Sorry, {e.User.Mention}, that's not on the menu.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        if (drink.Transformative == true)
+                        {
+                            await e.Channel.SendMessage($"Sorry, {e.User.Mention}, but you can't buy that for someone else.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        //Payment~
+                        var amount = drink.Cost;
+                        var pts = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
+                        if (pts < amount)
+                        {
+                            await e.Channel.SendMessage($"{e.User.Mention} you don't have enough {NadekoBot.Config.CurrencyName}s! \nYou still need {amount - pts} {NadekoBot.Config.CurrencySign} to be able to do this!").ConfigureAwait(false);
+                            return;
+                        }
+                        await FlowersHandler.RemoveFlowers(e.User, $"bought {target.Name} a {drink.Code}", amount).ConfigureAwait(false);
+
+                        if (drink.Name != null)
+                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
+                        else
+                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
                     });
 
                 cgb.CreateCommand(Prefix + "donate")
@@ -555,6 +642,7 @@ namespace NadekoBot.Modules.Bartender
                                     EarCount = 2,
                                     TongueLength = rng.Next(3, 5),
                                     EyeCount = 2,
+                                    MorphCount = 0
 
                                 }, typeof(UserMorph));
 
@@ -642,6 +730,7 @@ namespace NadekoBot.Modules.Bartender
                                 morph.EyeCount = target_morph.MaxEyes;
                                 morph.FeetType = target_key;
                                 morph.HandType = target_key;
+                                morph.MorphCount = +1;
 
                                 DbHandler.Instance.Save(morph);
                             }
@@ -686,7 +775,8 @@ namespace NadekoBot.Modules.Bartender
                                     TongueLength = target_morph.MaxTongue,
                                     EyeCount = target_morph.MaxEyes,
                                     FeetType = target_key,
-                                    HandType = target_key
+                                    HandType = target_key,
+                                    MorphCount = 0
                                 }, typeof(UserMorph));
                             }
                         }

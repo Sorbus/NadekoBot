@@ -36,7 +36,8 @@
 		"LegPosition": null,
 		"EarPosition": "on either side of",
 		"WingPosition": ["sprouting from ","shoulderblades"],
-		"TailPosition": ["extending from the base of ", "spine"]
+		"TailPosition": ["extending from the base of ", "spine"],
+		"Permanence": 0
 	},
 	{
 		"Code": "fox"
@@ -99,7 +100,8 @@
 		"LegPosition": ["extending from ","arachnid body"],
 		"EarPosition": "on either side of",
 		"WingPosition": ["sprouting from ","shoulderblades"],
-		"TailPosition": null
+		"TailPosition": null,
+		"Permanence": 50
 	},
 	{
 		"Code": "sheep"
@@ -141,7 +143,11 @@
 		"LegPosition": null,
 		"EarPosition": "on either side of",
 		"WingPosition": ["sprouting from ","shoulderblades"],
-		"TailPosition": ["extending from the base of ", "spine"]
+		"TailPosition": ["extending from the base of ", "spine"],
+		"Permanence": 20
+	},
+	{
+		"Code": "centaur"
 	},
 	{
 		"Code": "none",
@@ -178,7 +184,7 @@
 		"WingSize": [],
 		"TailSize": [],
 		"LegPosition": [],
-		"EarPosition": ""
+		"EarPosition": "",
+		"Permanence": 0
 	}
-
 ]

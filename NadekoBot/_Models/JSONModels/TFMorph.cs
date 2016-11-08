@@ -12,7 +12,8 @@ namespace NadekoBot.Classes.JSONModels
             string cod, string nam, string bodt, string bodu, string bodl, string legt, string armt, string fact, string[] eyec,
             string hait, string[] haic, string eart, string tont, string teet, string skit, string[] skio, string skic, string feet,
             string hant, string hanm, string feem, string wint, string tait, int mwin, int mtai, int meye, int mhai, int mear,
-            int mton, int marm, int mleg, string[] wins, string[] tais, string[] legp, string earp, string[] winp, string[] taip
+            int mton, int marm, int mleg, string[] wins, string[] tais, string[] legp, string earp, string[] winp, string[] taip,
+            int perm
             )
         {
             Code = cod;
@@ -53,6 +54,8 @@ namespace NadekoBot.Classes.JSONModels
             MaxTongue = mton;
             MaxArms = marm;
             MaxLegs = mleg;
+
+            Permanence = perm;
         }
         public String Code { get; set; }
         public String Name { get; set; }
@@ -92,5 +95,7 @@ namespace NadekoBot.Classes.JSONModels
         public int MaxTongue { get; set; }
         public int MaxArms { get; set; }
         public int MaxLegs { get; set; }
+
+        public int Permanence { get; set; }
     }
 }

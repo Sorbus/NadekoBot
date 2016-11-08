@@ -393,6 +393,7 @@ namespace NadekoBot.Modules.Pokemon
                             return;
                         }
                         await FlowersHandler.RemoveFlowers(e.User, $"set usertype to {targetTypeStr}", amount).ConfigureAwait(false);
+
                         //Actually changing the type here
                         var preTypes = DbHandler.Instance.GetAllRows<UserPokeTypes>();
                         Dictionary<long, int> Dict = preTypes.ToDictionary(x => x.UserId, y => y.Id.Value);
