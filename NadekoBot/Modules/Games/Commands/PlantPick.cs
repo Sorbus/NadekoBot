@@ -150,7 +150,7 @@ namespace NadekoBot.Modules.Games.Commands
         }
 
         private string GetRandomCurrencyImagePath() =>
-            Directory.GetFiles("data/currency_images").OrderBy(s => rng.Next()).FirstOrDefault();
+            Directory.GetFiles("data" + System.IO.Path.DirectorySeparatorChar + "currency_images").OrderBy(s => rng.Next()).FirstOrDefault();
 
         int GetRandomNumber()
         {

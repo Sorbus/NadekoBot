@@ -14,8 +14,8 @@ namespace NadekoBot.Modules.Searches.Commands
         public PokemonSearchCommands(DiscordModule module) : base(module)
         {
 
-            pokemons = JsonConvert.DeserializeObject<Dictionary<string, SearchPokemon>>(File.ReadAllText("data/pokemon/pokemon_list.json"));
-            pokemonAbilities = JsonConvert.DeserializeObject<Dictionary<string, SearchPokemonAbility>>(File.ReadAllText("data/pokemon/pokemon_abilities.json"));
+            pokemons = JsonConvert.DeserializeObject<Dictionary<string, SearchPokemon>>(File.ReadAllText("data/pokemon" + System.IO.Path.DirectorySeparatorChar + "pokemon_list.json"));
+            pokemonAbilities = JsonConvert.DeserializeObject<Dictionary<string, SearchPokemonAbility>>(File.ReadAllText("data/pokemon" + System.IO.Path.DirectorySeparatorChar + "pokemon_abilities.json"));
         }
 
         internal override void Init(CommandGroupBuilder cgb)

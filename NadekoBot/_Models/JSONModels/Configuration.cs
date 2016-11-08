@@ -235,7 +235,7 @@ Nadeko Support Server: <https://discord.gg/0ehQwTK2RBjAxzEY>";
             await configLock.WaitAsync();
             try
             {
-                File.WriteAllText("data/config.json", JsonConvert.SerializeObject(NadekoBot.Config, Formatting.Indented));
+                File.WriteAllText("data" + System.IO.Path.DirectorySeparatorChar + "config.json", JsonConvert.SerializeObject(NadekoBot.Config, Formatting.Indented));
             }
             finally
             {

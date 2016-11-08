@@ -11,7 +11,7 @@ namespace NadekoBot.Classes
     {
         public static DbHandler Instance { get; } = new DbHandler();
 
-        private string FilePath { get; } = "data/nadekobot.sqlite";
+        private string FilePath { get; } = "data" + System.IO.Path.DirectorySeparatorChar + "nadekobot.sqlite";
 
         public SQLiteConnection Connection { get; set; }
 

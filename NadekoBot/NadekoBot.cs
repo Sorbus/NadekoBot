@@ -53,9 +53,9 @@ namespace NadekoBot
 
             try
             {
-                File.WriteAllText("data/config_example.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
-                if (!File.Exists("data/config.json"))
-                    File.Copy("data/config_example.json", "data/config.json");
+                File.WriteAllText("data" + System.IO.Path.PathSeparator + "config_example.json", JsonConvert.SerializeObject(new Configuration(), Formatting.Indented));
+                if (!File.Exists("data" + System.IO.Path.PathSeparator + "config.json"))
+                    File.Copy("data" + System.IO.Path.PathSeparator + "config_example.json", "data/config.json");
                 File.WriteAllText("credentials_example.json", JsonConvert.SerializeObject(new Credentials(), Formatting.Indented));
 
             }
@@ -66,12 +66,12 @@ namespace NadekoBot
 
             try
             {
-                Config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("data/config.json"));
-                Config.Quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("data/quotes.json"));
-                Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data/PokemonTypes.json"));
-                Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data/PokemonMoves.json"));
-                Config.DrinkMenu = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data/DrinkMenu.json"));
-                Config.ValidMorphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data/UserMorphs.json"));
+                Config = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "config.json"));
+                Config.Quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "quotes.json"));
+                Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonTypes.json"));
+                Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonMoves.json"));
+                Config.DrinkMenu = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "DrinkMenu.json"));
+                Config.ValidMorphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "UserMorphs.json"));
             }
             catch (Exception ex)
             {

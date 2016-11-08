@@ -27,7 +27,7 @@ namespace NadekoBot.Modules.Searches.Commands
                 {
                     if (!jokes.Any())
                     {
-                        jokes = JsonConvert.DeserializeObject<List<WoWJoke>>(File.ReadAllText("data/wowjokes.json"));
+                        jokes = JsonConvert.DeserializeObject<List<WoWJoke>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "wowjokes.json"));
                     }
                     await e.Channel.SendMessage(jokes[new Random().Next(0, jokes.Count)].ToString());
                 });

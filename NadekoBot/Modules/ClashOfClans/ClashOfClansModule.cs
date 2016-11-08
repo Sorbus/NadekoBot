@@ -27,11 +27,11 @@ namespace NadekoBot.Modules.ClashOfClans
             {
                 Task.Run(async () =>
             {
-                if (File.Exists("data/clashofclans/wars.json"))
+                if (File.Exists("data" + System.IO.Path.DirectorySeparatorChar + "clashofclans" + System.IO.Path.DirectorySeparatorChar + "wars.json"))
                 {
                     try
                     {
-                        var content = File.ReadAllText("data/clashofclans/wars.json");
+                        var content = File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "clashofclans" + System.IO.Path.DirectorySeparatorChar + "wars.json");
 
                         var dict = JsonConvert.DeserializeObject<Dictionary<ulong, List<ClashWar>>>(content);
 

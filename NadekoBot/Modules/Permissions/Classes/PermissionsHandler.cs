@@ -25,8 +25,8 @@ namespace NadekoBot.Modules.Permissions.Classes
         public static Task Initialize() => Task.Run(() =>
         {
             Console.WriteLine("Reading from the permission files.");
-            Directory.CreateDirectory("data/permissions");
-            foreach (var file in Directory.EnumerateFiles("data/permissions/"))
+            Directory.CreateDirectory("data" + System.IO.Path.DirectorySeparatorChar + "permissions");
+            foreach (var file in Directory.EnumerateFiles("data" + System.IO.Path.DirectorySeparatorChar + "permissions" + System.IO.Path.DirectorySeparatorChar))
             {
                 try
                 {

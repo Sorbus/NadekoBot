@@ -30,7 +30,7 @@ namespace NadekoBot.Modules.Games.Commands.Trivia
 
         internal void Reload()
         {
-            var arr = JArray.Parse(File.ReadAllText("data/questions.json"));
+            var arr = JArray.Parse(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "questions.json"));
 
             foreach (var item in arr)
             {

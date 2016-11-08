@@ -17,8 +17,8 @@ namespace NadekoBot.Classes.JSONModels {
         };
 
         public static string[] GetAvailableLocales() {
-            Directory.CreateDirectory("data/locales");
-            return Directory.GetFiles("data/locales");
+            Directory.CreateDirectory("data" + System.IO.Path.DirectorySeparatorChar + "locales");
+            return Directory.GetFiles("data" + System.IO.Path.DirectorySeparatorChar + "locales");
         }
 
         //public static void HandleLocalization() {

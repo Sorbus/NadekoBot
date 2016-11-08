@@ -714,7 +714,7 @@ namespace NadekoBot.Modules.Administration
                         await e.Channel.SendMessage("New avatar set.").ConfigureAwait(false);
 
                         // Save the image to disk.
-                        image.Save("data/avatar.png", System.Drawing.Imaging.ImageFormat.Png);
+                        image.Save("data" + System.IO.Path.DirectorySeparatorChar + "avatar.png", System.Drawing.Imaging.ImageFormat.Png);
                     });
 
                 cgb.CreateCommand(Prefix + "setgame")
