@@ -67,7 +67,7 @@ namespace NadekoBot.Modules.Bartender
 
         private Boolean isBaseline(UserMorph m)
         {
-            if (0 != m.BodyType + m.UpperType + m.LowerType + m.LegType + m.ArmType + m.FaceType +
+            if (0 != m.UpperType + m.LowerType + m.LegType + m.ArmType + m.FaceType +
                 m.HairType + m.EarType + m.TongueType + m.TeethType + m.SkinType + m.SkinOrnamentsMorph +
                 m.ArmCovering + m.LegCovering + m.TorsoCovering + m.HandModification + m.FeetModification +
                 m.HandType + m.FeetType + m.WingType + m.TailType)
@@ -83,11 +83,44 @@ namespace NadekoBot.Modules.Bartender
             return true;
         }
 
+        private string getWeight(UserMorph m)
+        {
+            if (m.Weight != null && m.Gender < 2)
+            {
+                if (m.Weight > 20  && m.Weight <= 24 ) { return ""; }
+                else if(m.Weight > 19.5 && m.Weight <= 20 ) { return "slender "; }
+                else if (m.Weight > 19 && m.Weight <= 19.5 ) { return "skinny "; }
+                else if (m.Weight > 18.5 && m.Weight <= 19 ) { return "waifish "; }
+                else if (m.Weight > 17.5 && m.Weight <= 18.5 ) { return "underweight "; }
+                else if (m.Weight > 16 && m.Weight <= 17.5 ) { return "starving "; }
+                else if (m.Weight <= 16 ) { return "skeletal "; }
+                else if (m.Weight > 24 && m.Weight <= 25.5 ) { return "plump "; }
+                else if (m.Weight > 25.5 && m.Weight <= 27 ) { return "chubby "; }
+                else if (m.Weight > 27 && m.Weight <= 30 ) { return "overweight "; }
+                else if (m.Weight > 30 ) { return "obese "; }
+            }
+            else if (m.Weight != null && m.Gender == 2)
+            {
+                if (m.Weight > 20.5 && m.Weight <= 23 ) { return ""; }
+                else if (m.Weight > 19.5 && m.Weight <= 20.5 ) { return "slender "; }
+                else if (m.Weight > 18.5 && m.Weight <= 19.5 ) { return "skinny "; }
+                else if (m.Weight > 17.5 && m.Weight <= 18.5 ) { return "underweight "; }
+                else if (m.Weight > 16 && m.Weight <= 17.5 ) { return "starving "; }
+                else if (m.Weight <= 16 ) { return "skeletal "; }
+                else if (m.Weight > 23 && m.Weight <= 24 ) { return "stout "; }
+                else if (m.Weight > 24 && m.Weight <= 25 ) { return "thickset "; }
+                else if (m.Weight > 25 && m.Weight <= 27 ) { return "chubby "; }
+                else if (m.Weight > 27 && m.Weight <= 30 ) { return "overweight "; }
+                else if (m.Weight > 30 ) { return "obese "; }
+            }
+            return "";
+        }
+
         private string getDominantType(UserMorph m)
         {
             Dictionary<int, int> c = new Dictionary<int, int>();
-            if (c.ContainsKey(m.BodyType)) { c[m.BodyType] += 1; }
-            else { c[m.BodyType] = 1; }
+            //if (c.ContainsKey(m.BodyType)) { c[m.BodyType] += 1; }
+            //else { c[m.BodyType] = 1; }
             if (c.ContainsKey(m.UpperType)) { c[m.UpperType] += 1; }
             else { c[m.UpperType] = 1; }
             if (c.ContainsKey(m.LowerType)) { c[m.LowerType] += 1; }
@@ -154,6 +187,51 @@ namespace NadekoBot.Modules.Bartender
             return false;
         }
 
+        private Boolean anyInRange(int[] nums, int upper, int lower)
+        {
+            foreach (int i in nums)
+            {
+                if (nums[i] > lower && nums[i] <= upper)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private Tuple<UserMorph, String, String> transformUser(UserMorph original, TFMorph target, BarDrink drink)
+        {
+            String str_third = "";
+            string str_second = "";
+
+            int[] rolls = new int[3] { rng.Next(0, 100), rng.Next(0, 100), rng.Next(0, 100) };
+
+
+
+            if (false) // modify lower body type
+            { }
+            else if (false) // modify upper body type
+            { }
+            else if (false) // modify arms
+            { }
+            else if (false) // modify legs
+            { }
+            else if (false)
+            { }
+            else if (false)
+            { }
+            else if (false)
+            { }
+            else if (false)
+            { }
+            else if (false)
+            { }
+            else if (false)
+            { }
+
+            return Tuple.Create(original, str_third, str_second);
+        }
+
         public override void Install(ModuleManager manager)
         {
             manager.CreateCommands("", cgb =>
@@ -164,10 +242,22 @@ namespace NadekoBot.Modules.Bartender
 
                 cgb.CreateCommand(Prefix + "menu")
                     .Description($"List items in one of the drink menu's categories. | `{Prefix}menu \"beer\"`")
-                    .Parameter("move", ParameterType.Required)
-                    .Parameter("category", ParameterType.Unparsed)
+                    .Parameter("category", ParameterType.Required)
                     .Do(async e =>
                     {
+                        try
+                        {
+                            Dictionary<String, BarDrink> drink_cat = Drinks.Where(t => t.Cat == e.GetArg("category".ToLowerInvariant())).ToDictionary(x => x.Code, y => y);
+
+                            if (drink_cat.Count > 0)
+                            {
+
+                            }
+                            else
+                            { await e.Channel.SendMessage($"We don't have any drinks in that category, {e.User.Mention}.").ConfigureAwait(false); }
+                        }
+                        catch (Exception ex)
+                        { Console.WriteLine(ex); }
                     });
 
                 cgb.CreateCommand(Prefix + "info")
@@ -317,16 +407,16 @@ namespace NadekoBot.Modules.Bartender
                                 UserMorph morph = morphs[(long)e.User.Id];
                                 if (isBaseline(morph))
                                 {
-                                    await e.Channel.SendMessage($"{target.Mention} is a baseline human.").ConfigureAwait(false);
+                                    await e.Channel.SendMessage($"{target.Mention} is a {getWeight(morph)}baseline human.").ConfigureAwait(false);
                                 }
                                 else
                                 {
                                     await e.Channel.SendIsTyping();
                                     // await e.Channel.SendMessage($"{target.Mention} has modifications.").ConfigureAwait(false);
 
-                                    String str = $"{target.Mention} is a {getDominantType(morph)}. ";
+                                    String str = $"{target.Mention} is a {getWeight(morph)}{getDominantType(morph)}. ";
 
-                                    str += $"{Pronoun[morph.Gender]} {PronounHas[morph.Gender]} a {Valid[morph.BodyType].BodyType} body";
+                                    str += $"{Pronoun[morph.Gender]} {PronounHas[morph.Gender]} a {Valid[morph.LowerType].BodyType} body";
                                     if (Valid[morph.UpperType].UpperType != null && Valid[morph.LowerType].LowerType != null)
                                     {
                                         str += $", with {(vowelFirst(Valid[morph.UpperType].UpperType) ? "an" : "a")} {Valid[morph.UpperType].UpperType}" +
@@ -345,22 +435,26 @@ namespace NadekoBot.Modules.Bartender
                                     else
                                     { str += "."; }
 
-                                    if (morph.LegCount > 0 && morph.ArmCount > 0 && Valid[morph.LegType].LegType != null && Valid[morph.ArmType].ArmType != null)
+                                    String legs = null;
+                                    if (Valid[morph.LowerType].LowerType != null) { legs = Valid[morph.LowerType].LegType; }
+                                    else { legs = Valid[morph.LegType].LegType; }
+
+                                    if (morph.LegCount > 0 && morph.ArmCount > 0 && legs != null && Valid[morph.ArmType].ArmType != null)
                                     {
                                         str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.ArmCount)} {Valid[morph.ArmType].ArmType}" +
-                                            $" and {NumberToWords(morph.LegCount)} {Valid[morph.LegType].LegType}";
+                                            $" and {NumberToWords(morph.LegCount)} {legs}";
                                         if (Valid[morph.LowerType].LowerType != null)
                                         {
-                                            str += $" {Valid[morph.LowerType].LegPosition[0]} {PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
+                                            str += $" {Valid[morph.LowerType].LegPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
                                         }
                                         else { str += ".";  }
                                     }
-                                    else if (morph.LegCount > 0 && Valid[morph.LegType].LegType != null)
+                                    else if (morph.LegCount > 0 && legs != null)
                                     {
-                                        str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.LegCount)} {Valid[morph.LegType].LegType}";
+                                        str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.LegCount)} {legs}";
                                         if (Valid[morph.LowerType].LowerType != null)
                                         {
-                                            str += $" {Valid[morph.LowerType].LegPosition[0]} {PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
+                                            str += $" {Valid[morph.LowerType].LegPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
                                         }
                                         else { str += "."; }
                                     }
@@ -400,7 +494,7 @@ namespace NadekoBot.Modules.Bartender
                                     }
                                     else { str += " no hair."; }
 
-                                    str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.EarCount)} " +
+                                    str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.EarCount)}" +
                                         $" {Valid[morph.EarType].EarType}";
                                     if (morph.EarCount > 0) { str += "s"; }
                                     str += $" {Valid[morph.EarType].EarPosition} {PronounObjective[morph.Gender]} head,";
@@ -607,7 +701,7 @@ namespace NadekoBot.Modules.Bartender
 
                                     Gender = gender_marker,
                                     // default morph is a standard human
-                                    BodyType = 0,
+                                    // BodyType = 0,
                                     UpperType = 0,
                                     LowerType = 0,
                                     LegType = 0,
@@ -695,7 +789,7 @@ namespace NadekoBot.Modules.Bartender
                             {
                                 UserMorph morph = morphs[(long)e.User.Id];
 
-                                morph.BodyType = target_key;
+                                // morph.BodyType = target_key;
                                 morph.UpperType = target_key;
                                 morph.LowerType = target_key;
                                 morph.LegType = target_key;
@@ -741,7 +835,7 @@ namespace NadekoBot.Modules.Bartender
                                     UserId = (long)e.User.Id,
 
                                     Gender = 0,
-                                    BodyType = target_key,
+                                    // BodyType = target_key,
                                     UpperType = target_key,
                                     LowerType = target_key,
                                     LegType = target_key,
@@ -776,7 +870,7 @@ namespace NadekoBot.Modules.Bartender
                                     EyeCount = target_morph.MaxEyes,
                                     FeetType = target_key,
                                     HandType = target_key,
-                                    MorphCount = 0
+                                    MorphCount = 0,
                                 }, typeof(UserMorph));
                             }
                         }

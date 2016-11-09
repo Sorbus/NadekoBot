@@ -13,7 +13,7 @@ namespace NadekoBot.Classes.JSONModels
             Code = p;
             Name = n;
             Cost = c;
-            Type = t;
+            Cat = t;
             Description = d;
             Flavor = f;
             Image = i;
@@ -24,7 +24,7 @@ namespace NadekoBot.Classes.JSONModels
         public string Code { get; set; }
         public string Name { get; set; }
         public int Cost { get; set; }
-        public string Type { get; set; }
+        public string Cat { get; set; }
         public string Description { get; set; }
         public string Flavor { get; set; }
         public string Image { get; set; }

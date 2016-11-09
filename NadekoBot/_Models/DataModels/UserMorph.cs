@@ -14,7 +14,7 @@ namespace NadekoBot.DataModels
         public int Gender { get; set; } // 0 = they, 1 = he, 2 = she
 
         // unless noted these numbers refer to locations in the UserMorphs.JSON array
-        public int BodyType { get; set; }
+        // public int BodyType { get; set; }
         public int UpperType{ get; set; }
         public int LowerType{ get; set; }
 
@@ -60,5 +60,6 @@ namespace NadekoBot.DataModels
         public int EyeCount { get; set; }
 
         public int MorphCount { get; set; }
+        public float Weight { get; set; }
     }
 }
