@@ -206,28 +206,62 @@ namespace NadekoBot.Modules.Bartender
 
             int[] rolls = new int[3] { rng.Next(0, 100), rng.Next(0, 100), rng.Next(0, 100) };
 
+            // modify UpperType
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // modify LowerType
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // modify legs. Not that legtype only displays if lowertype is null
+                // leg count
+                // leg type
+                // feet type
+                // feet modification
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // modify arms
+                // arm count
+                // arm type
+                // hand type
+                // hand modification
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // modify head
+            // face type
+            // eyes
+            // eye color
+            // ear type
+            // ear count
+            // tongue
+                // tongue type
+                // if not set by drink, bring closer to morph's max
+            // hair
+                // hair type
+                // if not set by drink, bring closer to morph's max
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // modify skin
+                // skin ornaments
+                // arm covering
+                // leg covering
+                // torso covering
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // wings
+                // add if lower than morph's maximum
+                // expand if at morph's maximum
+                // remove if higher than morph's maximum
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // tails
+                // add if lower than morph's maximum
+                // expand if at morph's maximum
+                // remove if higher than morph's maximum
+            if (anyInRange(rolls, 0, 10)) { }
+
+            // weight
 
 
-            if (false) // modify lower body type
-            { }
-            else if (false) // modify upper body type
-            { }
-            else if (false) // modify arms
-            { }
-            else if (false) // modify legs
-            { }
-            else if (false)
-            { }
-            else if (false)
-            { }
-            else if (false)
-            { }
-            else if (false)
-            { }
-            else if (false)
-            { }
-            else if (false)
-            { }
 
             return Tuple.Create(original, str_third, str_second);
         }
