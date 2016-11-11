@@ -298,12 +298,19 @@ namespace NadekoBot.Modules.Karma
                         await doStuff(e, "shot");
                     });
                 cgb.CreateCommand("спасибо ")
-                    .Description($"Speak english you savage | `спасибо  @someguy`")
+                    .Description($"Speak english you savage | `спасибо @someguy`")
                     .Parameter("target", ParameterType.Unparsed)
                     .Do(async e =>
                     {
                         await doStuff(e, "спасибо ");
-                    }); 
+                    });
+                cgb.CreateCommand("tack ")
+                    .Description($"Speak english you savage | `tack @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "tack ");
+                    });
             });
         }
     }
