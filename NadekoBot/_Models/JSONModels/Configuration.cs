@@ -123,7 +123,7 @@ namespace NadekoBot.Classes.JSONModels
                 "🐬",
                 "🐞",
                 "🦀",
-                "🦄" };
+                "🦄", };
 
         [JsonIgnore]
         public List<Quote> Quotes { get; set; } = new List<Quote>();
@@ -222,6 +222,7 @@ Nadeko Support Server: <https://discord.gg/0ehQwTK2RBjAxzEY>";
         public string Programming { get; set; } = "%";
         public string Pokemon { get; set; } = ">";
         public string Utility { get; set; } = ".";
+        public string Karma { get; set; } = "/";
     }
 
     public static class ConfigHandler

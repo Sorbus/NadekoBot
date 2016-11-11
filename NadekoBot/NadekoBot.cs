@@ -13,6 +13,7 @@ using NadekoBot.Modules.Gambling;
 using NadekoBot.Modules.Games;
 using NadekoBot.Modules.Games.Commands;
 using NadekoBot.Modules.Help;
+using NadekoBot.Modules.Karma;
 #if !NADEKO_RELEASE
 using NadekoBot.Modules.Music;
 #endif
@@ -178,6 +179,7 @@ namespace NadekoBot
             modules.Add(new PokemonModule(), "Pokegame", ModuleFilter.None);
             modules.Add(new TranslatorModule(), "Translator", ModuleFilter.None);
             modules.Add(new CustomReactionsModule(), "Customreactions", ModuleFilter.None);
+            modules.Add(new KarmaModule(), "Karma", ModuleFilter.None);
             if (!string.IsNullOrWhiteSpace(Creds.TrelloAppKey))
                 modules.Add(new TrelloModule(), "Trello", ModuleFilter.None);
 
