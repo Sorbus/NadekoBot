@@ -93,7 +93,7 @@ namespace NadekoBot.Modules.Karma
 
             DateTime last = DateTime.FromBinary(user.LastGiven);
 
-            if (last.AddSeconds(1).CompareTo(DateTime.Now) <= 0)
+            if (last.AddSeconds(30).CompareTo(DateTime.Now) <= 0)
             {
                 target.Karma += 1;
                 user.LastGiven = DateTime.Now.ToBinary();
