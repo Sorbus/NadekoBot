@@ -255,6 +255,55 @@ namespace NadekoBot.Modules.Karma
                     {
                         await doStuff(e, "praise");
                     });
+                cgb.CreateCommand("thank you")
+                    .Description($"Thank a user | `thank you @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "thank");
+                    });
+                cgb.CreateCommand("danke")
+                    .Description($"Speak english you savage. | `danke @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "danked");
+                    });
+                cgb.CreateCommand("thx")
+                    .Description($"Thank a user | `thx @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "praise");
+                    });
+                cgb.CreateCommand("tanks")
+                    .Description($"Tank a user | `tank @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "tank");
+                    });
+                cgb.CreateCommand("shot,")
+                    .Description($"Speak english you savage | `shot, @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "shot");
+                    });
+                cgb.CreateCommand("shot")
+                    .Description($"Speak english you savage | `shot @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "shot");
+                    });
+                cgb.CreateCommand("спасибо ")
+                    .Description($"Speak english you savage | `спасибо  @someguy`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .Do(async e =>
+                    {
+                        await doStuff(e, "спасибо ");
+                    }); 
             });
         }
     }
