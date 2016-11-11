@@ -9,10 +9,10 @@ namespace NadekoBot.Classes.JSONModels
     public class TFMorph
     {
         public TFMorph(
-            string cod, string nam, string bodt, string bodu, string bodl, string legt, string armt, string fact, string[] eyec,
+            string cod, string nam, string bodt, string bodu, string bodl, string legt, string armt, string fact, string eyet, string[] eyec,
             string hait, string[] haic, string eart, string tont, string teet, string skit, string[] skio, string skic, string feet,
             string hant, string hanm, string feem, string wint, string tait, int mwin, int mtai, int meye, int mhai, int mear,
-            int mton, int marm, int mleg, string[] wins, string[] tais, string[] legp, string earp, string[] winp, string[] taip,
+            int mton, int marm, int mleg, string[] wins, string[] tais, string legp, string earp, string winp, string taip,
             int perm
             )
         {
@@ -24,6 +24,7 @@ namespace NadekoBot.Classes.JSONModels
             LegType = legt;
             ArmType = armt;
             FaceType = fact;
+            EyeType = eyet;
             EyeColor = eyec;
             HairType = hait;
             HairColor = haic;
@@ -65,6 +66,7 @@ namespace NadekoBot.Classes.JSONModels
         public String LegType { get; set; }
         public String ArmType { get; set; }
         public String FaceType { get; set; }
+        public String EyeType { get; set; }
         public String[] EyeColor { get; set; }
         public String HairType { get; set; }
         public String[] HairColor { get; set; }
@@ -82,10 +84,10 @@ namespace NadekoBot.Classes.JSONModels
         public String TailType { get; set; }
         public String[] WingSize { get; set; }
         public String[] TailSize { get; set; }
-        public String[] LegPosition { get; set; }
+        public String LegPosition { get; set; }
         public String EarPosition { get; set; }
-        public String[] WingPosition { get; set; }
-        public String[] TailPosition { get; set; }
+        public String WingPosition { get; set; }
+        public String TailPosition { get; set; }
 
         public int MaxWings { get; set; }
         public int MaxTails { get; set; }

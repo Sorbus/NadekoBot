@@ -22,7 +22,8 @@ namespace NadekoBot.DataModels
         public int ArmType{ get; set; }
 
         public int FaceType { get; set; }
-        public int EyeColor { get; set; } // draws from list inside whichever morph facetype is
+        public int EyeType { get; set; }
+        public int EyeColor { get; set; } // draws from list inside whichever morph eyetype is
         public int HairType { get; set; }
         public int HairColor { get; set; } // draws from hairtype
         public int EarType { get; set; }

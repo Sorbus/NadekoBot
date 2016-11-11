@@ -8,6 +8,7 @@
 		"LegType": null,
 		"ArmType": null,
 		"FaceType": "human",
+		"EyeType": "eye",
 		"EyeColor": [null],
 		"HairType": "hair",
 		"HairColor": [null],
@@ -35,8 +36,8 @@
 		"TailSize": [null],
 		"LegPosition": null,
 		"EarPosition": "on either side of",
-		"WingPosition": ["sprouting from ","shoulderblades"],
-		"TailPosition": ["extending from the base of ", "spine"],
+		"WingPosition": "sprouting from $objective$ shoulderblades",
+		"TailPosition": "extending from the base of $objective$ spine",
 		"Permanence": 0
 	},
 	{
@@ -72,6 +73,7 @@
 		"LegType": "arachnid legs",
 		"ArmType": null,
 		"FaceType": "human face",
+		"EyeType": "eye",
 		"EyeColor": ["slate-blue","black","gold","red","yellow","black",null],
 		"HairType": "tentacles in place of hair",
 		"HairColor": ["purple","blue","green","iridescent","black","red",null],
@@ -97,9 +99,9 @@
 		"MaxLegs": 8,
 		"WingSize": ["stubby", "short", "arm-length", "long"],
 		"TailSize": [null],
-		"LegPosition": ["extending from ","arachnid body"],
+		"LegPosition": "extending from $objective$ arachnid body",
 		"EarPosition": "on either side of",
-		"WingPosition": ["sprouting from ","shoulderblades"],
+		"WingPosition": "sprouting from $objective$ shoulderblades",
 		"TailPosition": null,
 		"Permanence": 50
 	},
@@ -115,6 +117,7 @@
 		"LegType": null,
 		"ArmType": null,
 		"FaceType": "human",
+		"EyeType": "compound eye",
 		"EyeColor": [null],
 		"HairType": "hair",
 		"HairColor": [null],
@@ -142,8 +145,8 @@
 		"TailSize": [null],
 		"LegPosition": null,
 		"EarPosition": "on either side of",
-		"WingPosition": ["sprouting from ","shoulderblades"],
-		"TailPosition": ["extending from the base of ", "spine"],
+		"WingPosition": "sprouting from $objective$ shoulderblades",
+		"TailPosition": "extending from the base of $objective$ spine",
 		"Permanence": 10
 	},
 	{
@@ -183,7 +186,7 @@
 		"MaxLegs": 0,
 		"WingSize": [],
 		"TailSize": [],
-		"LegPosition": [],
+		"LegPosition": "",
 		"EarPosition": "",
 		"Permanence": 0
 	}

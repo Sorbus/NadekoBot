@@ -10,6 +10,7 @@ using System.Text;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace NadekoBot.Modules.Bartender
 {
@@ -23,10 +24,11 @@ namespace NadekoBot.Modules.Bartender
 
         private List<TFMorph> Valid = NadekoBot.Config.ValidMorphs;
         private List<BarDrink> Drinks = NadekoBot.Config.DrinkMenu;
-        private String[] PronounObjective = new String[3]  { "their", "her", "his" };
-        private String[] PronounHas = new String[3]  { "have", "has", "has" };
-        private String[] Pronoun = new String[3] { "they", "she", "he" };
-        private String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
+        private static String[] PronounObjective = new String[3]  { "their", "her", "his" };
+        private static String[] PronounHas = new String[3]  { "have", "has", "has" };
+        private static String[] Pronoun = new String[3] { "they", "she", "he" };
+        private static String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
+        private static readonly Regex re = new Regex(@"\$(\w+)\$", RegexOptions.Compiled);
 
         // from https://stackoverflow.com/a/2730393
         public static string NumberToWords(int number)
@@ -446,26 +448,16 @@ namespace NadekoBot.Modules.Bartender
                                 else
                                 {
                                     await e.Channel.SendIsTyping();
-                                    // await e.Channel.SendMessage($"{target.Mention} has modifications.").ConfigureAwait(false);
 
-                                    String str = $"{target.Mention} is a {getWeight(morph)}{getDominantType(morph)}. ";
+                                    String str = "$mention$ is a $weight$$morphtype$. ";
 
-                                    str += $"{Pronoun[morph.Gender]} {PronounHas[morph.Gender]} a {Valid[morph.LowerType].BodyType} body";
+                                    str += "$pronoun$ $has$ a $bodytype$ body";
                                     if (Valid[morph.UpperType].UpperType != null && Valid[morph.LowerType].LowerType != null)
-                                    {
-                                        str += $", with {(vowelFirst(Valid[morph.UpperType].UpperType) ? "an" : "a")} {Valid[morph.UpperType].UpperType}" +
-                                                $" upper body and the lower body of { (vowelFirst(Valid[morph.LowerType].LowerType) ? "an" : "a")}" + 
-                                                $" { Valid[morph.LowerType].LowerType}.";
-                                        //  which merge seamlessly together at { PronounObjective[morph.Gender]} waist.
-                                    }
+                                    { str += ", with $a_uppertype$ upper body and the lower body of $a_lowertype$."; }
                                     else if (Valid[morph.UpperType].UpperType != null)
-                                    {
-                                        str += $", with the upper body of {(vowelFirst(Valid[morph.UpperType].UpperType) ? "an" : "a")} {Valid[morph.UpperType].UpperType}.";
-                                    }
+                                    { str += ", with the upper body of $a_uppertype$."; }
                                     else if (Valid[morph.LowerType].LowerType != null)
-                                    {
-                                        str += $", with the lower body of {(vowelFirst(Valid[morph.LowerType].LowerType) ? "an" : "a")} {Valid[morph.LowerType].LowerType}.";
-                                    }
+                                    { str += ", with the lower body of $a_lowertype$."; }
                                     else
                                     { str += "."; }
 
@@ -475,39 +467,21 @@ namespace NadekoBot.Modules.Bartender
 
                                     if (morph.LegCount > 0 && morph.ArmCount > 0 && legs != null && Valid[morph.ArmType].ArmType != null)
                                     {
-                                        str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.ArmCount)} {Valid[morph.ArmType].ArmType}" +
-                                            $" and {NumberToWords(morph.LegCount)} {legs}";
-                                        if (Valid[morph.LowerType].LowerType != null)
-                                        {
-                                            str += $" {Valid[morph.LowerType].LegPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
-                                        }
-                                        else { str += ".";  }
+                                        str += " $pronoun$ $has$ $armcount$ $armtype$ and $legcount$ $legtype$";
+                                        str += (Valid[morph.LowerType].LowerType != null) ? " $legposition$." : ".";
                                     }
                                     else if (morph.LegCount > 0 && legs != null)
                                     {
-                                        str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.LegCount)} {legs}";
-                                        if (Valid[morph.LowerType].LowerType != null)
-                                        {
-                                            str += $" {Valid[morph.LowerType].LegPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].LegPosition[1]}.";
-                                        }
-                                        else { str += "."; }
+                                        str += " $pronoun$ $has$ $legcount$ $legtype$";
+                                        str += (Valid[morph.LowerType].LowerType != null) ? " $legposition$." : ".";
                                     }
                                     else if (morph.ArmCount > 0 && Valid[morph.ArmType].ArmType != null)
-                                    {
-                                        str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.ArmCount)} {Valid[morph.ArmType].ArmType}.";
-                                    }
+                                    { str += " $pronoun$ $has$ $armcount$ $armtype$."; }
                                     else if (morph.ArmCount == 0 && morph.LegCount == 0)
-                                    { str += $" {Pronoun[morph.Gender]} has neither arms nor legs."; }
+                                    { str += " $pronoun$ $has$ neither arms nor legs."; }
 
-                                    str += $" {Pronoun[morph.Gender]} has a {Valid[morph.FaceType].FaceType} with";
-                                    if (morph.EyeCount > 2)
-                                    {
-                                        str += $" {NumberToWords(morph.EyeCount)}";
-                                        if (Valid[morph.FaceType].EyeColor[morph.EyeColor] != null)
-                                        { str += $" {Valid[morph.FaceType].EyeColor[morph.EyeColor]}"; }
-                                        str += " eyes and";
-                                    }
-                                    else if (morph.EyeCount == 0) { str += " with no eyes"; }
+                                    str += " $pronoun$ $has$ a $facetype$ with";
+                                    str += (morph.EyeCount > 0) ? " $eyecount$$eyecolor$ $eyetype$ and" : " with no eyes";
 
                                     if (morph.HairLength > 0)
                                     {
@@ -524,14 +498,13 @@ namespace NadekoBot.Modules.Bartender
                                         else if (morph.HairLength < 74) { str += " floor-length"; }
                                         else { str += " rapunzelesque"; }
 
-                                        str += $" {Valid[morph.HairType].HairColor[morph.HairColor]} {Valid[morph.HairType].HairType}.";
+                                        str += " $haircolor$$hairtype$.";
                                     }
                                     else { str += " no hair."; }
 
-                                    str += $" {Pronoun[morph.Gender]} {PronounHas[morph.Gender]} {NumberToWords(morph.EarCount)}" +
-                                        $" {Valid[morph.EarType].EarType}";
-                                    if (morph.EarCount > 0) { str += "s"; }
-                                    str += $" {Valid[morph.EarType].EarPosition} {PronounObjective[morph.Gender]} head,";
+                                    str += " $pronoun$ $has$ $earcount$ $eartype$";
+                                    if (morph.EarCount > 1) { str += "s"; }
+                                    str += " $earposition$ $objective$ head,";
                                     if (morph.TongueLength > 0)
                                     {
                                         if (morph.TongueLength < 3) { str += " a stubby"; }
@@ -540,19 +513,12 @@ namespace NadekoBot.Modules.Bartender
                                         else if (morph.TongueLength < 8) { str += " a long"; }
                                         else if (morph.TongueLength < 12) { str += " a very long"; }
                                         else { str += " an obscenely long"; }
-                                        str += $" {Valid[morph.TongueType].TongueType},";
+                                        str += " $tonguetype$,";
                                     }
                                     else { str += " no tongue,";  }
-                                    str += $" and {Valid[morph.TeethType].TeethType}.\n\n";
+                                    str += " and $teethtype$.\n\n";
 
-                                    if (Valid[morph.SkinOrnamentsMorph].SkinOrnaments != null)
-                                    {
-                                        str += $"{PronounObjective[morph.Gender]} {Valid[morph.SkinType].SkinType} is {Valid[morph.SkinOrnamentsMorph].SkinOrnaments[morph.SkinOrnaments]}";
-                                    }
-                                    else
-                                    {
-                                        str += $"{Pronoun[morph.Gender]} has {Valid[morph.SkinType].SkinType}"; 
-                                    }
+                                    str += (Valid[morph.SkinOrnamentsMorph].SkinOrnaments != null) ? "$objective$ $skintype$ is $skinornament$" : "$pronoun$ has $skintype$";
 
                                     if ((Valid[morph.ArmCovering].SkinCovering != null && morph.ArmCount > 0) &&
                                         (Valid[morph.LegCovering].SkinCovering != null && morph.LegCount > 0) &&
@@ -560,112 +526,128 @@ namespace NadekoBot.Modules.Bartender
                                     {
                                         if ((Valid[morph.ArmCovering].SkinCovering == Valid[morph.LegCovering].SkinCovering) == 
                                             (Valid[morph.LegCovering].SkinCovering == Valid[morph.TorsoCovering].SkinCovering))
-                                        {
-                                            str += $", and {PronounObjective[morph.Gender]} entire body is {Valid[morph.ArmCovering].SkinCovering}.";
-                                        }
+                                        { str += ", and $objective$ entire body is $torsocovering$."; }
                                         else if (Valid[morph.ArmCovering].SkinCovering == Valid[morph.LegCovering].SkinCovering)
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} arms and legs are {Valid[morph.ArmCovering].SkinCovering}" +
-                                                $", and {PronounObjective[morph.Gender]} torso is {Valid[morph.TorsoCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ arms and legs are $armcovering$, and $objective$ torso is $torsocovering$."; }
                                         else if (Valid[morph.ArmCovering].SkinCovering == Valid[morph.TorsoCovering].SkinCovering)
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} arms and torso are {Valid[morph.ArmCovering].SkinCovering}" +
-                                                $", and {PronounObjective[morph.Gender]} legs are {Valid[morph.LegCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ arms and torso are $armcovering$, and $objective$ legs are $legcovering$."; }
                                         else if (Valid[morph.LegCovering].SkinCovering == Valid[morph.TorsoCovering].SkinCovering)
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} legs and torso are {Valid[morph.LegCovering].SkinCovering}" +
-                                                $", and {PronounObjective[morph.Gender]} arms are {Valid[morph.ArmCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ legs and torso are $legcovering$, and $objective$ arms are $armcovering$."; }
                                         else
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} arms are {Valid[morph.ArmCovering].SkinCovering}" +
-                                                $", {PronounObjective[morph.Gender]} legs are {Valid[morph.LegCovering].SkinCovering}" +
-                                                $", and {PronounObjective[morph.Gender]} torso is {Valid[morph.TorsoCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ arms are $armcovering$, $objective$ legs are $legcovering$, and $objective$ torso is $torsocovering$."; }
 
                                     }
                                     else if ((Valid[morph.ArmCovering].SkinCovering != null && morph.ArmCount > 0) &&
                                             (Valid[morph.LegCovering].SkinCovering != null && morph.LegCount > 0))
                                     {
                                         if (Valid[morph.ArmCovering].SkinCovering == Valid[morph.LegCovering].SkinCovering)
-                                        {
-                                            str += $", and {PronounObjective[morph.Gender]} arms and legs are {Valid[morph.ArmCovering].SkinCovering}.";
-                                        }
+                                        { str += ", and $objective$ arms and legs are $armcovering$."; }
                                         else
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} arms are {Valid[morph.ArmCovering].SkinCovering}, and " +
-                                            $"{PronounObjective[morph.Gender]} legs are {Valid[morph.LegCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ arms are $armcovering$, and $objective$ legs are $legcovering$."; }
                                     }
                                     else if ((Valid[morph.ArmCovering].SkinCovering != null && morph.ArmCount > 0) &&
                                             (Valid[morph.TorsoCovering].SkinCovering != null))
                                     {
                                         if (Valid[morph.ArmCovering].SkinCovering == Valid[morph.TorsoCovering].SkinCovering)
-                                        {
-                                            str += $", and {PronounObjective[morph.Gender]} arms and torso are {Valid[morph.ArmCovering].SkinCovering}.";
-                                        }
+                                        { str += ", and $objective$ arms and torso are $armcovering$."; }
                                         else
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} arms are {Valid[morph.ArmCovering].SkinCovering}, and " +
-                                            $"{PronounObjective[morph.Gender]} torso is {Valid[morph.TorsoCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ arms are $armcovering$, and $objective$ torso is $torsocovering$."; }
                                     }
                                     else if ((Valid[morph.LegCovering].SkinCovering != null && morph.LegCount > 0) &&
                                             (Valid[morph.TorsoCovering].SkinCovering != null))
                                     {
                                         if (Valid[morph.LegCovering].SkinCovering == Valid[morph.TorsoCovering].SkinCovering)
-                                        {
-                                            str += $", and {PronounObjective[morph.Gender]} torso and legs are {Valid[morph.LegCovering].SkinCovering}.";
-                                        }
+                                        { str += ", and $objective$ torso and legs are $legcovering$."; }
                                         else
-                                        {
-                                            str += $", {PronounObjective[morph.Gender]} torso is {Valid[morph.TorsoCovering].SkinCovering}, and " +
-                                            $"{PronounObjective[morph.Gender]} legs are {Valid[morph.LegCovering].SkinCovering}.";
-                                        }
+                                        { str += ", $objective$ torso is $torsocovering$, and $objective$ legs are $legcovering$."; }
                                     }
                                     else if (Valid[morph.ArmCovering].SkinCovering != null && morph.ArmCount > 0)
-                                    { str += $", and {PronounObjective[morph.Gender]} arms are {Valid[morph.TorsoCovering].SkinCovering}."; }
+                                    { str += ", and $objective$ arms are $armcovering$."; }
                                     else if (Valid[morph.LegCovering].SkinCovering != null && morph.LegCount > 0)
-                                    { str += $", and {PronounObjective[morph.Gender]} legs are {Valid[morph.TorsoCovering].SkinCovering}."; }
+                                    { str += ", and $objective$ legs are $legcovering."; }
                                     else if (Valid[morph.TorsoCovering].SkinCovering != null)
-                                    { str += $", and {PronounObjective[morph.Gender]} torso is {Valid[morph.TorsoCovering].SkinCovering}."; }
+                                    { str += ", and $objective$ torso is $torsocovering$."; }
 
                                     if (Valid[morph.HandModification].HandModification != null && Valid[morph.FeetModification].FeetModification != null && morph.LegCount > 0 && morph.ArmCount > 0)
                                     {
                                         if (Valid[morph.HandModification].HandModification == Valid[morph.FeetModification].FeetModification)
-                                        {
-                                            str += $" {PronounObjective[morph.Gender]} {Valid[morph.HandType].HandType} and {Valid[morph.FeetType].FeetType} are {Valid[morph.FeetModification].FeetModification}.";
-                                        }
+                                        { str += " $objective$ $handtype$ and $feettype$ are $handmodification$."; }
                                         else
-                                        {
-                                            str += $" {PronounObjective[morph.Gender]} {Valid[morph.HandType].HandType} are {Valid[morph.HandModification].HandModification} and" +
-                                                $" {PronounObjective[morph.Gender]} {Valid[morph.FeetType].FeetType} are {Valid[morph.FeetModification].FeetModification}.";
-                                        }
+                                        { str += " $objective$ $handtype$ are $handmodification$ and $objective$ $feettype$ are $feetmodification$."; }
                                     }
                                     else if (Valid[morph.HandModification].HandModification != null && morph.ArmCount > 0)
-                                    { str += $" {PronounObjective[morph.Gender]} {Valid[morph.HandType].HandType} are {Valid[morph.HandModification].HandModification}.";  }
+                                    { str += " $objective$ $handtype$ are $handmoficiation$.";  }
                                     else if (Valid[morph.FeetModification].FeetModification != null && morph.LegCount > 0)
-                                    { str += $" {PronounObjective[morph.Gender]} {Valid[morph.FeetType].FeetType} are {Valid[morph.FeetModification].FeetModification}."; }
+                                    { str += " $objective$ $feettype$ are $feetmodification$."; }
 
                                     if (Valid[morph.UpperType].WingPosition != null && Valid[morph.LowerType].TailPosition != null && morph.TailCount > 0 && morph.WingCount > 0)
-                                    {
-                                        str += $" {Pronoun[morph.Gender]} has {NumberToWords(morph.WingCount)} {Valid[morph.WingType].WingSize[morph.WingSize]} {Valid[morph.WingType].WingType}" + 
-                                            $" {Valid[morph.UpperType].WingPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.UpperType].WingPosition[1]} and" +
-                                            $" {NumberToWords(morph.TailCount)} {Valid[morph.TailType].TailSize[morph.TailSize]} {Valid[morph.TailType].TailType}" +
-                                            $" {Valid[morph.LowerType].TailPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].TailPosition[1]}.";
-                                    }
+                                    { str += " $pronoun$ $has$ $wingcount$ $wingsize$ $wingtype$ $wingposition$ and $tailcount$ $tailsize$ $tailtype$ $tailposition$"; }
                                     else if (Valid[morph.UpperType].WingPosition != null && morph.WingCount > 0)
-                                    {
-                                        str += $" {Pronoun[morph.Gender]} has {NumberToWords(morph.WingCount)} {Valid[morph.WingType].WingSize[morph.WingSize]} {Valid[morph.WingType].WingType}" +
-                                           $" {Valid[morph.UpperType].WingPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.UpperType].WingPosition[1]}.";
-                                    }
+                                    { str += " $pronoun$ $has$ $wingcount$ $wingsize$ $wingtype$ $wingposition$."; }
                                     else if (Valid[morph.LowerType].TailPosition != null && morph.TailCount > 0)
-                                    {
-                                        str += $" {Pronoun[morph.Gender]} has {NumberToWords(morph.TailCount)} {Valid[morph.TailType].WingSize[morph.TailSize]} {Valid[morph.TailType].TailType}" +
-                                            $" {Valid[morph.LowerType].TailPosition[0]}{PronounObjective[morph.Gender]} {Valid[morph.LowerType].TailPosition[1]}.";
-                                    }
+                                    { str += " $pronoun$ $has$ $tailcount$ $tailsize$ $tailtype% $tailposition$."; }
+
+                                    var swapper = new Dictionary<string, string>(
+                                        StringComparer.OrdinalIgnoreCase) {
+                                            {"$mention$", target.Mention },
+
+                                            {"$weight$", getWeight(morph) },
+                                            {"$morphtype$", getDominantType(morph) },
+
+                                            {"$pronoun$", Pronoun[morph.Gender]},
+                                            {"$has$", PronounHas[morph.Gender]},
+                                            {"$objective$", PronounObjective[morph.Gender]},
+
+                                            {"$bodytype$", Valid[morph.LowerType].BodyType},
+                                            {"$a_uppertype$", (vowelFirst(Valid[morph.UpperType].UpperType) ? "an " : "a ") + Valid[morph.UpperType].UpperType },
+                                            {"$a_lowertype$", (vowelFirst(Valid[morph.LowerType].LowerType) ? "an " : "a ") + Valid[morph.LowerType].LowerType },
+
+                                            {"$armcount$", NumberToWords(morph.ArmCount) },
+                                            {"$armtype$", Valid[morph.ArmType].ArmType },
+                                            {"$legcount$", NumberToWords(morph.LegCount) },
+                                            {"$legtype$", (Valid[morph.LowerType].LowerType != null) ? Valid[morph.LowerType].LegType : Valid[morph.LegType].LegType },
+                                            {"$legposition$", Valid[morph.LowerType].LegPosition },
+
+                                            {"$wingtype$", Valid[morph.WingType].WingType},
+                                            {"$wingsize$", Valid[morph.WingType].WingSize[morph.WingSize]},
+                                            {"$wingcount$", NumberToWords(morph.WingCount)},
+                                            {"$wingposition$", Valid[morph.UpperType].WingPosition },
+
+                                            {"$tailtype$", Valid[morph.TailType].TailType},
+                                            {"$tailsize$", (Valid[morph.TailType].TailSize[0] != null) ? Valid[morph.TailType].TailSize[morph.TailSize] : "ERROR"},
+                                            {"$tailcount$", NumberToWords(morph.TailCount)},
+                                            {"$tailpositon$", Valid[morph.LowerType].TailPosition },
+
+                                            {"$facetype$", Valid[morph.FaceType].FaceType },
+                                            {"$eyetype$", (morph.EyeCount > 1) ? Valid[morph.EyeType].EyeType + "s" : Valid[morph.EyeType].EyeType },
+                                            {"$eyecount$", NumberToWords(morph.EyeCount) },
+                                            {"$eyecolor$", (Valid[morph.EyeType].EyeColor[0] != null) ? " " + Valid[morph.EyeType].EyeColor[morph.EyeColor] : "" },
+                                            {"$tonguetype$", Valid[morph.TongueType].TongueType },
+                                            {"$teethtype$", Valid[morph.TeethType].TeethType },
+
+                                            {"$earposition$", Valid[morph.EarType].EarPosition },
+                                            {"$earcount$", NumberToWords(morph.EarCount) },
+                                            {"$eartype$", Valid[morph.EarType].EarType },
+
+                                            {"$feettype$", Valid[morph.FeetType].FeetType },
+                                            {"$handtype$", Valid[morph.HandType].HandType },
+                                            {"$handmodification$", Valid[morph.HandModification].HandModification },
+                                            {"$feetmodification$", Valid[morph.FeetModification].FeetModification },
+
+                                            {"$torsocovering$", Valid[morph.TorsoCovering].SkinCovering },
+                                            {"$legcovering$", Valid[morph.LegCovering].SkinCovering },
+                                            {"$armcovering$", Valid[morph.ArmCovering].SkinCovering },
+                                            {"$skintype$", Valid[morph.SkinType].SkinType },
+                                            {"$skinornament$", (Valid[morph.SkinOrnamentsMorph].SkinOrnaments[0] != null) ? Valid[morph.SkinOrnamentsMorph].SkinOrnaments[morph.SkinOrnaments] : "ERROR" },
+
+                                            {"$hairtype$", Valid[morph.HairType].HairType },
+                                            {"$haircolor$", (Valid[morph.HairType].HairColor[0] != null) ? Valid[morph.HairType].HairColor[morph.HairColor] + " " : "" }
+                                        };
+
+                                    // first pass
+                                    str = swapper.Aggregate(str, (current, value) => current.Replace(value.Key, value.Value));
+                                    // second pass
+                                    str = swapper.Aggregate(str, (current, value) => current.Replace(value.Key, value.Value));
 
                                     await e.Channel.SendMessage(str.CapitalizeFirst()).ConfigureAwait(false);
                                 }
@@ -770,7 +752,8 @@ namespace NadekoBot.Modules.Bartender
                                     EarCount = 2,
                                     TongueLength = rng.Next(3, 5),
                                     EyeCount = 2,
-                                    MorphCount = 0
+                                    MorphCount = 0,
+                                    Weight = 22,
 
                                 }, typeof(UserMorph));
 
@@ -905,6 +888,7 @@ namespace NadekoBot.Modules.Bartender
                                     FeetType = target_key,
                                     HandType = target_key,
                                     MorphCount = 0,
+                                    Weight = 22,
                                 }, typeof(UserMorph));
                             }
                         }
