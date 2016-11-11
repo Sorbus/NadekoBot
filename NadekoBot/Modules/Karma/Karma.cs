@@ -146,6 +146,7 @@ namespace NadekoBot.Modules.Karma
                     if (message.Item3 != 0)
                     {
                         await FlowersHandler.AddFlowersAsync(target, "Reached a milestone", message.Item3, true).ConfigureAwait(false);
+                        await target.SendMessage($":crown:Congratulations!:crown:\nYou received: {message.Item3} {NadekoBot.Config.CurrencySign} for being a swell person.").ConfigureAwait(false);
                     }
 
                     if (message.Item2 != null)
