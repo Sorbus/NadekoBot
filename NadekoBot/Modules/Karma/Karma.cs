@@ -167,6 +167,39 @@ namespace NadekoBot.Modules.Karma
 
                 commands.ForEach(cmd => cmd.Init(cgb));
 
+                cgb.CreateCommand(Prefix + "?")
+                    .Description($"Check your own karma. | `{Prefix}?`")
+                    .Do(async e =>
+                    {
+                        var db = DbHandler.Instance.GetAllRows<UserKarma>();
+                        Dictionary<long, UserKarma> karma = db.ToDictionary(x => x.UserID, y => y);
+                        UserKarma user;
+
+                        // find or create the userkarma objects
+                        if (karma.ContainsKey((long)e.User.Id))
+                        { user = karma[(long)e.User.Id]; }
+                        else
+                        {
+                            await e.Channel.SendMessage("You have no karma.").ConfigureAwait(false);
+                            return;
+                        }
+
+                        String str = "";
+
+                        if (user.Karma < 10) { str += $"You have {NumberToWords(user.Karma)} karma."; }
+                        else if (user.Karma < 100) {
+                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 10)).Trim()} and {NumberToWords(10 + user.Karma - (user.Karma % 10)).Trim()} karma.";
+                        }
+                        else if (user.Karma < 1000) {
+                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 50)).Trim()} and {NumberToWords(50 + user.Karma - (user.Karma % 50)).Trim()} karma.";
+                        }
+                        else {
+                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 100)).Trim()} and {NumberToWords(100 + user.Karma - (user.Karma % 100)).Trim()} karma.";
+                        }
+
+                        await e.Channel.SendMessage(str).ConfigureAwait(false);
+                    });
+
                 cgb.CreateCommand("kudos")
                     .Description($"Give kudos to a user. | `kudos @someguy`")
                     .Parameter("target", ParameterType.Unparsed)
