@@ -10,6 +10,8 @@ using System.Text;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NadekoBot.Modules.Karma
 {
@@ -118,6 +120,7 @@ namespace NadekoBot.Modules.Karma
                 else if (target.Karma % 100 == 0) { message = "[user] has reached a moderate milestone!"; award = 50; }
                 else if (target.Karma % 50 == 0) { message = "[user] has reached a minor milestone!"; award = 25; }
                 else if (target.Karma % 10 == 0) { message = "[user] has reached a tiny milestone!"; award = 5; }
+                else { message = "[user] has given [target] [type]."; }
             }
 
             return Tuple.Create(isGiven, message, award);
@@ -147,12 +150,21 @@ namespace NadekoBot.Modules.Karma
 
                     if (message.Item2 != null)
                     {
-                        String str = message.Item2.Replace("[user]", target.Name).Replace("[type]", "kudos");
+                        String str = message.Item2.Replace("[user]", e.User.Name).Replace("[type]", "kudos").Replace("[target]", target.Name);
                         if (message.Item3 > 0)
                         { str += $" They have been awarded {NumberToWords(message.Item3)}{NadekoBot.Config.CurrencySign}!"; }
-                        await e.Channel.SendMessage(str).ConfigureAwait(false);
-                    }
+                        var msg = await e.Channel.SendMessage(str).ConfigureAwait(false);
 
+                        ThreadPool.QueueUserWorkItem(async (state) =>
+                        {
+                            try
+                            {
+                                await Task.Delay(6000).ConfigureAwait(false);
+                                await msg.Delete().ConfigureAwait(false);
+                            }
+                            catch { }
+                        });
+                    }
                 }
                 return true;
             }
@@ -184,18 +196,18 @@ namespace NadekoBot.Modules.Karma
                             return;
                         }
 
-                        String str = "";
+                        String str = $"You have {user.Karma} karma.";
 
-                        if (user.Karma < 10) { str += $"You have {NumberToWords(user.Karma)} karma."; }
-                        else if (user.Karma < 100) {
-                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 10)).Trim()} and {NumberToWords(10 + user.Karma - (user.Karma % 10)).Trim()} karma.";
-                        }
-                        else if (user.Karma < 1000) {
-                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 50)).Trim()} and {NumberToWords(50 + user.Karma - (user.Karma % 50)).Trim()} karma.";
-                        }
-                        else {
-                            str += $"You have between {NumberToWords(user.Karma - (user.Karma % 100)).Trim()} and {NumberToWords(100 + user.Karma - (user.Karma % 100)).Trim()} karma.";
-                        }
+                        // if (user.Karma < 10) { str += $"You have {NumberToWords(user.Karma)} karma."; }
+                        // else if (user.Karma < 100) {
+                        //     str += $"You have between {NumberToWords(user.Karma - (user.Karma % 10)).Trim()} and {NumberToWords(10 + user.Karma - (user.Karma % 10)).Trim()} karma.";
+                        // }
+                        // else if (user.Karma < 1000) {
+                        // str += $"You have between {NumberToWords(user.Karma - (user.Karma % 50)).Trim()} and {NumberToWords(50 + user.Karma - (user.Karma % 50)).Trim()} karma.";
+                        // }
+                        // else {
+                        // str += $"You have between {NumberToWords(user.Karma - (user.Karma % 100)).Trim()} and {NumberToWords(100 + user.Karma - (user.Karma % 100)).Trim()} karma.";
+                        // }
 
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
                     });
