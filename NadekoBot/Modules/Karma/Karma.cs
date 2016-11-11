@@ -95,7 +95,7 @@ namespace NadekoBot.Modules.Karma
 
             DateTime last = DateTime.FromBinary(user.LastGiven);
 
-            if (last.AddSeconds(1).CompareTo(DateTime.Now) <= 0)
+            if (last.AddSeconds(30).CompareTo(DateTime.Now) <= 0)
             {
                 target.Karma += 1;
                 user.LastGiven = DateTime.Now.ToBinary();
@@ -113,13 +113,13 @@ namespace NadekoBot.Modules.Karma
                 // process message and award
                 
                 isGiven = true;
-                if (target.Karma == 1) { message = "[user] has recieved their first [type]!"; }
-                else if (target.Karma % 5000 == 0) { message = "[user] has reached a enormous milestone!"; award = 500; }
-                else if (target.Karma % 1000 == 0) { message = "[user] has reached a huge milestone!"; award = 250; }
-                else if (target.Karma % 500 == 0) { message = "[user] has reached a major milestone!"; award = 100; }
-                else if (target.Karma % 100 == 0) { message = "[user] has reached a moderate milestone!"; award = 50; }
-                else if (target.Karma % 50 == 0) { message = "[user] has reached a minor milestone!"; award = 25; }
-                else if (target.Karma % 10 == 0) { message = "[user] has reached a tiny milestone!"; award = 5; }
+                if (target.Karma == 1) { message = "[target] has recieved their first [type]!"; }
+                else if (target.Karma % 5000 == 0) { message = "Thanks to [user], [target] has reached a enormous milestone!"; award = 500; }
+                else if (target.Karma % 1000 == 0) { message = "Thanks to [user], [target] has reached a huge milestone!"; award = 250; }
+                else if (target.Karma % 500 == 0) { message = "Thanks to [user], [target] has reached a major milestone!"; award = 100; }
+                else if (target.Karma % 100 == 0) { message = "Thanks to [user], [target] has reached a moderate milestone!"; award = 50; }
+                else if (target.Karma % 50 == 0) { message = "Thanks to [user], [target] has reached a minor milestone!"; award = 25; }
+                else if (target.Karma % 10 == 0) { message = "Thanks to [user], [target] has reached a tiny milestone!"; award = 5; }
                 else { message = "[user] has given [target] [type]."; }
             }
 
@@ -192,7 +192,7 @@ namespace NadekoBot.Modules.Karma
                         { user = karma[(long)e.User.Id]; }
                         else
                         {
-                            await e.Channel.SendMessage("You have no karma.").ConfigureAwait(false);
+                            await e.Channel.SendMessage("You have 0 karma.").ConfigureAwait(false);
                             return;
                         }
 
