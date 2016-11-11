@@ -49,7 +49,7 @@ namespace NadekoBot.Modules.Games.Commands
                         var rnd = Math.Abs(rng.Next(0, 101));
                         if (rnd == 0)
                         {
-                            var msgs = new[] { await e.Channel.SendFile(GetRandomCurrencyImagePath()), await e.Channel.SendMessage($"❗ A random {NadekoBot.Config.CurrencyName} appeared! Pick it up by typing `>pick`") };
+                            var msgs = new[] { await e.Channel.SendFile(GetRandomCurrencyImagePath()), await e.Channel.SendMessage($"❗ A random {NadekoBot.Config.CurrencyName} appeared! Drink it up by typing `>sip`") };
                             plantedFlowerChannels.AddOrUpdate(e.Channel.Id, msgs, (u, m) => { m.ForEach(async msgToDelete => { try { await msgToDelete.Delete(); } catch { } }); return msgs; });
                             plantpickCooldowns.AddOrUpdate(e.Channel.Id, now, (i, d) => now);
                         }
@@ -116,7 +116,7 @@ namespace NadekoBot.Modules.Games.Commands
                         else
                             msg = await e.Channel.SendFile(file).ConfigureAwait(false);
                         var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(NadekoBot.Config.CurrencyName[0]);
-                        var msg2 = await e.Channel.SendMessage($"Oh how swell! **{e.User.Name}** poured {(vowelFirst ? "an" : "a")} {NadekoBot.Config.CurrencyName}. Pick it using {Module.Prefix}sip").ConfigureAwait(false);
+                        var msg2 = await e.Channel.SendMessage($"Oh how swell! **{e.User.Name}** poured {(vowelFirst ? "an" : "a")} {NadekoBot.Config.CurrencyName}. Drink it using {Module.Prefix}sip").ConfigureAwait(false);
                         plantedFlowerChannels.TryAdd(e.Channel.Id, new[] { msg, msg2 });
                     }
                     finally { locker.Release(); }
