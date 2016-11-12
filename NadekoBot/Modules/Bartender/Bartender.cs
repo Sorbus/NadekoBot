@@ -35,6 +35,11 @@ namespace NadekoBot.Modules.Bartender
         private static Dictionary<int, String> skinPatterns = new Dictionary<int, string> { };
         private static Dictionary<int, String> eyeColors = new Dictionary<int, string> { };
 
+        public Bartender()
+        {
+            commands.Add(new ChooseForm(this));
+        }
+
         // from https://stackoverflow.com/a/2730393
         public static string NumberToWords(int number)
         {
@@ -444,7 +449,7 @@ namespace NadekoBot.Modules.Bartender
                     });
 
                 cgb.CreateCommand(Prefix + "pool")
-                    .Description($"Check how many {NadekoBot.Config.CurrencyName} are in the pool. | `{Prefix}pool`")
+                    .Description($"Check how many {NadekoBot.Config.CurrencyName}s are in the pool. | `{Prefix}pool`")
                     .Do(async e =>
                     {
                     });
@@ -669,108 +674,6 @@ namespace NadekoBot.Modules.Bartender
                             }
                         }
                         catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    });
-
-                cgb.CreateCommand(Prefix + "set")
-                    .Description($"Set your gender. | `{Prefix}set female`")
-                    .Parameter("gender", ParameterType.Required)
-                    .Do(async e =>
-                    {
-                        int gender_marker;
-                        if(e.GetArg("gender").ToLowerInvariant() == "female")
-                        {
-                            gender_marker = 1;
-                        }
-                        else if(e.GetArg("gender").ToLowerInvariant() == "male")
-                        {
-                            gender_marker = 2;
-                        }
-                        else if(e.GetArg("gender").ToLowerInvariant() == "neutral")
-                        {
-                            gender_marker = 0;
-                        }
-                        else
-                        {
-                            await e.Channel.SendMessage($"Sorry, {e.User.Mention}, we don't currently support that gender. Supported markers are male, female, and neutral.").ConfigureAwait(false);
-                            return;
-                        }
-
-                        try
-                        {
-                            var db = DbHandler.Instance.GetAllRows<UserMorph>();
-                            Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
-                     
-                            if (morphs.ContainsKey((long)e.User.Id))
-                            {
-                                UserMorph morph = morphs[(long)e.User.Id];
-                                if (morph.Gender == gender_marker)
-                                {
-                                    await e.Channel.SendMessage($"Your gender is already {e.GetArg("gender").ToUpperInvariant()}, {e.User.Mention}.").ConfigureAwait(false);
-                                }
-                                else
-                                {
-                                    morph.Gender = gender_marker;
-
-                                    DbHandler.Instance.Save(morph);
-
-                                    await e.Channel.SendMessage($"Set your gender to {e.GetArg("gender").ToUpperInvariant()}, {e.User.Mention}.").ConfigureAwait(false);
-                                }
-                            }
-                            else
-                            {
-                                DbHandler.Instance.Connection.Insert(new UserMorph
-                                {
-                                    UserId = (long)e.User.Id,
-
-                                    Gender = gender_marker,
-                                    // default morph is a standard human
-                                    // BodyType = 0,
-                                    UpperType = 0,
-                                    LowerType = 0,
-                                    LegType = 0,
-                                    ArmType = 0,
-                                    FaceType = 0,
-                                    EyeColor = 152,
-                                    HairType = 0,
-                                    HairColor = 152,
-                                    EarType = 0,
-                                    TongueType = 0,
-                                    TeethType = 0,
-                                    SkinType = 0,
-                                    SkinOrnamentsMorph = 0,
-                                    SkinOrnaments = 0,
-                                    // SkinCovering = 0,
-                                    ArmCovering = 0,
-                                    TorsoCovering = 0,
-                                    LegCovering = 0,
-                                    HandModification = 0,
-                                    FeetModification = 0,
-                                    HandType = 0,
-                                    FeetType = 0,
-                                    WingType = 0,
-                                    TailType = 0,
-                                    LegCount = 2,
-                                    ArmCount = 2,
-                                    WingCount = 0,
-                                    TailCount = 0,
-                                    WingSize = 0,
-                                    TailSize = 0,
-                                    HairLength = rng.Next(1, 8),
-                                    EarCount = 2,
-                                    TongueLength = rng.Next(3, 5),
-                                    EyeCount = 2,
-                                    MorphCount = 0,
-                                    Weight = 22,
-
-                                }, typeof(UserMorph));
-
-                                await e.Channel.SendMessage($"Set your gender to {e.GetArg("gender").ToUpperInvariant()}, {e.User.Mention}.").ConfigureAwait(false);
-                            }
-                        }
-                        catch(Exception ex)
                         {
                             Console.WriteLine(ex);
                         }
