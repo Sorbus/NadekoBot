@@ -287,7 +287,6 @@ namespace NadekoBot
             {
                 if (e.Server != null || e.User.Id == Client.CurrentUser.Id) return;
                 if (PollCommand.ActivePolls.SelectMany(kvp => kvp.Key.Users.Select(u => u.Id)).Contains(e.User.Id)) return;
-                if (ChooseForm.Active.ContainsKey((long)e.User.Id)) return;
                 if (ConfigHandler.IsBlackListed(e))
                     return;
 
