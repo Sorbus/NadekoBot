@@ -9,11 +9,10 @@ namespace NadekoBot.Classes.JSONModels
     public class TFMorph
     {
         public TFMorph(
-            string cod, string nam, string bodt, string bodu, string bodl, string legt, string armt, string fact, string eyet, string[] eyec,
-            string hait, string[] haic, string eart, string tont, string teet, string skit, string[] skio, string skic, string feet,
+            string cod, string nam, string bodt, string bodu, string bodl, string legt, string armt, string fact, string eyet, int[] eyec,
+            string hait, int[] haic, string eart, string tont, string teet, string skit, string[] skio, string skic, string feet,
             string hant, string hanm, string feem, string wint, string tait, int mwin, int mtai, int meye, int mhai, int mear,
-            int mton, int marm, int mleg, string[] wins, string[] tais, string legp, string earp, string winp, string taip,
-            int perm
+            int mton, int marm, int mleg, string[] wins, string[] tais, string legp, string earp, string winp, string taip, TFData trans
             )
         {
             Code = cod;
@@ -56,7 +55,7 @@ namespace NadekoBot.Classes.JSONModels
             MaxArms = marm;
             MaxLegs = mleg;
 
-            Permanence = perm;
+            Transform = trans;
         }
         public String Code { get; set; }
         public String Name { get; set; }
@@ -67,9 +66,9 @@ namespace NadekoBot.Classes.JSONModels
         public String ArmType { get; set; }
         public String FaceType { get; set; }
         public String EyeType { get; set; }
-        public String[] EyeColor { get; set; }
+        public int[] EyeColor { get; set; }
         public String HairType { get; set; }
-        public String[] HairColor { get; set; }
+        public int[] HairColor { get; set; }
         public String EarType { get; set; }
         public String TongueType { get; set; }
         public String TeethType { get; set; }
@@ -98,6 +97,17 @@ namespace NadekoBot.Classes.JSONModels
         public int MaxArms { get; set; }
         public int MaxLegs { get; set; }
 
+        public int Permanence { get; set; }
+
+        public TFData Transform { get; set; }
+    }
+
+    public class TFData
+    {
+        public TFData(int perm)
+        {
+            Permanence = perm;
+        }
         public int Permanence { get; set; }
     }
 }

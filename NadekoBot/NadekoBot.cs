@@ -70,8 +70,9 @@ namespace NadekoBot
                 Config.Quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "quotes.json"));
                 Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonTypes.json"));
                 Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonMoves.json"));
-                Config.DrinkMenu = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "DrinkMenu.json"));
-                Config.ValidMorphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "UserMorphs.json"));
+                Config.Drinks = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "drinks.json"));
+                Config.Morphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "morphs.json"));
+                Config.Colors = JsonConvert.DeserializeObject<Dictionary<String,TFColors>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "colors.json"));
             }
             catch (Exception ex)
             {

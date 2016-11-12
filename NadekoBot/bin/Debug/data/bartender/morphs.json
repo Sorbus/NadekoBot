@@ -9,9 +9,9 @@
 		"ArmType": null,
 		"FaceType": "human",
 		"EyeType": "eye",
-		"EyeColor": [null],
+		"EyeColor": [0],
 		"HairType": "hair",
-		"HairColor": [null],
+		"HairColor": [0],
 		"EarType": "human",
 		"TongueType": "human tongue",
 		"TeethType": "human teeth",
@@ -38,7 +38,9 @@
 		"EarPosition": "on either side of",
 		"WingPosition": "sprouting from $objective$ shoulderblades",
 		"TailPosition": "extending from the base of $objective$ spine",
-		"Permanence": 0
+		"Transform": {
+			"Permanence": 0
+		}
 	},
 	{
 		"Code": "fox"
@@ -74,9 +76,9 @@
 		"ArmType": null,
 		"FaceType": "human face",
 		"EyeType": "eye",
-		"EyeColor": ["slate-blue","black","gold","red","yellow","black",null],
+		"EyeColor": [0],
 		"HairType": "tentacles in place of hair",
-		"HairColor": ["purple","blue","green","iridescent","black","red",null],
+		"HairColor": [0],
 		"EarType": "human ear",
 		"TongueType": "prehensile tongue",
 		"TeethType": "sharply pointed teeth",
@@ -103,7 +105,13 @@
 		"EarPosition": "on either side of",
 		"WingPosition": "sprouting from $objective$ shoulderblades",
 		"TailPosition": null,
-		"Permanence": 50
+		"Transform": {
+			"Permanence": 50,
+			"HairKey": "tentacle",
+			"WingKey": null,
+			"FaceChange": "minor",
+			"LowerChange": "major",
+		}
 	},
 	{
 		"Code": "sheep"
@@ -118,9 +126,9 @@
 		"ArmType": null,
 		"FaceType": "human",
 		"EyeType": "compound eye",
-		"EyeColor": [null],
+		"EyeColor": [0],
 		"HairType": "hair",
-		"HairColor": [null],
+		"HairColor": [0],
 		"EarType": "human",
 		"TongueType": "gentle tongue",
 		"TeethType": "human teeth",
@@ -147,7 +155,9 @@
 		"EarPosition": "on either side of",
 		"WingPosition": "sprouting from $objective$ shoulderblades",
 		"TailPosition": "extending from the base of $objective$ spine",
-		"Permanence": 10
+		"Transform": {
+			"Permanence": 10
+		}
 	},
 	{
 		"Code": "centaur"
@@ -188,6 +198,8 @@
 		"TailSize": [],
 		"LegPosition": "",
 		"EarPosition": "",
-		"Permanence": 0
+		"Transform": {
+			"Permanence": 0
+		}
 	}
 ]

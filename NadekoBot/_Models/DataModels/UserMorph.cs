@@ -23,15 +23,16 @@ namespace NadekoBot.DataModels
 
         public int FaceType { get; set; }
         public int EyeType { get; set; }
-        public int EyeColor { get; set; } // draws from list inside whichever morph eyetype is
+        public int EyeColor { get; set; } // draws from list in bartender.
         public int HairType { get; set; }
-        public int HairColor { get; set; } // draws from hairtype
+        public int HairColor { get; set; } // draws from list in bartender.
         public int EarType { get; set; }
 
         public int TongueType { get; set; }
         public int TeethType { get; set; }
 
         public int SkinType { get; set; }
+        public int SkinPattern { get; set; } // draws from list in bartender.
         public int SkinOrnamentsMorph { get; set; }
         public int SkinOrnaments { get; set; } // draws from SkinOrnamentsMorph
 
@@ -61,6 +62,8 @@ namespace NadekoBot.DataModels
         public int EyeCount { get; set; }
 
         public int MorphCount { get; set; }
-        public float Weight { get; set; }
+        public float Weight { get; set; } // bmi
+        public int Height { get; set; } // in inches
+        public float Musculature { get; set; } // abstract
     }
 }

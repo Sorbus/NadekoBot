@@ -31,8 +31,11 @@
 		"Image": "",
 		"Dragon": false,
 		"Transformative": true,
-		"Target": "femmehuman",
-		"HairMod": [0, 2, 4, 6, 8, 10],
+		"TFDetails": {
+			"Target": "femmehuman",
+			"HairMod": [0, 2, 4, 6, 8, 10],
+		}
+		
 	},
 	{
 		"Code": "foxflower nectar",
@@ -44,7 +47,9 @@
 		"Image": "",
 		"Dragon": true,
 		"Transformative": true,
-		"Target": "fox"
+		"TFDetails": {
+			"Target": "fox",
+		}
 	},
 	{
 		"Code": "apple cider",
@@ -394,5 +399,165 @@
 		"Image": "",
 		"Dragon": false,
 		"Transformative": false
-	}
+	},
+	{
+		"Code": "white pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "grey pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "black pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "magenta pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "pink pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "red pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "brown pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "orange pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "yellow pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "green pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "cyan pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "blue pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "violet pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "neon pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "irridescent pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
+	{
+		"Code": "multihued pill",
+		"Cost": 2,
+		"Type": "pill",
+		"Description": "",
+		"Flavor": "",
+		"Image": "",
+		"Dragon": false,
+		"Transformative": true
+	},
 ]
