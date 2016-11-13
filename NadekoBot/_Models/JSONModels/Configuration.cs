@@ -131,9 +131,15 @@ namespace NadekoBot.Classes.JSONModels
         [JsonIgnore]
         public List<PokemonType> PokemonTypes { get; set; } = new List<PokemonType>();
         public List<PokemonMove> PokemonMoves { get; set; } = new List<PokemonMove>();
-        public List<BarDrink> Drinks { get; set; } = new List<BarDrink>();
+        public List<Drink> Drinks { get; set; } = new List<Drink>();
+
         public List<TFMorph> Morphs { get; set; } = new List<TFMorph>();
-        public Dictionary<string, TFColors> Colors { get; set; } = new Dictionary<string, TFColors>();
+        public Dictionary<int, TFColor> Colors { get; set; } = new Dictionary<int, TFColor>();
+        public Dictionary<int, TFHead> Head { get; set; } = new Dictionary<int, TFHead>();
+        public Dictionary<int, TFBody> Body { get; set; } = new Dictionary<int, TFBody>();
+        public Dictionary<int, TFSkin> Skin { get; set; } = new Dictionary<int, TFSkin>();
+        public Dictionary<int, TFOrnament> Ornament { get; set; } = new Dictionary<int, TFOrnament>();
+        public Dictionary<int, TFAppendages> Appendages { get; set; } = new Dictionary<int, TFAppendages>();
 
         public string RemindMessageFormat { get; set; } = "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗";
 

@@ -70,9 +70,15 @@ namespace NadekoBot
                 Config.Quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "quotes.json"));
                 Config.PokemonTypes = JsonConvert.DeserializeObject<List<PokemonType>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonTypes.json"));
                 Config.PokemonMoves = JsonConvert.DeserializeObject<List<PokemonMove>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "PokemonMoves.json"));
-                Config.Drinks = JsonConvert.DeserializeObject<List<BarDrink>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "drinks.json"));
-                Config.Morphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "morphs.json"));
-                Config.Colors = JsonConvert.DeserializeObject<Dictionary<String,TFColors>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "colors.json"));
+                Config.Drinks = JsonConvert.DeserializeObject<List<Drink>>(File.ReadAllText("data" + System.IO.Path.DirectorySeparatorChar + "bartender" + System.IO.Path.DirectorySeparatorChar + "drinks.json"));
+
+                Config.Morphs = JsonConvert.DeserializeObject<List<TFMorph>>(File.ReadAllText("data/bartender/morphs.json"));
+                Config.Colors = JsonConvert.DeserializeObject<Dictionary<int,TFColor>>(File.ReadAllText("data/bartender/colors.json"));
+                Config.Appendages = JsonConvert.DeserializeObject<Dictionary<int, TFAppendages>>(File.ReadAllText("data/bartender/appendages.json"));
+                Config.Body = JsonConvert.DeserializeObject<Dictionary<int, TFBody>>(File.ReadAllText("data/bartender/bodytypes.json"));
+                Config.Head = JsonConvert.DeserializeObject<Dictionary<int, TFHead>>(File.ReadAllText("data/bartender/headfeatures.json"));
+                Config.Ornament = JsonConvert.DeserializeObject<Dictionary<int, TFOrnament>>(File.ReadAllText("data/bartender/ornaments.json"));
+                Config.Skin = JsonConvert.DeserializeObject<Dictionary<int, TFSkin>>(File.ReadAllText("data/bartender/skin.json"));
             }
             catch (Exception ex)
             {

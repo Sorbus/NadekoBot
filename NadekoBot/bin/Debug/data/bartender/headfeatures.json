@@ -1,0 +1,44 @@
+// eyes, heads, hair, ears, tongues, teeth
+
+{
+	0: {
+		"Name": null,
+		"Head": null,
+		"Hair": null,
+		"Ears": null,
+		"Tongue": null,
+		"Teeth": null,
+		"Eyes": null,
+		"EarAnchor": null,
+	},
+	1: {
+		"Name": "human",
+		"Head": "human head",
+		"Hair": "hair",
+		"Ears": "human ear",
+		"Tongue": "human tongue",
+		"Teeth": "human teeth",
+		"Eyes": "eye",
+		"EarAnchor": "on either side of",
+	},
+	2: {
+		"Name": "spidertaur",
+		"Head": "human head",
+		"Hair": "hair",
+		"Ears": "human ear",
+		"Tongue": "prehensile tongue",
+		"Teeth": "sharply pointed teeth",
+		"Eyes": "eye",
+		"EarAnchor": "on either side of",
+	},
+	3: {
+		"Name": "tentacle",
+		"Head": null,
+		"Hair": "tentacles in place of hair",
+		"Ears": "thin waving tentacle",
+		"Tongue": "tentacle tongue",
+		"Teeth": "waving rows of tentacles in place of teeth",
+		"Eyes": "greedy eye",
+		"EarAnchor": "protruding from the top of",
+	},
+}

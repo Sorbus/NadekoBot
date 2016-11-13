@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NadekoBot.Classes.JSONModels
 {
-    public class TFColors
+    public class TFColor
     {
-        public TFColors(string name, string hue)
+        public TFColor(string name, string hue)
         {
             Name = name;
             Hue = hue;

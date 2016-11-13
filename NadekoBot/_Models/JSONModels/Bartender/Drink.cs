@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NadekoBot.Classes.JSONModels
 {
-    public class BarDrink
+    public class Drink
     {
-        public BarDrink(string p, string n, int c, string t, string d, string f, string i, bool s, bool w, TFDetails tf)
+        public Drink(string p, string n, int c, string t, string d, string f, bool s, bool w, TFDetails tf)
         {
             Code = p;
             Name = n;
@@ -16,7 +16,6 @@ namespace NadekoBot.Classes.JSONModels
             Cat = t;
             Description = d;
             Flavor = f;
-            Image = i;
             Dragon = s;
             Transformative = w;
             Transform = tf;
@@ -27,7 +26,6 @@ namespace NadekoBot.Classes.JSONModels
         public string Cat { get; set; }
         public string Description { get; set; }
         public string Flavor { get; set; }
-        public string Image { get; set; }
         public Boolean Dragon { get; set; }
         public Boolean Transformative { get; set; }
 

@@ -23,18 +23,21 @@ namespace NadekoBot.DataModels
 
         public int FaceType { get; set; }
         public int EyeType { get; set; }
-        public int EyeColor { get; set; } // draws from list in bartender.
+        public int EyeColor { get; set; } // draws from list of colors.
         public int HairType { get; set; }
-        public int HairColor { get; set; } // draws from list in bartender.
+        public int HairColor { get; set; } // draws from list of colors.
         public int EarType { get; set; }
+        public int LipColor { get; set; } // draws from list of colors.
 
         public int TongueType { get; set; }
         public int TeethType { get; set; }
+        public int TongueColor { get; set; }
 
         public int SkinType { get; set; }
-        public int SkinPattern { get; set; } // draws from list in bartender.
-        public int SkinOrnamentsMorph { get; set; }
-        public int SkinOrnaments { get; set; } // draws from SkinOrnamentsMorph
+        public int SkinPattern { get; set; } // draws from list in bartender, not currently implemented
+        public int SkinColor { get; set; } // draws from list of colors
+        public int SkinOrnaments { get; set; } // draws from list
+        public int OrnamentColor { get; set; }
 
         //public int SkinCovering { get; set; }
         public int ArmCovering { get; set; }
@@ -48,8 +51,10 @@ namespace NadekoBot.DataModels
 
         public int WingType { get; set; }
         public int WingSize { get; set; } // draws from type of WingType
+        public int WingColor { get; set; }
         public int TailType { get; set; }
         public int TailSize { get; set; } // draws from type of TailType
+        public int TailColor { get; set; }
 
         // following values are purely numeric
         public int LegCount { get; set; }
@@ -58,6 +63,7 @@ namespace NadekoBot.DataModels
         public int TailCount { get; set; }
         public int HairLength { get; set; }
         public int EarCount { get; set; }
+        public int TongueCount { get; set; }
         public int TongueLength { get; set; }
         public int EyeCount { get; set; }
 

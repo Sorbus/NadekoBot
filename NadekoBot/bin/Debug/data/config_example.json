@@ -19,6 +19,11 @@
   "Drinks": [],
   "Morphs": [],
   "Colors": {},
+  "Head": {},
+  "Body": {},
+  "Skin": {},
+  "Ornament": {},
+  "Appendages": {},
   "RemindMessageFormat": "❗⏰**I've been told to remind you to '%message%' now by %user%.**⏰❗",
   "CustomReactions": {
     "\\o\\": [

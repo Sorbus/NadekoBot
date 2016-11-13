@@ -218,8 +218,13 @@
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\DataModels\UserMorph.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
-    <Compile Include="_Models\JSONModels\BarDrink.cs" />
-    <Compile Include="_Models\JSONModels\TFColors.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\Drink.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFAppendages.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFHead.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFBody.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFOrnament.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFSkin.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFColor.cs" />
     <Compile Include="_Models\JSONModels\PokemonMove.cs" />
     <Compile Include="_Models\JSONModels\Configuration.cs" />
     <Compile Include="Modules\Searches\Commands\WowJokes.cs" />
@@ -227,7 +232,7 @@
     <Compile Include="_Models\JSONModels\MagicItem.cs" />
     <Compile Include="_Models\JSONModels\MangaResult.cs" />
     <Compile Include="_Models\JSONModels\PokemonType.cs" />
-    <Compile Include="_Models\JSONModels\TFMorph.cs" />
+    <Compile Include="_Models\JSONModels\Bartender\TFMorph.cs" />
     <Compile Include="_Models\JSONModels\_JSONModels.cs" />
     <Compile Include="Modules\Games\Commands\Leet.cs" />
     <Compile Include="Modules\Music\Classes\MusicControls.cs" />

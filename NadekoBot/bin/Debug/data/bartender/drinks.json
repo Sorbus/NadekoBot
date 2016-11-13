@@ -6,8 +6,7 @@
 		"Type": "wine",
 		"Description": "A sweet honey wine",
 		"Flavor": "Your mead arrives in a outrageously ornamental stein, all bone and skulls and steel. It tastes sweet, almost cloying, but after a few moments the subtle flavor of honey comes through, flowers and nectar and freedom.",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -17,8 +16,7 @@
 		"Type": "beer",
 		"Description": "I don't know, do you like beer?",
 		"Flavor": "It tastes like beer. I don't know, I can't stand the stuff. Give me a break.",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -28,8 +26,7 @@
 		"Type": "cocktail",
 		"Description": "A provocatively named drink. Normally it's harmless and fruity, but our variant is a bit more fun.",
 		"Flavor": "The drink arrives in a tall highball glass, orange and inviting, condensation already beading its sides. It tastes of summer and the sun, of long days spent in idle relaxation. As you drink it the taste spreads throughout your body, leaving you relaxed and languid.",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true,
 		"TFDetails": {
 			"Target": "femmehuman",
@@ -44,8 +41,7 @@
 		"Type": "Transformative",
 		"Description": "Concentrated nectar from a rare flower. May have transformative properties.",
 		"Flavor": "The drink arrives in a tiny glass vial. There's hardly any of the red liquid there. It roils in your mouth as you drink it, and by the time you begin to swallow it is gone, absorbed through your mouth.",
-		"Image": "",
-		"Dragon": true,
+ 		"Dragon": true,
 		"Transformative": true,
 		"TFDetails": {
 			"Target": "fox",
@@ -58,8 +54,7 @@
 		"Type": "cider",
 		"Description": "Made in the traditional farmhouse style, but slightly sweetened with apple juice and honey.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -69,8 +64,7 @@
 		"Type": "cider",
 		"Description": "This hot, spicy drink is the perfect choice for autumn.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -80,8 +74,7 @@
 		"Type": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -91,8 +84,7 @@
 		"Type": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -102,8 +94,7 @@
 		"Type": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -113,8 +104,7 @@
 		"Type": "wine",
 		"Description": "A light, dry wine that pairs well with fish, chicken, and pork.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -123,8 +113,7 @@
 		"Type": "wine",
 		"Description": "An aromatic wine, perfect for sipping.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -134,8 +123,7 @@
 		"Type": "wine",
 		"Description": "A popular white wine that pairs well with fish and chicken.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -145,8 +133,7 @@
 		"Type": "wine",
 		"Description": "A versatile light white wine with herbal notes.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -156,8 +143,7 @@
 		"Type": "wine",
 		"Description": "A spicy red wine which pairs well with all sorts of meat.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -167,8 +153,7 @@
 		"Type": "wine",
 		"Description": "This red wine is easy to drink and pairs with any food. It is a good introduction to red wines.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -178,8 +163,7 @@
 		"Type": "wine",
 		"Description": "One of the world's best red wines, it is full-bodied and pairs well with red meat.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -189,8 +173,7 @@
 		"Type": "wine",
 		"Description": "A noble and fruity red wine, it pairs well with grilled salmon, chicken, lamb, and Japanese dishes.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -200,8 +183,7 @@
 		"Type": "non-alcoholic",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -211,8 +193,7 @@
 		"Type": "non-alcoholic",
 		"Description": "A traditional hot chocolate, rich and creamy.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -222,8 +203,7 @@
 		"Type": "non-alcoholic",
 		"Description": "Made in a Mexican style, with just a dash of chile. We think that this is the *perfect* hot chocolate.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": true
+ 		"Dragon": true
 	},
 	{
 		"Code": "black coffee",
@@ -232,8 +212,7 @@
 		"Type": "non-alcoholic",
 		"Description": "As black as your soul on a dark night, perfect for filling your mind with bitter ideas.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -243,8 +222,7 @@
 		"Type": "non-alcoholic",
 		"Description": "While often derided as basic, this drink carries all the flavors of fall.",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -253,8 +231,7 @@
 		"Type": "",
 		"Description": "Served in a (clean) shoe,",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -264,8 +241,7 @@
 		"Type": "",
 		"Description": "with lots of lemon",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -275,8 +251,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -286,8 +261,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -297,8 +271,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -308,8 +281,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -319,8 +291,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -330,8 +301,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	}
 	,
@@ -342,8 +312,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -353,8 +322,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -364,8 +332,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -375,8 +342,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -386,8 +352,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -396,8 +361,7 @@
 		"Type": "",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": false
 	},
 	{
@@ -406,8 +370,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -416,8 +379,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -426,8 +388,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -436,8 +397,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -446,8 +406,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -456,8 +415,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -466,8 +424,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -476,8 +433,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -486,8 +442,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -496,8 +451,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -506,8 +460,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -516,8 +469,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -526,8 +478,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -536,8 +487,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -546,8 +496,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 	{
@@ -556,8 +505,7 @@
 		"Type": "pill",
 		"Description": "",
 		"Flavor": "",
-		"Image": "",
-		"Dragon": false,
+ 		"Dragon": false,
 		"Transformative": true
 	},
 ]
