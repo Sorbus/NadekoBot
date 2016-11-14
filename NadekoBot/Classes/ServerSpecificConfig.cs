@@ -196,6 +196,23 @@ namespace NadekoBot.Classes
         }
 
         [JsonIgnore]
+        private ObservableConcurrentDictionary<ulong, int> festivalChannels;
+        public ObservableConcurrentDictionary<ulong, int> FestivalChannels
+        {
+            get { return festivalChannels; }
+            set
+            {
+                festivalChannels = value;
+                if (value != null)
+                    festivalChannels.CollectionChanged += (s, e) =>
+                    {
+                        if (!SpecificConfigurations.Instantiated) return;
+                        OnPropertyChanged();
+                    };
+            }
+        }
+
+        [JsonIgnore]
         private bool autoDeleteMessagesOnCommand = false;
         public bool AutoDeleteMessagesOnCommand {
             get { return autoDeleteMessagesOnCommand; }
@@ -249,6 +266,7 @@ namespace NadekoBot.Classes
             ListOfSelfAssignableRoles = new ObservableCollection<ulong>();
             ObservingStreams = new ObservableCollection<StreamNotificationConfig>();
             GenerateCurrencyChannels = new ObservableConcurrentDictionary<ulong, int>();
+            FestivalChannels = new ObservableConcurrentDictionary<ulong, int>();
             VoiceChannelLog = new ObservableConcurrentDictionary<ulong, ulong>();
             LogserverIgnoreChannels = new ObservableCollection<ulong>();
         }
