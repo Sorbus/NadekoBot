@@ -15,5 +15,6 @@ namespace NadekoBot.DataModels
         public int Gears { get; set; }
         public int Plates { get; set; }
         public int Assembled { get; set; }
+        public int Summoned { get; set; }
     }
 }

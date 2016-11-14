@@ -240,6 +240,9 @@ namespace NadekoBot.Modules.Games.Commands
                                 ).ConfigureAwait(false);
                             user.Assembled -= 1;
 
+                            if (user.Summoned != null) { user.Summoned += 1; }
+                            else { user.Summoned = 1; }
+
                             // await e.User.SendMessage
                             await FlowersHandler.AddFlowersAsync(e.User, "a reward for your accomplishment", 250).ConfigureAwait(false);
 
