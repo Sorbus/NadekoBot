@@ -10,8 +10,9 @@ namespace NadekoBot.Classes.JSONModels
     {
         public TFMorph(
              string code, string name, int[] eyec, int[] haic, int[] skit, int[] skio, int[] sknc, int[] ornc,
-             int[] skic, int[] coco, int[] winc, int[] taic, int[] horc, int mwin, int mtai, int meye, int mhai, int mear,
-             int mton, int cton, int marm, int mleg, int mhor, TFData trans, TFHead head, TFBody body, TFAppendages appe
+             int[] skic, int[] coco, int[] winc, int[] taic, int[] horc, int[] necc, int[] armc, int[] legc,
+             int mwin, int mtai, int meye, int mhai, int mear, int mton, int cton, int marm, int mleg, int mhor,
+             TFData trans, TFHead head, TFBody body, TFAppendages appe
             )
         {
             Code = code;
@@ -27,6 +28,9 @@ namespace NadekoBot.Classes.JSONModels
             WingColor = winc;
             TailColor = taic;
             HornColor = horc;
+            NeckColor = necc;
+            ArmColor = armc;
+            LegColor = legc;
 
             MaxWings = mwin;
             MaxTails = mtai;
@@ -61,6 +65,9 @@ namespace NadekoBot.Classes.JSONModels
         public int[] SkinColor { get; set; }
         public int[] LipColor { get; set; }
         public int[] HornColor { get; set; }
+        public int[] NeckColor { get; set; }
+        public int[] LegColor { get; set; }
+        public int[] ArmColor { get; set; }
 
         public int MaxWings { get; set; }
         public int MaxTails { get; set; }

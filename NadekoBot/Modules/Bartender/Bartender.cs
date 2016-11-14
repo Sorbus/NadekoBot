@@ -160,13 +160,20 @@ namespace NadekoBot.Modules.Bartender
 
             morph.FaceType = target_morph.Key;
             morph.EyeType = target_morph.Key;
-            morph.EyeColor = target_morph.Value.EyeColor[rng.Next(0,target_morph.Value.EyeColor.Length)];
+            morph.EyeColor = target_morph.Value.EyeColor[rng.Next(0, target_morph.Value.EyeColor.Length)];
             morph.HairType = target_morph.Key;
             morph.HairColor = target_morph.Value.HairColor[rng.Next(0, target_morph.Value.HairColor.Length)];
             morph.EarType = target_morph.Key;
 
             morph.TongueType = target_morph.Key;
             morph.TeethType = target_morph.Key;
+
+            morph.NeckFeature = target_morph.Key;
+            morph.NeckColor = target_morph.Value.NeckColor[rng.Next(0, target_morph.Value.NeckColor.Length)];
+            morph.LegFeature = target_morph.Key;
+            morph.LegColor = target_morph.Value.LegColor[rng.Next(0, target_morph.Value.LegColor.Length)];
+            morph.ArmFeature = target_morph.Key;
+            morph.ArmColor = target_morph.Value.ArmColor[rng.Next(0, target_morph.Value.ArmColor.Length)];
 
             morph.SkinType = target_morph.Value.SkinType[rng.Next(0, target_morph.Value.SkinType.Length)];
             morph.SkinColor = target_morph.Value.SkinColor[rng.Next(0, target_morph.Value.SkinColor.Length)];
@@ -271,9 +278,9 @@ namespace NadekoBot.Modules.Bartender
             if (c.ContainsKey(m.SkinType)) { c[m.SkinType] += 1; }
             else { c[m.SkinType] = 1; }
 
-            IOrderedEnumerable<KeyValuePair<int,int>> o = c.OrderByDescending(x => x.Value);
+            IOrderedEnumerable<KeyValuePair<int, int>> o = c.OrderByDescending(x => x.Value);
 
-            if (o.First().Value == 15 )
+            if (o.First().Value == 15)
             {
                 if (o.First().Key == 0)
                 {
@@ -584,15 +591,22 @@ namespace NadekoBot.Modules.Bartender
 
                                     String str = "$mention$ is a $weight$ $morphtype$. ";
 
-                                    str += "$pronoun$ $has$ a $bodytype$ body";
-                                    if (Morphs[morph.UpperType].Body.UpperType != null && Morphs[morph.LowerType].Body.LowerType != null)
-                                    { str += ", with $a_uppertype$ upper body and the lower body of $a_lowertype$."; }
-                                    else if (Morphs[morph.UpperType].Body.UpperType != null)
-                                    { str += ", with the upper body of $a_uppertype$."; }
-                                    else if (Morphs[morph.LowerType].Body.LowerType != null)
-                                    { str += ", with the lower body of $a_lowertype$."; }
+                                    if (Morphs[morph.UpperType].Body.UpperType == Morphs[morph.LowerType].Body.LowerType && Morphs[morph.LowerType].Body.LowerType != null)
+                                    {
+                                        str += "$pronoun$ is $a_bodytype$ $uppertype$.";
+                                    }
                                     else
-                                    { str += "."; }
+                                    {
+                                        str += "$pronoun$ $has$ a $bodytype$ body";
+                                        if (Morphs[morph.UpperType].Body.UpperType != null && Morphs[morph.LowerType].Body.LowerType != null)
+                                        { str += ", with $a_uppertype$ upper body and the lower body of $a_lowertype$."; }
+                                        else if (Morphs[morph.UpperType].Body.UpperType != null)
+                                        { str += ", with the upper body of $a_uppertype$."; }
+                                        else if (Morphs[morph.LowerType].Body.LowerType != null)
+                                        { str += ", with the lower body of $a_lowertype$."; }
+                                        else
+                                        { str += "."; }
+                                    }
 
 
                                     if (morph.LegCount > 0 && morph.ArmCount > 0 && Morphs[morph.LowerType].Appendages.Legs != null && Morphs[morph.ArmType].Appendages.Arms != null)
@@ -612,11 +626,15 @@ namespace NadekoBot.Modules.Bartender
                                     str += " $pronoun$ $has$ a $facetype$ with";
                                     str += (morph.EyeCount > 0) ? " $eyecount$ $eyecolor$ $eyetype$" : " with no eyes";
 
-                                    str += (Colors[morph.LipColor].Name != null) ? ", $lipcolor$ lips, and" : " and";
-
-                                    if (morph.HairLength > 0)
-                                    { str += " $hairlength$ $haircolor$ $hairtype$"; }
-                                    else { str += " no hair"; }
+                                    if (Morphs[morph.HairType].Head.Hair != null)
+                                    {
+                                        str += (Colors[morph.LipColor].Name != null) ? ", $lipcolor$ lips, and" : " and";
+                                        if (morph.HairLength > 0)
+                                        { str += " $hairlength$ $haircolor$ $hairtype$"; }
+                                        else { str += " no hair"; }
+                                    }
+                                    else
+                                    { str += (Colors[morph.LipColor].Name != null) ? " and $lipcolor$ lips." : "."; }
 
                                     if (morph.HornCount > 0 && Morphs[morph.HornType].Head.Horns != null && Morphs[morph.FaceType].Head.HornAnchor != null)
                                     { str += " $hornanchor$" + ((morph.HornCount > 1) ? "s." : "."); }
@@ -695,11 +713,23 @@ namespace NadekoBot.Modules.Bartender
 
                                     if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && Morphs[morph.TailType].Appendages.Tail != null &&
                                         Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0 && morph.WingCount > 0)
-                                    { str += " $pronoun$ $has$ $wingcount$ $wingsize$ $wingcolor$ $wingtype$ $wingposition$ and $tailcount$ $tailsize$ $tailcolor$ $tailtype$ $tailposition$"; }
+                                    { str += " $pronoun$ $has$ $wingtype$ $wingposition$ and $tailtype$ $tailposition$"; }
                                     else if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && morph.WingCount > 0)
-                                    { str += " $pronoun$ $has$ $wingcount$ $wingsize$ $wingcolor$ $wingtype$ $wingposition$."; }
+                                    { str += " $pronoun$ $has$ $wingtype$ $wingposition$."; }
                                     else if (Morphs[morph.TailType].Appendages.Tail != null && Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0)
-                                    { str += " $pronoun$ $has$ $tailcount$ $tailsize$ $tailcolor$ $tailtype% $tailposition$."; }
+                                    { str += " $pronoun$ $has$ $tailtype% $tailposition$."; }
+
+                                    if (Morphs[morph.ArmFeature].Appendages.ArmFeature != null && Morphs[morph.LegFeature].Appendages.LegFeature != null)
+                                    {
+                                        if (morph.ArmFeature == morph.LegFeature)
+                                        { str += " $pronoun$ $has$ $bothfeature$."; }
+                                        else
+                                        { str += " $pronoun$ $has$ $legfeature$ and $armfeature$."; }
+                                    }
+                                    else if (Morphs[morph.ArmFeature].Appendages.ArmFeature != null)
+                                    { str += " $pronoun$ $has$ $armfeature$."; }
+                                    else if (Morphs[morph.LegFeature].Appendages.LegFeature != null)
+                                    { str += " $pronoun$ $has$ $legfeature$."; }
 
                                     var swapper = new Dictionary<string, string>(
                                         StringComparer.OrdinalIgnoreCase) {
@@ -715,6 +745,8 @@ namespace NadekoBot.Modules.Bartender
                                             {"$bodytype$",(morph.UpperType == morph.LowerType) ? Morphs[morph.LowerType].Body.BodyType : "tauric " + Morphs[morph.LowerType].Body.BodyType },
                                             {"$a_uppertype$", (vowelFirst(Morphs[morph.UpperType].Body.UpperType) ? "an " : "a ") + Morphs[morph.UpperType].Body.UpperType },
                                             {"$a_lowertype$", (vowelFirst(Morphs[morph.LowerType].Body.LowerType) ? "an " : "a ") + Morphs[morph.LowerType].Body.LowerType },
+                                            {"$uppertype$", Morphs[morph.UpperType].Body.UpperType },
+                                            {"$a_bodytype$", (vowelFirst(Morphs[morph.UpperType].Body.BodyType) ? "an " : "a ") + Morphs[morph.LowerType].Body.BodyType },
 
                                             {"$armcount$", NumberToWords(morph.ArmCount) },
                                             {"$armtype$", Morphs[morph.ArmType].Appendages.Arms },
@@ -771,6 +803,14 @@ namespace NadekoBot.Modules.Bartender
                                             {"$hornanchor$", Morphs[morph.FaceType].Head.HornAnchor },
                                             {"$horncolor$", Colors[morph.HornColor].Name },
                                             {"$horncount$", NumberToWords(morph.HornCount) },
+
+                                            {"$neckfeature$", Morphs[morph.NeckFeature].Head.NeckFeature },
+                                            {"$neckcolor$", Colors[morph.NeckColor].Name },
+                                            {"$armfeature$", Morphs[morph.ArmFeature].Appendages.ArmFeature },
+                                            {"$armcolor$", Colors[morph.ArmColor].Name },
+                                            {"$legfeature$", Morphs[morph.LegFeature].Appendages.LegFeature },
+                                            {"$legcolor$", Colors[morph.LegColor].Name },
+                                            {"$bothfeature$", Morphs[morph.ArmFeature].Appendages.BothFeature },
 
                                             {"  ", " "},
                                         };
@@ -844,7 +884,7 @@ namespace NadekoBot.Modules.Bartender
                             }
                             else
                             {
-                                UserMorph morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human" ));
+                                UserMorph morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human"));
 
                                 morph.Gender = gender_marker;
 

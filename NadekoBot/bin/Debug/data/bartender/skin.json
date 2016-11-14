@@ -9,4 +9,9 @@
 		"Text": "chitin",
 		"Cover": "covered with a thin coat of $covercolor$ chitin plates",
 	},
+	3: {
+		"Name": "thick chiten",
+		"Text": "fragile skin",
+		"Cover": "completed covered by $covercolor$ chitin plates",
+	}
 }

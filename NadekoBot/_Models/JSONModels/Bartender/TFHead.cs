@@ -9,7 +9,7 @@ namespace NadekoBot.Classes.JSONModels
     public class TFHead
     {
         public TFHead(String n, String f, String h, String e, String to, String te, String ey, String ea,
-            String ho, String[] hs, String ha)
+            String ho, String[] hs, String ha, String nf)
         {
             Name = n;
             Head = f;
@@ -22,6 +22,7 @@ namespace NadekoBot.Classes.JSONModels
             Horns = ho;
             HornSizes = hs;
             HornAnchor = ha;
+            NeckFeature = nf;
         }
         public String Name { get; set; }
         public String Head { get; set; }
@@ -34,5 +35,6 @@ namespace NadekoBot.Classes.JSONModels
         public String Horns { get; set; }
         public String[] HornSizes { get; set; }
         public String HornAnchor { get; set; }
+        public String NeckFeature { get; set; }
     }
 }

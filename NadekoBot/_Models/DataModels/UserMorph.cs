@@ -33,6 +33,14 @@ namespace NadekoBot.DataModels
         public int HornSize { get; set; }
         public int HornColor { get; set; }
 
+        public int NeckFeature { get; set; }
+        public int NeckColor { get; set; }
+
+        public int ArmFeature { get; set; }
+        public int ArmColor { get; set; }
+        public int LegFeature { get; set; }
+        public int LegColor { get; set; }
+
         public int TongueType { get; set; }
         public int TeethType { get; set; }
         public int TongueColor { get; set; }

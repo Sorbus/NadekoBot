@@ -8,7 +8,8 @@ namespace NadekoBot.Classes.JSONModels
 {
     public class TFAppendages
     {
-        public TFAppendages(String n, String l, String f, String fm, String a, String h, String hm, String t, String[] ts, String w, String[] ws)
+        public TFAppendages(String n, String l, String f, String fm, String a, String h, String hm, String t,
+            String[] ts, String w, String[] ws, String af, String lf, String bf)
         {
             Name = n;
             Legs = l;
@@ -21,6 +22,9 @@ namespace NadekoBot.Classes.JSONModels
             TailSizes = ts;
             Wings = w;
             WingSizes = ws;
+            LegFeature = lf;
+            ArmFeature = af;
+            BothFeature = bf;
         }
         public String Name { get; set; }
         public String Legs { get; set; }
@@ -33,5 +37,8 @@ namespace NadekoBot.Classes.JSONModels
         public String[] TailSizes { get; set; }
         public String Wings { get; set; }
         public String[] WingSizes { get; set; }
+        public String LegFeature { get; set; }
+        public String ArmFeature { get; set; }
+        public String BothFeature { get; set; }
     }
 }
