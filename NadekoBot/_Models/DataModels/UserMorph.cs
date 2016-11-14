@@ -15,11 +15,11 @@ namespace NadekoBot.DataModels
 
         // unless noted these numbers refer to locations in the UserMorphs.JSON array
         // public int BodyType { get; set; }
-        public int UpperType{ get; set; }
-        public int LowerType{ get; set; }
+        public int UpperType { get; set; }
+        public int LowerType { get; set; }
 
         public int LegType { get; set; }
-        public int ArmType{ get; set; }
+        public int ArmType { get; set; }
 
         public int FaceType { get; set; }
         public int EyeType { get; set; }
@@ -28,6 +28,10 @@ namespace NadekoBot.DataModels
         public int HairColor { get; set; } // draws from list of colors.
         public int EarType { get; set; }
         public int LipColor { get; set; } // draws from list of colors.
+
+        public int HornType { get; set; }
+        public int HornSize { get; set; }
+        public int HornColor { get; set; }
 
         public int TongueType { get; set; }
         public int TeethType { get; set; }
@@ -41,8 +45,9 @@ namespace NadekoBot.DataModels
 
         //public int SkinCovering { get; set; }
         public int ArmCovering { get; set; }
-        public int TorsoCovering{ get; set; }
-        public int LegCovering{ get; set; }
+        public int TorsoCovering { get; set; }
+        public int LegCovering { get; set; }
+        public int CoveringColor { get; set; }
 
         public int HandModification { get; set; }
         public int FeetModification { get; set; }
@@ -66,6 +71,7 @@ namespace NadekoBot.DataModels
         public int TongueCount { get; set; }
         public int TongueLength { get; set; }
         public int EyeCount { get; set; }
+        public int HornCount { get; set; }
 
         public int MorphCount { get; set; }
         public float Weight { get; set; } // bmi

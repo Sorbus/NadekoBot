@@ -1,10 +1,5 @@
 {
 	0: {
-		"Name": null,
-		"Text": null,
-		"Cover": null,
-	},
-	1: {
 		"Name": "human",
 		"Text": "human skin",
 		"Cover": null,
@@ -12,6 +7,6 @@
 	2: {
 		"Name": "thin chitin",
 		"Text": "chitin",
-		"Cover": "covered with a thin coat of chitin plates",
+		"Cover": "covered with a thin coat of $covercolor$ chitin plates",
 	},
 }

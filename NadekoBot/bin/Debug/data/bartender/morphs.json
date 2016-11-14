@@ -1,118 +1,163 @@
-[
-	{
+{
+	0: {
 		"Code": "human",
 		"Name": "human",
-		"UpperType": 1,
-		"LowerType": 1,
-		"LegType": 1,
-		"ArmType": 1,
-		"FaceType": 1,
-		"EyeType": 1,
 		"EyeColor": [0],
-		"HairType": 1,
 		"HairColor": [0],
-		"EarType": 1,
-		"TongueType": 1,
-		"TeethType": 1,
-		"SkinType": 1,
+		"SkinType": [0],
 		"Ornaments": [0],
 		"OrnamentColor": [416, 430],
 		"SkinColor": [0],
-		"SkinCovering": [1],
-		"HandType": 1,
-		"FeetType": 1,
-		"HandModification": [0],
-		"FeetModification": [0],
-		"WingType": 0,
+		"SkinCovering": [0],
+		"CoveringColor": [0],
+		"LipColor": [136], 
 		"WingColor": [0],
-		"TailType": 0,
 		"TailColor": [0],
+		"HornColor": [0],
 		"MaxWings": 0,
 		"MaxTails": 0,
 		"MaxEyes": 2,
 		"MaxHair": 40,
 		"MaxEars": 2,
+		"MaxHorns": 0,
 		"MaxTongueSize": 5,
 		"MaxTongueCount": 1,
 		"MaxArms": 2,
 		"MaxLegs": 2,
 		"Transform": {
 			"Permanence": 0,
-		}
+		},
+		"Head": {
+			"Head": "human head",
+			"Hair": "hair",
+			"Ears": "human ear",
+			"Tongue": "human tongue",
+			"Teeth": "human teeth",
+			"Eyes": "eye",
+			"EarAnchor": "on either side of",
+			"Horns": null,
+			"HornSizes": null,
+			"HornAnchor": "topped with"
+		},
+		"Body": {
+			"BodyType": "bipedal",
+			"UpperType": "human",
+			"ArmAnchor": null,
+			"LowerType": "human",
+			"LegAnchor": null,
+			"WingAnchor": "sprouting from $objective$ shoulderblades",
+			"TailAnchor": "extending from the base of $objective$ spine",
+		},
+		"Appendages": {
+			"Legs": "human legs",
+			"Feet": "human feet",
+			"FeetMod": null,
+			"Arms": "human arms",
+			"Hands": "human hands",
+			"HandMod": null,
+			"Tail": null,
+			"TailSizes": null,
+			"Wings": null,
+			"WingSizes": null,
+		},
 	},
-	{
+	1: {
 		"Code": "fox"
 	},
-	{
+	2: {
 		"Code": "spider"
 	},
-	{
+	3: {
 		"Code": "dragon"
 	},
-	{
+	4: {
 		"Code": "octopus"
 	},
-	{
+	5: {
 		"Code": "robot"
 	},
-	{
+	6: {
 		"Code": "mouse"
 	},
-	{
+	7: {
 		"Code": "bee"
 	},
-	{
+	8: {
 		"Code": "slime"
 	},
-	{
+	9: {
 		"Code": "spidertaur",
 		"Name": "spider-morph",
-		"UpperType": 1,
-		"LowerType": 2,
-		"LegType": 2,
-		"ArmType": 2,
-		"FaceType": 2,
-		"EyeType": 2,
 		"EyeColor": [0],
-		"HairType": 3,
 		"HairColor": [0],
-		"EarType": 2,
-		"TongueType": 2,
-		"TeethType": 2,
-		"SkinType": 1,
-		"Ornaments": [1],
+		"SkinType": [0],
+		"Ornaments": [0],
 		"OrnamentColor": [416, 430],
 		"SkinColor": [15],
 		"SkinCovering": [2],
-		"HandType": 1,
-		"FeetType": 2,
+		"CoveringColor": [47, 50, 53, 28, 27, 38],
+		"LipColor": [435], 
 		"HandModification": [2],
 		"FeetModification": [2],
-		"WingType": 3,
 		"WingColor": [15],
-		"TailType": 0,
 		"TailColor": [15],
+		"HornColor": [21],
 		"MaxWings": 2,
 		"MaxTails": 0,
 		"MaxEyes": 6,
 		"MaxHair": 36,
 		"MaxEars": 2,
+		"MaxHorns": 2,
 		"MaxTongueSize": 10,
 		"MaxTongueCount": 2,
 		"MaxArms": 2,
 		"MaxLegs": 8,
 		"Transform": {
 			"Permanence": 50,
-		}
+		},
+		"Head": {
+			"Head": "human head",
+			"Hair": "hair",
+			"Ears": "ear",
+			"Tongue": "prehensile tongue",
+			"Teeth": "sharply pointed teeth",
+			"Eyes": "eye",
+			"EarAnchor": "on either side of",
+			"Horns": null,
+			"HornSizes": null,
+			"HornAnchor": "topped with $horncount$ $hornsize$ $horncolor$ $horntype$"
+		},
+		"Body": {
+			"BodyType": "tauric",
+			"UpperType": "human",
+			"ArmAnchor": "in the normal place",
+			"LowerType": "enormous spider",
+			"LegAnchor": "extending from $objective$ lower body",
+			"WingAnchor": "sprouting from the back of $objective$ abdomen",
+			"TailAnchor": null,
+		},
+		"Appendages": {
+			"Name": "arachnid",
+			"Legs": "arachnid legs",
+			"Feet": "arachnid feet",
+			"FeetMod": "sharply pointed",
+			"Arms": null,
+			"Hands": "hands",
+			"HandMod": "tipped with sharp nails",
+			"Tail": null,
+			"TailSizes": null,
+			"Wings": null,
+			"WingSizes": null,
+		},
 	},
-	{
+	10: {
 		"Code": "sheep"
 	},
-	{
+	11: {
 		"Code": "femmehuman",
 		"Name": "feminine human",
 	},
-	{
+	12: {
 		"Code": "centaur",
 	},
-]
+}
