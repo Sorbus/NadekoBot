@@ -195,6 +195,7 @@
     <Compile Include="Modules\Conversations\Commands\RipCommand.cs" />
     <Compile Include="Modules\CustomReactions\CustomReactions.cs" />
     <Compile Include="Modules\Gambling\Commands\AnimalRacing.cs" />
+    <Compile Include="Modules\Games\Commands\Festival.cs" />
     <Compile Include="Modules\Karma\Karma.cs" />
     <Compile Include="Modules\Music\Classes\PlaylistFullException.cs" />
     <Compile Include="Modules\Programming\Commands\HaskellRepl.cs" />
@@ -213,6 +214,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SQLite.cs" />
+    <Compile Include="_Models\DataModels\FestivalStats.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
     <Compile Include="_Models\DataModels\UserKarma.cs" />
