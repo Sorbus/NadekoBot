@@ -507,5 +507,14 @@
 		"Flavor": "",
  		"Dragon": false,
 		"Transformative": true
+	},{
+		"Code": "Folköl",
+		"Name": "Can of Folköl",
+		"Cost": 5,
+		"Type": "beer",
+		"Description": "A bitter-sweet beer",
+		"Flavor": "The drink, fresh from Norrland arrives in the finest Volvo availble. It stops only meters before a tall norrlandish person walks out holding a can of ''Norrlands guld folköl'' Which he gently places down on the table infront of you before running off somewhere...",
+ 		"Dragon": false,
+		"Transformative": false
 	},
 ]
