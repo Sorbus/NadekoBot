@@ -241,7 +241,7 @@ namespace NadekoBot.Modules.Games.Commands
                             user.Assembled -= 1;
 
                             // await e.User.SendMessage
-                            await FlowersHandler.AddFlowersAsync(e.User, "a reward for your accomplishment", 50).ConfigureAwait(false);
+                            await FlowersHandler.AddFlowersAsync(e.User, "a reward for your accomplishment", 250).ConfigureAwait(false);
 
                             DbHandler.Instance.Save(user);
                             return;
