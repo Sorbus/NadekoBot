@@ -783,6 +783,53 @@ namespace NadekoBot.Modules.Permissions
                         }).ConfigureAwait(false);
                     });
 
+                cgb.CreateCommand(Prefix + "channelcooldown")
+                    .Alias(Prefix + "chnlcd")
+                    .Description($"Adds a cooldown for how often commands can be used on a channel. Set 0 to clear. **Needs Manager Messages Permissions**| `{Prefix}chnlcd module 5`")
+                    .Parameter("module", ParameterType.Required)
+                    .Parameter("secs", ParameterType.Required)
+                    .AddCheck(SimpleCheckers.ManageMessages())
+                    .Do(async e =>
+                    {
+                        try
+                        {
+                            var module = e.GetArg("module")?.Trim().ToLower();
+                            if (string.IsNullOrWhiteSpace(module))
+                                return;
+                            var cmds = NadekoBot.Client.GetService<CommandService>().AllCommands
+                                                   .Where(c => c.Category.ToLower() == module)
+                                                   .OrderBy(c => c.Text)
+                                                   .AsEnumerable();
+                            var cmdsArray = cmds as Command[] ?? cmds.ToArray();
+
+                            if (!cmdsArray.Any())
+                            {
+                                await e.Channel.SendMessage("That module does not exist.").ConfigureAwait(false);
+                                return;
+                            }
+
+                            var secsStr = e.GetArg("secs").Trim();
+                            int secs;
+                            if (!int.TryParse(secsStr, out secs) || secs < 0 || secs > 3600)
+                                throw new ArgumentOutOfRangeException("secs", "Invalid second parameter. (Must be a number between 0 and 3600)");
+
+
+                            await PermissionsHandler.SetChannelCooldown(e.Server, e.Channel, module, secs).ConfigureAwait(false);
+                            if (secs == 0)
+                                await e.Channel.SendMessage($"**{e.Channel.Name}** has no coooldown now.").ConfigureAwait(false);
+                            else
+                                await e.Channel.SendMessage($"**{e.Channel.Name}** now has a **{secs} {(secs == 1 ? "second" : "seconds")}** cooldown.").ConfigureAwait(false);
+                        }
+                        catch (ArgumentException exArg)
+                        {
+                            await e.Channel.SendMessage(exArg.Message).ConfigureAwait(false);
+                        }
+                        catch (Exception ex)
+                        {
+                            await e.Channel.SendMessage("Something went terribly wrong - " + ex.Message).ConfigureAwait(false);
+                        }
+                    });
+
                 cgb.CreateCommand(Prefix + "cmdcooldown")
                     .Alias(Prefix+ "cmdcd")
                     .Description($"Sets a cooldown per user for a command. Set 0 to clear. **Needs Manager Messages Permissions**| `{Prefix}cmdcd \"some cmd\" 5`")

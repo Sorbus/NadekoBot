@@ -14,6 +14,7 @@ namespace NadekoBot.Modules.Permissions.Classes
         public static PermissionChecker Instance { get; } = new PermissionChecker();
 
         private ConcurrentDictionary<string, ulong> commandCooldowns = new ConcurrentDictionary<string, ulong>();
+        private ConcurrentDictionary<string, ulong> channelCooldowns = new ConcurrentDictionary<string, ulong>();
         private ConcurrentDictionary<ulong, bool> timeBlackList { get; } = new ConcurrentDictionary<ulong, bool>();
 
         static PermissionChecker() { }
@@ -70,6 +71,14 @@ namespace NadekoBot.Modules.Permissions.Classes
             {
                 if (perms?.Verbose == true)
                     error = $"{user.Mention} You have a cooldown on that command.";
+                return false;
+            }
+
+            AddChannelCooldown(user.Server.Id, channel.Id, command.Category.ToLower());
+            if (channelCooldowns.Keys.Contains(channel.Id.ToString() + ":" + command.Category.ToLower()))
+            {
+                if (perms?.Verbose == true)
+                    error = $"{channel.Name} has a command cooldown.";
                 return false;
             }
 
@@ -150,6 +159,29 @@ namespace NadekoBot.Modules.Permissions.Classes
                 }
                 return false;
             }
+        }
+
+        public void AddChannelCooldown(ulong serverId, ulong channelId, String module)
+        {
+            //channelCooldowns.TryAdd(channelId, channelId);
+            var tosave = channelId + ":" + module;
+            Task.Run(async () =>
+            {
+                ServerPermissions perms;
+                PermissionsHandler.PermissionsDict.TryGetValue(serverId, out perms);
+                int cd;
+                if (!perms.ChannelCooldowns.TryGetValue(tosave, out cd))
+                {
+                    return;
+                }
+                if (channelCooldowns.TryAdd(tosave, channelId))
+                {
+                    await Task.Delay(cd * 1000);
+                    ulong throwaway;
+                    channelCooldowns.TryRemove(tosave, out throwaway);
+                }
+
+            });
         }
 
         public void AddUserCooldown(ulong serverId, ulong userId, string commandName)
