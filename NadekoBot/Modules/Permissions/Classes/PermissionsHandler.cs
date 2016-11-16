@@ -424,6 +424,23 @@ namespace NadekoBot.Modules.Permissions.Classes
             await WriteServerToJson(serverPerms).ConfigureAwait(false);
         }
 
+        public static async Task SetChannelCooldown(Server server, Channel channel, string moduleName, int value)
+        {
+            var serverPerms = PermissionsDict.GetOrAdd(server.Id,
+                new ServerPermissions(server.Id, server.Name));
+            if (value == 0)
+            {
+                int throwaway;
+                serverPerms.ChannelCooldowns.TryRemove(channel.Id.ToString() + ":" + moduleName, out throwaway);
+            }
+            else
+            {
+                serverPerms.ChannelCooldowns.AddOrUpdate(channel.Id.ToString() + ":" + moduleName, value, (str, v) => value);
+            }
+
+            await WriteServerToJson(serverPerms).ConfigureAwait(false);
+        }
+
         public static async Task SetCommandCooldown(Server server, string commandName, int value)
         {
             var serverPerms = PermissionsDict.GetOrAdd(server.Id,
@@ -559,6 +576,8 @@ namespace NadekoBot.Modules.Permissions.Classes
         /// </summary>
         public ConcurrentDictionary<string, int> CommandCooldowns { get; set; }
 
+        public ConcurrentDictionary<string, int> ChannelCooldowns { get; set; }
+
         public ServerPermissions(ulong id, string name)
         {
             Id = id;
@@ -571,6 +590,7 @@ namespace NadekoBot.Modules.Permissions.Classes
             ChannelPermissions = new Dictionary<ulong, Permissions>();
             RolePermissions = new Dictionary<ulong, Permissions>();
             CommandCooldowns = new ConcurrentDictionary<string, int>();
+            ChannelCooldowns = new ConcurrentDictionary<string, int>();
             Words = new HashSet<string>();
         }
     }
