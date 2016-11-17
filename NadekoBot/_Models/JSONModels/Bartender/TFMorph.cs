@@ -9,86 +9,104 @@ namespace NadekoBot.Classes.JSONModels
     public class TFMorph
     {
         public TFMorph(
-             string code, string name, int[] eyec, int[] haic, int[] skit, int[] skio, int[] sknc, int[] ornc,
-             int[] skic, int[] coco, int[] winc, int[] taic, int[] horc, int[] necc, int[] armc, int[] legc,
-             int mwin, int mtai, int meye, int mhai, int mear, int mton, int cton, int marm, int mleg, int mhor,
-             TFData trans, TFHead head, TFBody body, TFAppendages appe
+             string code, string name, int[] skit, int[] skio, int[] skic,
+             MorphData transform, MorphColors color, MorphMax max, TFHead head, TFBody body, TFAppendages appendages
             )
         {
             Code = code;
             Name = name;
-            EyeColor = eyec;
-            HairColor = haic;
+
             SkinType = skit;
             Ornaments = skio;
-            OrnamentColor = ornc;
-            SkinColor = sknc;
             SkinCovering = skic;
-            CoveringColor = coco;
-            WingColor = winc;
-            TailColor = taic;
-            HornColor = horc;
-            NeckColor = necc;
-            ArmColor = armc;
-            LegColor = legc;
 
-            MaxWings = mwin;
-            MaxTails = mtai;
-            MaxEyes = meye;
-            MaxHair = mhai;
-            MaxEars = mear;
-            MaxTongueSize = mton;
-            MaxTongueCount = cton;
-            MaxArms = marm;
-            MaxLegs = mleg;
-            MaxHorns = mhor;
-
-            Transform = trans;
+            Transform = transform;
             Head = head;
             Body = body;
-            Appendages = appe;
+            Appendages = appendages;
+            Color = color;
+            Max = max;
         }
         public String Code { get; set; }
         public String Name { get; set; }
 
         public int[] SkinType { get; set; }
         public int[] Ornaments { get; set; }
-        public int[] OrnamentColor { get; set; }
         public int[] SkinCovering { get; set; }
-        public int[] CoveringColor { get; set; }
 
-        public int[] WingColor { get; set; }
-        public int[] TailColor { get; set; }
+        public MorphData Transform { get; set; }
+        public MorphMax Max { get; set; }
+        public MorphColors Color { get; set; }
 
-        public int[] HairColor { get; set; }
-        public int[] EyeColor { get; set; }
-        public int[] SkinColor { get; set; }
-        public int[] LipColor { get; set; }
-        public int[] HornColor { get; set; }
-        public int[] NeckColor { get; set; }
-        public int[] LegColor { get; set; }
-        public int[] ArmColor { get; set; }
-
-        public int MaxWings { get; set; }
-        public int MaxTails { get; set; }
-        public int MaxEyes { get; set; }
-        public int MaxHair { get; set; }
-        public int MaxEars { get; set; }
-        public int MaxTongueSize { get; set; }
-        public int MaxTongueCount { get; set; }
-        public int MaxArms { get; set; }
-        public int MaxLegs { get; set; }
-        public int MaxHorns { get; set; }
-
-        public TFData Transform { get; set; }
         public TFHead Head { get; set; }
         public TFBody Body { get; set; }
         public TFAppendages Appendages { get; set; }
     }
 
-    public class TFData
+    public class MorphColors
     {
-        public TFData(int perm)
+        public MorphColors(int[] eyec, int[] haic, int[] ornc, int[] sknc, int[] coco, int[] winc,
+            int[] taic, int[] horc, int[] necc, int[] armc, int[] legc, int[] tong)
+        {
+            Covering = coco;
+            Wing = winc;
+            Tail = taic;
+            Horn = horc;
+            Neck = necc;
+            Arm = armc;
+            Leg = legc;
+            Ornament = ornc;
+            Skin = sknc;
+            Eye = eyec;
+            Hair = haic;
+            Tongue = tong;
+        }
+        public int[] Ornament { get; set; }
+        public int[] Covering { get; set; }
+        public int[] Wing { get; set; }
+        public int[] Tail { get; set; }
+        public int[] Hair { get; set; }
+        public int[] Eye { get; set; }
+        public int[] Skin { get; set; }
+        public int[] Lip { get; set; }
+        public int[] Horn { get; set; }
+        public int[] Neck { get; set; }
+        public int[] Leg { get; set; }
+        public int[] Arm { get; set; }
+        public int[] Tongue { get; set; }
+    }
+
+    public class MorphMax
+    {
+        public MorphMax(int mwin, int mtai, int meye, int mhai, int mear, int mton, int cton,
+            int marm, int mleg, int mhor)
+        {
+            Wings = mwin;
+            Tails = mtai;
+            Eyes = meye;
+            Hair = mhai;
+            Ears = mear;
+            TongueSize = mton;
+            TongueCount = cton;
+            Arms = marm;
+            Legs = mleg;
+            Horns = mhor;
+        }
+        public int Wings { get; set; }
+        public int Tails { get; set; }
+        public int Eyes { get; set; }
+        public int Hair { get; set; }
+        public int Ears { get; set; }
+        public int TongueSize { get; set; }
+        public int TongueCount { get; set; }
+        public int Arms { get; set; }
+        public int Legs { get; set; }
+        public int Horns { get; set; }
+    }
+
+    public class MorphData
+    {
+        public MorphData(int perm)
         {
             Permanence = perm;
         }

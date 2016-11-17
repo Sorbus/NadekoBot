@@ -85,5 +85,84 @@ namespace NadekoBot.DataModels
         public float Weight { get; set; } // bmi
         public int Height { get; set; } // in inches
         public float Musculature { get; set; } // abstract
+
+        public UserMorph Copy()
+        {
+            return new UserMorph
+            {
+                UserId = this.UserId,
+
+                Gender = this.Gender,
+
+                UpperType = this.UpperType,
+                LowerType = this.LowerType,
+
+                LegType = this.LegType,
+                ArmType = this.ArmType,
+
+                FaceType = this.FaceType,
+                EyeType = this.EyeType,
+                EyeColor = this.EyeColor,
+                HairType = this.HairType,
+                HairColor = this.HairColor,
+                EarType = this.EarType,
+                LipColor = this.LipColor,
+
+                HornType = this.HornType,
+                HornSize = this.HornSize,
+                HornColor = this.HornColor,
+
+                NeckFeature = this.NeckFeature,
+                NeckColor = this.NeckColor,
+
+                ArmFeature = this.ArmFeature,
+                ArmColor = this.ArmColor,
+                LegFeature = this.LegFeature,
+                LegColor = this.LegColor,
+
+                TongueType = this.TongueType,
+                TeethType = this.TeethType,
+                TongueColor = this.TongueColor,
+
+                SkinType = this.SkinType,
+                SkinPattern = this.SkinPattern,
+                SkinColor = this.SkinColor,
+                SkinOrnaments = this.SkinOrnaments,
+                OrnamentColor = this.OrnamentColor,
+
+                ArmCovering = this.ArmCovering,
+                TorsoCovering = this.TorsoCovering,
+                LegCovering = this.LegCovering,
+                CoveringColor = this.CoveringColor,
+
+                HandModification = this.HandModification,
+                FeetModification = this.FeetModification,
+                HandType = this.HandType,
+                FeetType = this.FeetType,
+
+                WingType = this.WingType,
+                WingSize = this.WingSize,
+                WingColor = this.WingColor,
+                TailType = this.TailType,
+                TailSize = this.TailSize,
+                TailColor = this.TailColor,
+
+                LegCount = this.LegCount,
+                ArmCount = this.ArmCount,
+                WingCount = this.WingCount,
+                TailCount = this.TailCount,
+                HairLength = this.HairLength,
+                EarCount = this.EarCount,
+                TongueCount = this.TongueCount,
+                TongueLength = this.TongueLength,
+                EyeCount = this.EyeCount,
+                HornCount = this.HornCount,
+
+                MorphCount = this.MorphCount,
+                Weight = this.Weight,
+                Height = this.Height,
+                Musculature = this.Musculature,
+            };
+        }
     }
 }
