@@ -9,10 +9,10 @@
  		"Dragon": false,
 		"Transformative": true,
 		"Transform": {
-			"Target": null,
-			"ChangeCount": 0,
-			"Balance" : [null],
-			"Theme": "dust",
+			"Target": "spidertaur",
+			"ChangeCount": 3,
+			"Balance" : ["upper","lower","face","tongue","hair","horn","wing","tail","feature","color","skin","mod"],
+			"Theme": "static",
 
 			"WeightChange": [0],
 			"MusculatureChange": [0],

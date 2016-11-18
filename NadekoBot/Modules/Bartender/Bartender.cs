@@ -20,8 +20,6 @@ namespace NadekoBot.Modules.Bartender
 
         public Random rng = new Random();
 
-        // private ConcurrentDictionary<ulong, UserMorph> Morphs = new ConcurrentDictionary<ulong, UserMorph>();
-
         private List<Drink> Drinks = NadekoBot.Config.Drinks;
 
         private Dictionary<int, TFMorph> Morphs = NadekoBot.Config.Morphs;
@@ -29,116 +27,24 @@ namespace NadekoBot.Modules.Bartender
         private Dictionary<int, TFOrnament> Ornament = NadekoBot.Config.Ornament;
         private Dictionary<int, TFSkin> Skin = NadekoBot.Config.Skin;
 
-        private static String[] PronounObjective = new String[3] { "their", "her", "his" };
-        private static String[] PronounHas = new String[3] { "have", "has", "has" };
-        private static String[] Pronoun = new String[3] { "they", "she", "he" };
-        private static String[] Are = new String[3] { "are", "is", "is" };
-        private static String[] Was = new String[3] { "were", "was", "was" };
         private static String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
-        private static readonly Regex re = new Regex(@"\$(\w+)\$", RegexOptions.Compiled);
 
-        // from https://stackoverflow.com/a/2730393
-        public static string NumberToWords(int number)
-        {
-            if (number == 0)
-                return "zero";
-
-            if (number < 0)
-                return "minus " + NumberToWords(Math.Abs(number));
-
-            string words = "";
-
-            if ((number / 100) > 0)
-            {
-                words += NumberToWords(number / 100) + " hundred ";
-                number %= 100;
-            }
-
-            if (number > 0)
-            {
-                if (words != "")
-                    words += "and ";
-
-                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
-                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
-
-                if (number < 20)
-                    words += unitsMap[number];
-                else
-                {
-                    words += tensMap[number / 10];
-                    if ((number % 10) > 0)
-                        words += "-" + unitsMap[number % 10];
-                }
-            }
-            return words;
-        }
+        private ProseGen Prose = new ProseGen();
 
         private int getRandItem(int[] a)
         { return a[rng.Next(0, a.Length)]; }
 
-        private Boolean isBaseline(UserMorph m)
+        private MorphModel buildMorph(long userID, KeyValuePair<int, TFMorph> target_morph)
         {
-            int[] r = new int[] {m.UpperType, m.LowerType, m.LegType, m.ArmType, m.FaceType, m.EyeType, m.HairType,
-                m.EarType, m.TongueType, m.TeethType, m.SkinType, m.SkinOrnaments, m.ArmCovering, m.LegCovering,
-                m.TorsoCovering, m.HandType, m.FeetType};
-            if (!Array.TrueForAll<int>(r, x => x == 0))
-            {
-                return false;
-            }
+            var db = DbHandler.Instance.GetAllRows<MorphModel>();
+            Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals(userID)).ToDictionary(x => x.UserId, y => y);
 
-            if (m.LegCount != 2 || m.ArmCount != 2 || m.EarCount != 2 || m.EyeCount != 2)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private string getWeight(UserMorph m)
-        {
-            if (m.Weight != null && m.Gender < 2)
-            {
-                if (m.Weight > 20 && m.Weight <= 24) { return ""; }
-                else if (m.Weight > 19.5 && m.Weight <= 20) { return "slender "; }
-                else if (m.Weight > 19 && m.Weight <= 19.5) { return "skinny "; }
-                else if (m.Weight > 18.5 && m.Weight <= 19) { return "waifish "; }
-                else if (m.Weight > 17.5 && m.Weight <= 18.5) { return "underweight "; }
-                else if (m.Weight > 16 && m.Weight <= 17.5) { return "starving "; }
-                else if (m.Weight <= 16) { return "skeletal "; }
-                else if (m.Weight > 24 && m.Weight <= 25.5) { return "plump "; }
-                else if (m.Weight > 25.5 && m.Weight <= 27) { return "chubby "; }
-                else if (m.Weight > 27 && m.Weight <= 30) { return "overweight "; }
-                else if (m.Weight > 30) { return "obese "; }
-            }
-            else if (m.Weight != null && m.Gender == 2)
-            {
-                if (m.Weight > 20.5 && m.Weight <= 23) { return ""; }
-                else if (m.Weight > 19.5 && m.Weight <= 20.5) { return "slender "; }
-                else if (m.Weight > 18.5 && m.Weight <= 19.5) { return "skinny "; }
-                else if (m.Weight > 17.5 && m.Weight <= 18.5) { return "underweight "; }
-                else if (m.Weight > 16 && m.Weight <= 17.5) { return "starving "; }
-                else if (m.Weight <= 16) { return "skeletal "; }
-                else if (m.Weight > 23 && m.Weight <= 24) { return "stout "; }
-                else if (m.Weight > 24 && m.Weight <= 25) { return "thickset "; }
-                else if (m.Weight > 25 && m.Weight <= 27) { return "chubby "; }
-                else if (m.Weight > 27 && m.Weight <= 30) { return "overweight "; }
-                else if (m.Weight > 30) { return "obese "; }
-            }
-            return "";
-        }
-
-        private UserMorph buildMorph(long userID, KeyValuePair<int, TFMorph> target_morph)
-        {
-            var db = DbHandler.Instance.GetAllRows<UserMorph>();
-            Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals(userID)).ToDictionary(x => x.UserId, y => y);
-
-            UserMorph morph;
+            MorphModel morph;
             if (morphs.ContainsKey(userID))
             { morph = morphs[userID]; }
             else
             {
-                morph = new UserMorph
+                morph = new MorphModel
                 {
                     UserId = userID,
                     Gender = 0,
@@ -219,152 +125,15 @@ namespace NadekoBot.Modules.Bartender
             return morph;
         }
 
-        private string getTongue(UserMorph m)
+        private Tuple<MorphModel, String, String> transformUser(MorphModel original, Drink drink, Discord.User user)
         {
-            if (m.TongueLength < 3) { return "a stubby"; }
-            else if (m.TongueLength < 4) { return "a short"; }
-            else if (m.TongueLength < 5) { return "an average"; }
-            else if (m.TongueLength < 8) { return "a long"; }
-            else if (m.TongueLength < 12) { return "a very long"; }
-            else { return "an obscenely long"; }
-        }
-
-        private string getHair(UserMorph m)
-        {
-            if (m.HairLength < 2) { return " buzzcut"; }
-            else if (m.HairLength < 5) { return "short"; }
-            else if (m.HairLength < 9) { return "modest"; }
-            else if (m.HairLength < 13) { return "shoulder-length"; }
-            else if (m.HairLength < 28) { return "chest-length"; }
-            else if (m.HairLength < 35) { return "waist-length"; }
-            else if (m.HairLength < 40) { return "butt-length"; }
-            else if (m.HairLength < 48) { return "thigh-length"; }
-            else if (m.HairLength < 52) { return "knee-length"; }
-            else if (m.HairLength < 70) { return "ankle-length"; }
-            else if (m.HairLength < 74) { return "floor-length"; }
-            else { return " rapunzelesque"; }
-        }
-
-        private string getDominantType(UserMorph m)
-        {
-            SortedList<int, int> c = new SortedList<int, int>();
-
-            if (c.ContainsKey(m.UpperType)) { c[m.UpperType] += 1; }
-            else { c[m.UpperType] = 1; }
-            if (c.ContainsKey(m.LowerType)) { c[m.LowerType] += 1; }
-            else { c[m.LowerType] = 1; }
-            if (c.ContainsKey(m.ArmType)) { c[m.ArmType] += 1; }
-            else { c[m.ArmType] = 1; }
-            if (c.ContainsKey(m.LegType)) { c[m.LegType] += 1; }
-            else { c[m.LegType] = 1; }
-            if (c.ContainsKey(m.FaceType)) { c[m.FaceType] += 1; }
-            else { c[m.FaceType] = 1; }
-            if (c.ContainsKey(m.EyeType)) { c[m.EyeType] += 1; }
-            else { c[m.EyeType] = 1; }
-            if (c.ContainsKey(m.HairType)) { c[m.HairType] += 1; }
-            else { c[m.HairType] = 1; }
-            if (c.ContainsKey(m.EarType)) { c[m.EarType] += 1; }
-            else { c[m.EarType] = 1; }
-            if (c.ContainsKey(m.TongueType)) { c[m.TongueType] += 1; }
-            else { c[m.TongueType] = 1; }
-            if (c.ContainsKey(m.HandModification)) { c[m.HandModification] += 1; }
-            else { c[m.HandModification] = 1; }
-            if (c.ContainsKey(m.FeetModification)) { c[m.FeetModification] += 1; }
-            else { c[m.FeetModification] = 1; }
-            if (c.ContainsKey(m.HandType)) { c[m.HandType] += 1; }
-            else { c[m.HandType] = 1; }
-            if (c.ContainsKey(m.FeetType)) { c[m.FeetType] += 1; }
-            else { c[m.FeetType] = 1; }
-            if (c.ContainsKey(m.WingType)) { c[m.WingType] += 1; }
-            else { c[m.WingType] = 1; }
-            if (c.ContainsKey(m.TailType)) { c[m.TailType] += 1; }
-            else { c[m.TailType] = 1; }
-
-            if (c.ContainsKey(m.SkinType)) { c[m.SkinType] += 1; }
-            else { c[m.SkinType] = 1; }
-
-            IOrderedEnumerable<KeyValuePair<int, int>> o = c.OrderByDescending(x => x.Value);
-
-            if (o.First().Value == 15)
-            {
-                if (o.First().Key == 0)
-                {
-                    Boolean cosmetic;
-                    Boolean counts;
-                    if (m.ArmCount <= 2 && m.LegCount <= 2 && m.WingCount == 0 && m.TailCount == 0 && m.EarCount <= 2 &&
-                        m.TongueCount <= 1 && m.EyeCount <= 2 && m.TongueLength <= Morphs[0].Max.TongueSize)
-                    { counts = false; }
-                    else { counts = true; }
-
-                    if (Morphs[0].Color.Hair.Contains(m.HairColor) && Morphs[0].Color.Eye.Contains(m.EyeColor) &&
-                        Morphs[0].Color.Lip.Contains(m.LipColor) && Morphs[0].Ornaments.Contains(m.SkinOrnaments) &&
-                        Morphs[0].Color.Skin.Contains(m.SkinColor))
-                    { cosmetic = true; }
-                    else { cosmetic = false; }
-
-
-                    if (cosmetic && counts) { return "modified human"; }
-                    else if (cosmetic) { return "cosmetically modified human"; }
-                    else if (counts) { return "modified human"; }
-                    else { return "baseline human"; }
-                }
-                else { return Morphs[o.First().Key].Name; }
-            }
-            else if (o.First().Value > 12)
-            {
-                if (o.First().Key == 0) { return "modified human"; }
-                return "hybridized " + Morphs[c.First().Key].Name;
-            }
-            else if (o.First().Value >= 6 && o.ElementAt(1).Value >= 6)
-            {
-                return Morphs[o.First().Key].Name + "-" + Morphs[o.ElementAt(1).Value].Name + " hybrid";
-            }
-            else
-            {
-                return "hybrid";
-            }
-        }
-
-        private Boolean vowelFirst(string str)
-        {
-            if ("aeiou".Contains(str[0]))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private Boolean anyInRange(int[] nums, int upper, int lower)
-        {
-            foreach (int i in nums)
-            {
-                if (nums[i] > lower && nums[i] <= upper)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private Tuple<UserMorph, String, String> transformUser(UserMorph original, Drink drink, Discord.User user)
-        {
-            String str_3rd = "";
-            String str_2nd = "";
             TFDetails tf = drink.Transform;
-            UserMorph changed = original.Copy();
+            MorphModel changed = original.Copy();
             changed.MorphCount += 1;
             Boolean[] change_type = new bool[3] { false, false, false };
 
             List<string> changes = new List<string>();
 
-            var swapper = new Dictionary<string, string>(
-                StringComparer.OrdinalIgnoreCase) {
-                    {"$mention$", user.Mention },
-                    {"$pronoun$", Pronoun[original.Gender]},
-                    {"$has$", PronounHas[original.Gender]},
-                    {"$objective$", PronounObjective[original.Gender]},
-                    {"$are$", Are[original.Gender] },
-                };
             int i;
             int r;
 
@@ -375,6 +144,9 @@ namespace NadekoBot.Modules.Bartender
 
                 if (target_morph.Value == null)
                 { throw new Exception("broken JSON"); }
+
+                int key = target_morph.Key;
+                TFMorph value = target_morph.Value;
 
                 change_type[0] = true;
                 i = 0;
@@ -391,50 +163,48 @@ namespace NadekoBot.Modules.Bartender
                         switch (tf.Balance[r])
                         {
                             case "upper":
-                                if (rng.Next(0,100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.ArmType == target_morph.Key)
+                                if (original.ArmType == key)
                                 {
-                                    if (original.ArmCount >= target_morph.Value.Max.Arms)
+                                    if (original.ArmCount >= value.Max.Arms)
                                     {
-                                        if (original.UpperType != target_morph.Key)
-                                        { original.UpperType = target_morph.Key; }
-                                        else if (original.ArmCount > target_morph.Value.Max.Arms)
-                                        { changed.ArmCount -= 2 - target_morph.Value.Max.Arms % 2; }
+                                        changed.UpperType = key;
+                                        if (original.ArmCount > value.Max.Arms)
+                                        { changed.ArmCount -= 2 - value.Max.Arms % 2; }
                                     }
                                     else
-                                    { changed.ArmCount += 2 - target_morph.Value.Max.Arms % 2; }
+                                    { changed.ArmCount += 2 - value.Max.Arms % 2; }
                                 }
                                 else
-                                { changed.ArmType = target_morph.Key; }
+                                { changed.ArmType = key; }
                                 break;
                             case "lower":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.LegType == target_morph.Key)
+                                if (original.LegType == key)
                                 {
-                                    if (original.LegCount >= target_morph.Value.Max.Legs)
+                                    if (original.LegCount >= value.Max.Legs)
                                     {
-                                        if (original.LowerType != target_morph.Key)
-                                        { original.LowerType = target_morph.Key; }
-                                        else if (original.LegCount > target_morph.Value.Max.Legs)
-                                        { changed.LegCount -= 2 - target_morph.Value.Max.Legs % 2; }
+                                        if (original.LowerType != key)
+                                        { changed.LowerType = key; }
+                                        else if (original.LegCount > value.Max.Legs)
+                                        { changed.LegCount -= 2 - value.Max.Legs % 2; }
                                     }
                                     else
-                                    { changed.LegCount += 2 - target_morph.Value.Max.Legs % 2; }
+                                    { changed.LegCount += 2 - value.Max.Legs % 2; }
                                 }
                                 else
-                                { changed.ArmType = target_morph.Key; }
+                                { changed.ArmType = key; }
                                 break;
                             case "face":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.EyeType == target_morph.Key && original.EarType == target_morph.Key &&
-                                    original.TongueType == target_morph.Key && original.TeethType == target_morph.Key
-                                    && original.EyeCount == target_morph.Key)
+                                if (original.EyeType == key && original.EarType == key &&
+                                    original.TongueType == key && original.TeethType == key
+                                    && original.EyeCount == key)
                                 {
-                                    if (original.FaceType != target_morph.Key)
-                                    { changed.FaceType = target_morph.Key; }
+                                    changed.FaceType = key;
                                 }
                                 else
                                 {
@@ -444,43 +214,38 @@ namespace NadekoBot.Modules.Bartender
                                         switch (rng.Next(0, 5))
                                         {
                                             case 0:
-                                                if (original.EyeType != target_morph.Key)
+                                                if (original.EyeType != key)
                                                 {
-                                                    changed.EyeType = target_morph.Key;
+                                                    changed.EyeType = key;
                                                     search = false;
                                                 }
                                                 break;
                                             case 1:
-                                                if (original.EarType != target_morph.Key)
+                                                if (original.EarType != key)
                                                 {
-                                                    changed.EarType = target_morph.Key;
+                                                    changed.EarType = key;
                                                     search = false;
                                                 }
                                                 break;
                                             case 2:
-                                                if (original.TongueType != target_morph.Key)
+                                                if (original.TongueType != key)
                                                 {
-                                                    changed.TongueType = target_morph.Key;
-                                                    changed.TongueColor = getRandItem(target_morph.Value.Color.Tongue);
+                                                    changed.TongueType = key;
+                                                    changed.TongueColor = getRandItem(value.Color.Tongue);
                                                     search = false;
                                                 }
                                                 break;
                                             case 3:
-                                                if (original.TeethType != target_morph.Key)
+                                                if (original.TeethType != key)
                                                 {
-                                                    changed.TongueType = target_morph.Key;
+                                                    changed.TongueType = key;
                                                     search = false;
                                                 }
                                                 break;
                                             case 4:
-                                                if (original.EyeCount < target_morph.Value.Max.Eyes)
+                                                if (original.EyeCount != value.Max.Eyes)
                                                 {
-                                                    changed.EyeCount += 1;
-                                                    search = false;
-                                                }
-                                                else if (original.EyeCount > target_morph.Value.Max.Eyes)
-                                                {
-                                                    changed.EyeCount += 1;
+                                                    changed.EyeCount += BarHelp.Move(original.EyeCount, value.Max.Eyes, rng);
                                                     search = false;
                                                 }
                                                 break;
@@ -489,97 +254,92 @@ namespace NadekoBot.Modules.Bartender
                                 }
                                 break;
                             case "tongue":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.TongueType != target_morph.Key)
+                                if (original.TongueType != key)
                                 {
-                                    changed.TongueType = target_morph.Key;
-                                    changed.TongueColor = getRandItem(target_morph.Value.Color.Tongue);
+                                    changed.TongueType = key;
+                                    changed.TongueColor = getRandItem(value.Color.Tongue);
                                 }
-                                else if (!target_morph.Value.Color.Tongue.Contains(original.TongueColor))
+                                else if (!value.Color.Tongue.Contains(original.TongueColor))
                                 {
-                                    changed.TongueColor = getRandItem(target_morph.Value.Color.Tongue);
-                                    if (original.TongueLength > target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength -= rng.Next(0, 3); }
-                                    else if (original.TongueLength < target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength += rng.Next(0, 3); }
-                                }
-                                else if (original.TongueCount != target_morph.Value.Max.TongueCount)
-                                {
-                                    if (original.TongueCount > target_morph.Value.Max.TongueCount)
-                                    { changed.TongueCount -= 1; }
-                                    else if (original.TongueCount < target_morph.Value.Max.TongueCount)
-                                    { changed.TongueCount += 1; }
+                                    changed.TongueColor = getRandItem(value.Color.Tongue);
 
-                                    if (original.TongueLength > target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength -= rng.Next(0, 1); }
-                                    else if (original.TongueLength < target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength += rng.Next(0, 1); }
+                                    changed.TongueLength += BarHelp.Move(original.TongueLength, value.Max.TongueSize, 3, rng);
                                 }
-                                else if (original.TongueLength != target_morph.Value.Max.TongueSize)
+                                else if (original.TongueCount != value.Max.TongueCount)
                                 {
-                                    if (original.TongueLength > target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength -= rng.Next(0, 3); }
-                                    else if (original.TongueLength < target_morph.Value.Max.TongueSize)
-                                    { changed.TongueLength += rng.Next(0, 3); }
+                                    changed.TongueCount += BarHelp.Move(original.TongueCount, value.Max.TongueCount, rng);
+
+                                    changed.TongueLength += BarHelp.Move(original.TongueLength, value.Max.TongueSize, 1, rng);
+                                }
+                                else if (original.TongueLength != value.Max.TongueSize)
+                                {
+                                    changed.TongueLength += BarHelp.Move(original.TongueLength, value.Max.TongueSize, 3, rng);
                                 }
                                 break;
                             case "hair":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.HairType != target_morph.Key)
-                                { changed.HairType = target_morph.Key; }
-                                if (!target_morph.Value.Color.Hair.Contains(original.HairColor))
-                                { changed.HairColor = getRandItem(target_morph.Value.Color.Hair); }
-                                if (original.HairLength < target_morph.Value.Max.Hair)
-                                { changed.HairLength += rng.Next(0, 4); }
-                                else if (original.HairLength > target_morph.Value.Max.Hair)
-                                { changed.HairLength -= rng.Next(0, 4); }
+
+                                changed.HairType = key;
+
+                                if (!value.Color.Hair.Contains(original.HairColor))
+                                { changed.HairColor = getRandItem(value.Color.Hair); }
+
+                                changed.HairLength += BarHelp.Move(original.HairLength, value.Max.Hair, 4, rng);
+
                                 break;
                             case "horn":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.HornType == target_morph.Key && original.HornType > 0)
+                                if (original.HornType == key && original.HornType > 0)
                                 { }
-                                else if (original.HornType != target_morph.Key && original.HornType > 0)
+                                else if (original.HornType != key && original.HornType > 0)
                                 { }
                                 else if (original.HornCount == 0)
                                 {
-                                    changed.HornType = target_morph.Key;
-                                    changed.HornColor = getRandItem(target_morph.Value.Color.Horn);
-                                    changed.HornCount += 2 - target_morph.Value.Max.Horns % 2;
+                                    changed.HornType = key;
+                                    changed.HornColor = getRandItem(value.Color.Horn);
+                                    changed.HornCount += 2 - value.Max.Horns % 2;
                                 }
                                 break;
                             case "wing":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.WingType == target_morph.Key && original.WingCount > 0)
+                                if (original.WingType == key && original.WingCount > 0)
                                 { }
-                                else if (original.WingType != target_morph.Key && original.WingCount > 0 )
+                                else if (original.WingType != key && original.WingCount > 0)
                                 { }
                                 else if (original.WingCount == 0)
-                                { }
+                                {
+                                    changed.WingType = key;
+                                    changed.WingColor = getRandItem(value.Color.Wing);
+                                    changed.WingCount += 2 - value.Max.Horns % 2;
+                                }
                                 break;
                             case "tail":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
                             case "feature":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
                             case "color":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
                             case "skin":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
                             case "mod":
-                                if (rng.Next(0, 100) > target_morph.Value.Transform.Permanence)
+                                if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
+                            default:
+                                throw new Exception("null value in balance");
                         }
                     }
                 }
@@ -660,68 +420,11 @@ namespace NadekoBot.Modules.Bartender
             if (changed.EyeCount < 0) { changed.EyeCount = 0; }
             if (changed.HornCount < 0) { changed.HornCount = 0; }
 
-            switch (tf.Theme)
-            {
-                case "dust":
-                    if (true) // included to make code folding work.
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "viscera":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "light":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "static":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "instant":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "crossfade":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "bubbles":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "sarcastic":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                case "flow":
-                    if (true)
-                    {
-                        str_3rd += "";
-                    }
-                    break;
-                default:
-                    break;
-            }
+            Tuple<String, String> change_text = Prose.GetChange(original, changed, tf, changes);
 
+            DbHandler.Instance.Save<MorphModel>(changed);
 
-            return Tuple.Create(changed, str_2nd, str_3rd);
+            return Tuple.Create(changed, change_text.Item1, change_text.Item2);
         }
 
         public override void Install(ModuleManager manager)
@@ -768,8 +471,8 @@ namespace NadekoBot.Modules.Bartender
 
                         drink = Drinks.Find(t => t.Code.Equals(e.GetArg("drink").ToLowerInvariant()));
 
-                        var db = DbHandler.Instance.GetAllRows<UserMorph>();
-                        Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
+                        var db = DbHandler.Instance.GetAllRows<MorphModel>();
+                        Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
 
                         if (drink == null)
                         {
@@ -787,9 +490,9 @@ namespace NadekoBot.Modules.Bartender
                         }
                         await FlowersHandler.RemoveFlowers(e.User, $"bought a {drink.Code}", amount).ConfigureAwait(false);
 
-                        await e.User.SendMessage($"{drink.Flavor}").ConfigureAwait(false);
+                        //await e.User.SendMessage($"{drink.Flavor}").ConfigureAwait(false);
 
-                        UserMorph morph;
+                        MorphModel morph;
 
                         if (morphs.ContainsKey((long)e.User.Id))
                         { morph = morphs[(long)e.User.Id]; }
@@ -797,14 +500,26 @@ namespace NadekoBot.Modules.Bartender
                         { morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human")); }
 
                         if (drink.Name != null)
-                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
+                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
                         else
-                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
+                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
 
 
                         if (drink.Transformative)
                         {
-                            await e.Channel.SendMessage(transformUser(morph, drink, e.User).Item3).ConfigureAwait(false);
+                            try
+                            {
+                                Tuple<MorphModel, String, String> output = transformUser(morph, drink, e.User);
+
+                                if (morphs.ContainsKey((long)e.User.Id))
+                                { DbHandler.Instance.Delete<MorphModel>(morphs[(long)e.User.Id].Id.Value); }
+
+                                DbHandler.Instance.Save<MorphModel>(output.Item1);
+
+                                await e.Channel.SendMessage(output.Item3).ConfigureAwait(false);
+                            }
+                            catch (Exception ex)
+                            { Console.WriteLine(ex); }
                         }
 
 
@@ -853,9 +568,9 @@ namespace NadekoBot.Modules.Bartender
                         await FlowersHandler.RemoveFlowers(e.User, $"bought {target.Name} a {drink.Code}", amount).ConfigureAwait(false);
 
                         if (drink.Name != null)
-                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
+                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(DescHelp.vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
                         else
-                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
+                        { await e.Channel.SendMessage($"{e.User.Mention} sent {target.Mention} {(DescHelp.vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
                     });
 
                 cgb.CreateCommand(Prefix + "donate")
@@ -888,257 +603,16 @@ namespace NadekoBot.Modules.Bartender
 
                         try
                         {
-                            var db = DbHandler.Instance.GetAllRows<UserMorph>();
-                            Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)target.Id)).ToDictionary(x => x.UserId, y => y);
+                            var db = DbHandler.Instance.GetAllRows<MorphModel>();
+                            Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals((long)target.Id)).ToDictionary(x => x.UserId, y => y);
+
+                            await e.Channel.SendIsTyping();
 
                             if (morphs.ContainsKey((long)e.User.Id))
                             {
-                                UserMorph morph = morphs[(long)e.User.Id];
-                                if (isBaseline(morph))
-                                {
-                                    await e.Channel.SendMessage($"{target.Mention} is a {getWeight(morph)}baseline human.").ConfigureAwait(false);
-                                }
-                                else
-                                {
-                                    await e.Channel.SendIsTyping();
+                                MorphModel morph = morphs[(long)e.User.Id];
 
-                                    String str = "$mention$ is a $weight$ $morphtype$";
-
-                                    if (Morphs[morph.UpperType].Body.UpperType == Morphs[morph.LowerType].Body.LowerType && Morphs[morph.LowerType].Body.LowerType != null)
-                                    {
-                                        str += ", $a_bodytype$ $uppertype$.";
-                                    }
-                                    else
-                                    {
-                                        str += ". $pronoun$ $has$ a $bodytype$ body";
-                                        if (Morphs[morph.UpperType].Body.UpperType != null && Morphs[morph.LowerType].Body.LowerType != null)
-                                        { str += ", with $a_uppertype$ upper body and the lower body of $a_lowertype$."; }
-                                        else if (Morphs[morph.UpperType].Body.UpperType != null)
-                                        { str += ", with the upper body of $a_uppertype$."; }
-                                        else if (Morphs[morph.LowerType].Body.LowerType != null)
-                                        { str += ", with the lower body of $a_lowertype$."; }
-                                        else
-                                        { str += "."; }
-                                    }
-
-
-                                    if (morph.LegCount > 0 && morph.ArmCount > 0 && Morphs[morph.LowerType].Appendages.Legs != null && Morphs[morph.ArmType].Appendages.Arms != null)
-                                    {
-                                        str += " $pronoun$ $has$ $armcount$ $armtype$ and $legcount$ $legtype$";
-                                        str += (Morphs[morph.LowerType].Body.LegAnchor != null) ? " $legposition$." : ".";
-                                    }
-                                    else if (morph.LegCount > 0 && Morphs[morph.LowerType].Appendages.Legs != null)
-                                    {
-                                        str += " $pronoun$ $has$ $legcount$ $legtype$ $legposition$.";
-                                    }
-                                    else if (morph.ArmCount > 0 && Morphs[morph.ArmType].Appendages.Arms != null)
-                                    { str += " $pronoun$ $has$ $armcount$ $armtype$."; }
-                                    else if (morph.ArmCount == 0 && morph.LegCount == 0)
-                                    { str += " $pronoun$ $has$ neither arms nor legs."; }
-
-                                    str += " $pronoun$ $has$ a $facetype$ with";
-                                    str += (morph.EyeCount > 0) ? " $eyecount$ $eyecolor$ $eyetype$" : " with no eyes";
-
-                                    if (Morphs[morph.HairType].Head.Hair != null)
-                                    {
-                                        str += (Colors[morph.LipColor].Name != null) ? ", $lipcolor$ lips, and" : " and";
-                                        if (morph.HairLength > 0)
-                                        { str += " $hairlength$ $haircolor$ $hairtype$"; }
-                                        else { str += " no hair"; }
-                                    }
-                                    else
-                                    { str += (Colors[morph.LipColor].Name != null) ? " and $lipcolor$ lips." : "."; }
-
-                                    if (morph.HornCount > 0 && Morphs[morph.HornType].Head.Horns != null && Morphs[morph.FaceType].Head.HornAnchor != null)
-                                    { str += " $hornanchor$" + ((morph.HornCount > 1) ? "s." : "."); }
-                                    else { str += "."; }
-
-                                    str += " $pronoun$ $has$ $earcount$ $eartype$";
-                                    if (morph.EarCount > 1) { str += "s"; }
-                                    str += " $earposition$ $objective$ head,";
-                                    if (morph.TongueLength > 0)
-                                    { str += " $tonguesize$ $tonguetype$,"; }
-                                    else { str += " no tongue,"; }
-                                    str += " and $teethtype$.\n\n";
-
-                                    str += (Ornament[morph.SkinOrnaments].Name != null) ? "$objective$ $skincolor$ $skintype$ is $skinornament$" : "$pronoun$ $has$ $skincolor$ $skintype$";
-
-                                    if ((Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0) &&
-                                        (Skin[morph.LegCovering].Cover != null && morph.LegCount > 0) &&
-                                        (Skin[morph.TorsoCovering].Cover != null))
-                                    {
-                                        if ((Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover) ==
-                                            (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover))
-                                        { str += ", and $objective$ entire body is $torsocovering$."; }
-                                        else if (Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover)
-                                        { str += ", $objective$ arms and legs are $armcovering$, and $objective$ torso is $torsocovering$."; }
-                                        else if (Skin[morph.ArmCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                                        { str += ", $objective$ arms and torso are $armcovering$, and $objective$ legs are $legcovering$."; }
-                                        else if (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                                        { str += ", $objective$ legs and torso are $legcovering$, and $objective$ arms are $armcovering$."; }
-                                        else
-                                        { str += ", $objective$ arms are $armcovering$, $objective$ legs are $legcovering$, and $objective$ torso is $torsocovering$."; }
-
-                                    }
-                                    else if ((Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0) &&
-                                            (Skin[morph.LegCovering].Cover != null && morph.LegCount > 0))
-                                    {
-                                        if (Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover)
-                                        { str += ", and $objective$ arms and legs are $armcovering$."; }
-                                        else
-                                        { str += ", $objective$ arms are $armcovering$, and $objective$ legs are $legcovering$."; }
-                                    }
-                                    else if ((Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0) &&
-                                            (Skin[morph.TorsoCovering].Cover != null))
-                                    {
-                                        if (Skin[morph.ArmCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                                        { str += ", and $objective$ arms and torso are $armcovering$."; }
-                                        else
-                                        { str += ", $objective$ arms are $armcovering$, and $objective$ torso is $torsocovering$."; }
-                                    }
-                                    else if ((Skin[morph.LegCovering].Cover != null && morph.LegCount > 0) &&
-                                            (Skin[morph.TorsoCovering].Cover != null))
-                                    {
-                                        if (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                                        { str += ", and $objective$ torso and legs are $legcovering$."; }
-                                        else
-                                        { str += ", $objective$ torso is $torsocovering$, and $objective$ legs are $legcovering$."; }
-                                    }
-                                    else if (Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0)
-                                    { str += ", and $objective$ arms are $armcovering$."; }
-                                    else if (Skin[morph.LegCovering].Cover != null && morph.LegCount > 0)
-                                    { str += ", and $objective$ legs are $legcovering."; }
-                                    else if (Skin[morph.TorsoCovering].Cover != null)
-                                    { str += ", and $objective$ torso is $torsocovering$."; }
-                                    else { str += "."; }
-
-                                    if (Morphs[morph.HandModification].Appendages.HandMod != null && Morphs[morph.FeetModification].Appendages.FeetMod != null && morph.LegCount > 0 && morph.ArmCount > 0)
-                                    {
-                                        if (Morphs[morph.HandModification].Appendages.HandMod == Morphs[morph.FeetModification].Appendages.FeetMod)
-                                        { str += " $objective$ $handtype$ and $feettype$ are $handmodification$."; }
-                                        else
-                                        { str += " $objective$ $handtype$ are $handmodification$ and $objective$ $feettype$ are $feetmodification$."; }
-                                    }
-                                    else if (Morphs[morph.HandModification].Appendages.HandMod != null && morph.ArmCount > 0)
-                                    { str += " $objective$ $handtype$ are $handmoficiation$."; }
-                                    else if (Morphs[morph.FeetModification].Appendages.FeetMod != null && morph.LegCount > 0)
-                                    { str += " $objective$ $feettype$ are $feetmodification$."; }
-
-                                    if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && Morphs[morph.TailType].Appendages.Tail != null &&
-                                        Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0 && morph.WingCount > 0)
-                                    { str += " $pronoun$ $has$ $wingtype$ $wingposition$ and $tailtype$ $tailposition$"; }
-                                    else if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && morph.WingCount > 0)
-                                    { str += " $pronoun$ $has$ $wingtype$ $wingposition$."; }
-                                    else if (Morphs[morph.TailType].Appendages.Tail != null && Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0)
-                                    { str += " $pronoun$ $has$ $tailtype% $tailposition$."; }
-
-                                    if (Morphs[morph.ArmFeature].Appendages.ArmFeature != null && Morphs[morph.LegFeature].Appendages.LegFeature != null)
-                                    {
-                                        if (morph.ArmFeature == morph.LegFeature)
-                                        { str += " $pronoun$ $has$ $bothfeature$."; }
-                                        else
-                                        { str += " $pronoun$ $has$ $legfeature$ and $armfeature$."; }
-                                    }
-                                    else if (Morphs[morph.ArmFeature].Appendages.ArmFeature != null)
-                                    { str += " $pronoun$ $has$ $armfeature$."; }
-                                    else if (Morphs[morph.LegFeature].Appendages.LegFeature != null)
-                                    { str += " $pronoun$ $has$ $legfeature$."; }
-
-                                    var swapper = new Dictionary<string, string>(
-                                        StringComparer.OrdinalIgnoreCase) {
-                                            {"$mention$", target.Mention },
-
-                                            {"$weight$", getWeight(morph) },
-                                            {"$morphtype$", getDominantType(morph) },
-
-                                            {"$pronoun$", Pronoun[morph.Gender]},
-                                            {"$has$", PronounHas[morph.Gender]},
-                                            {"$objective$", PronounObjective[morph.Gender]},
-                                            {"$are$", Are[morph.Gender] },
-
-                                            {"$bodytype$",(morph.UpperType == morph.LowerType) ? Morphs[morph.LowerType].Body.BodyType : "tauric " + Morphs[morph.LowerType].Body.BodyType },
-                                            {"$a_uppertype$", (vowelFirst(Morphs[morph.UpperType].Body.UpperType) ? "an " : "a ") + Morphs[morph.UpperType].Body.UpperType },
-                                            {"$a_lowertype$", (vowelFirst(Morphs[morph.LowerType].Body.LowerType) ? "an " : "a ") + Morphs[morph.LowerType].Body.LowerType },
-                                            {"$uppertype$", Morphs[morph.UpperType].Body.UpperType },
-                                            {"$a_bodytype$", (vowelFirst(Morphs[morph.UpperType].Body.BodyType) ? "an " : "a ") + Morphs[morph.LowerType].Body.BodyType },
-
-                                            {"$armcount$", NumberToWords(morph.ArmCount) },
-                                            {"$armtype$", Morphs[morph.ArmType].Appendages.Arms },
-                                            {"$legcount$", NumberToWords(morph.LegCount) },
-                                            {"$legtype$", Morphs[morph.LegType].Appendages.Legs },
-                                            {"$legposition$", Morphs[morph.LowerType].Body.LegAnchor },
-
-                                            {"$wingtype$", Morphs[morph.WingType].Appendages.Wings},
-                                            {"$wingsize$", (Morphs[morph.WingType].Appendages.WingSizes != null) ? Morphs[morph.WingType].Appendages.WingSizes[morph.WingSize] : ""},
-                                            {"$wingcount$", NumberToWords(morph.WingCount)},
-                                            {"$wingposition$", Morphs[morph.UpperType].Body.WingAnchor },
-                                            {"$wingcolor$", Colors[morph.WingColor].Name },
-
-                                            {"$tailtype$", Morphs[morph.TailType].Appendages.Tail},
-                                            {"$tailsize$", (Morphs[morph.TailType].Appendages.TailSizes != null) ? Morphs[morph.TailType].Appendages.TailSizes[morph.TailSize] : ""},
-                                            {"$tailcount$", NumberToWords(morph.TailCount)},
-                                            {"$tailpositon$", Morphs[morph.LowerType].Body.TailAnchor },
-                                            {"$tailcolor$", Colors[morph.TailColor].Name },
-
-                                            {"$facetype$", Morphs[morph.FaceType].Head.Head },
-                                            {"$eyetype$", (morph.EyeCount > 1) ? Morphs[morph.EyeType].Head.Eyes + "s" : Morphs[morph.EyeType].Head.Eyes },
-                                            {"$eyecount$", NumberToWords(morph.EyeCount) },
-                                            {"$eyecolor$", Colors[morph.EyeColor].Name},
-                                            {"$tonguetype$", Morphs[morph.TongueType].Head.Tongue },
-                                            {"$tonguesize$", getTongue(morph) },
-                                            {"$teethtype$", Morphs[morph.TeethType].Head.Teeth },
-                                            {"$lipcolor$", Colors[morph.LipColor].Name },
-
-                                            {"$earposition$", Morphs[morph.EarType].Head.EarAnchor },
-                                            {"$earcount$", NumberToWords(morph.EarCount) },
-                                            {"$eartype$", Morphs[morph.EarType].Head.Ears },
-
-                                            {"$feettype$", Morphs[morph.FeetType].Appendages.Feet },
-                                            {"$handtype$", Morphs[morph.HandType].Appendages.Hands },
-                                            {"$handmodification$", Morphs[morph.HandModification].Appendages.HandMod },
-                                            {"$feetmodification$", Morphs[morph.FeetModification].Appendages.FeetMod },
-
-                                            {"$torsocovering$", Skin[morph.TorsoCovering].Cover },
-                                            {"$legcovering$", Skin[morph.LegCovering].Cover },
-                                            {"$armcovering$", Skin[morph.ArmCovering].Cover },
-                                            {"$covercolor$", Colors[morph.CoveringColor].Name },
-
-                                            {"$skintype$", Skin[morph.SkinType].Text },
-                                            {"$skincolor$", Colors[morph.SkinColor].Name },
-                                            {"$skinornament$", Ornament[morph.SkinOrnaments].Name},
-                                            {"$ornamentcolor$", Colors[morph.OrnamentColor].Name },
-
-                                            {"$hairtype$", Morphs[morph.HairType].Head.Hair },
-                                            {"$haircolor$", Colors[morph.HairColor].Name },
-                                            {"$hairlength$", getHair(morph) },
-
-                                            {"$horntype$", Morphs[morph.HornType].Head.Horns },
-                                            {"$hornsize$", (Morphs[morph.HornType].Head.HornSizes != null) ? Morphs[morph.HornType].Head.HornSizes[morph.HornSize] : ""},
-                                            {"$hornanchor$", Morphs[morph.FaceType].Head.HornAnchor },
-                                            {"$horncolor$", Colors[morph.HornColor].Name },
-                                            {"$horncount$", NumberToWords(morph.HornCount) },
-
-                                            {"$neckfeature$", Morphs[morph.NeckFeature].Head.NeckFeature },
-                                            {"$neckcolor$", Colors[morph.NeckColor].Name },
-                                            {"$armfeature$", Morphs[morph.ArmFeature].Appendages.ArmFeature },
-                                            {"$armcolor$", Colors[morph.ArmColor].Name },
-                                            {"$legfeature$", Morphs[morph.LegFeature].Appendages.LegFeature },
-                                            {"$legcolor$", Colors[morph.LegColor].Name },
-                                            {"$bothfeature$", Morphs[morph.ArmFeature].Appendages.BothFeature },
-
-                                            {"  ", " "},
-                                        };
-
-                                    // first pass
-                                    str = swapper.Aggregate(str, (current, value) => current.Replace(value.Key, value.Value));
-                                    // second pass
-                                    str = swapper.Aggregate(str, (current, value) => current.Replace(value.Key, value.Value));
-                                    // third pass
-                                    str = swapper.Aggregate(str, (current, value) => current.Replace(value.Key, value.Value));
-
-                                    await e.Channel.SendMessage(str.CapitalizeFirst()).ConfigureAwait(false);
-                                }
-
+                                await e.Channel.SendMessage(Prose.GetState(morph, target)).ConfigureAwait(false);
                             }
                             else
                             {
@@ -1177,12 +651,12 @@ namespace NadekoBot.Modules.Bartender
 
                         try
                         {
-                            var db = DbHandler.Instance.GetAllRows<UserMorph>();
-                            Dictionary<long, UserMorph> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
+                            var db = DbHandler.Instance.GetAllRows<MorphModel>();
+                            Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
 
                             if (morphs.ContainsKey((long)e.User.Id))
                             {
-                                UserMorph morph = morphs[(long)e.User.Id];
+                                MorphModel morph = morphs[(long)e.User.Id];
                                 if (morph.Gender == gender_marker)
                                 {
                                     await e.Channel.SendMessage($"Your gender is already {e.GetArg("gender").ToUpperInvariant()}, {e.User.Mention}.").ConfigureAwait(false);
@@ -1198,7 +672,7 @@ namespace NadekoBot.Modules.Bartender
                             }
                             else
                             {
-                                UserMorph morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human"));
+                                MorphModel morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human"));
 
                                 morph.Gender = gender_marker;
 
@@ -1220,8 +694,6 @@ namespace NadekoBot.Modules.Bartender
                     .AddCheck(SimpleCheckers.OwnerOnly())
                     .Do(async e =>
                     {
-                        // see dbhandler.save
-
                         var targetStr = e.GetArg("target")?.Trim();
                         if (string.IsNullOrWhiteSpace(targetStr))
                             return;
@@ -1252,6 +724,41 @@ namespace NadekoBot.Modules.Bartender
                         }
 
                         await e.Channel.SendMessage($"All will be well when you wake, {target.Mention}. Relax and embrace the void.").ConfigureAwait(false);
+                    });
+
+                cgb.CreateCommand(Prefix + "delete")
+                    .Description($"Delete a user's morph. **Bot Owner Only!** | `{Prefix}delete @somegal`")
+                    .Parameter("target", ParameterType.Unparsed)
+                    .AddCheck(SimpleCheckers.OwnerOnly())
+                    .Do(async e =>
+                    {
+                        try
+                        {
+                            var targetStr = e.GetArg("target")?.Trim();
+                            if (string.IsNullOrWhiteSpace(targetStr))
+                                return;
+                            var target = e.Server.FindUsers(targetStr).FirstOrDefault();
+                            if (target == null)
+                            {
+                                await e.Channel.SendMessage("No such person.").ConfigureAwait(false);
+                                return;
+                            }
+
+                            var db = DbHandler.Instance.GetAllRows<MorphModel>();
+                            Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals((long)target.Id)).ToDictionary(x => x.UserId, y => y);
+
+                            if (morphs.ContainsKey((long)target.Id))
+                            {
+                                DbHandler.Instance.Delete<MorphModel>(morphs[(long)target.Id].Id.Value);
+
+                                await e.Channel.SendMessage($"**{target.Name}** has been purged from the annals of history.").ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                await e.Channel.SendMessage($"**{target.Name}** is unchanged and so remains.").ConfigureAwait(false);
+                            }
+                        }
+                        catch (Exception ex) { Console.WriteLine(ex); }
                     });
             });
         }

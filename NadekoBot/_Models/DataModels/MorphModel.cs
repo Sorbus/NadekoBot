@@ -7,7 +7,7 @@ using NadekoBot.Classes.JSONModels;
 
 namespace NadekoBot.DataModels
 {
-    class UserMorph : IDataModel
+    class MorphModel : IDataModel
     {
         public long UserId { get; set; }
 
@@ -86,9 +86,9 @@ namespace NadekoBot.DataModels
         public int Height { get; set; } // in inches
         public float Musculature { get; set; } // abstract
 
-        public UserMorph Copy()
+        public MorphModel Copy()
         {
-            return new UserMorph
+            return new MorphModel
             {
                 UserId = this.UserId,
 

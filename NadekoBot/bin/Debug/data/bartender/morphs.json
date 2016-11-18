@@ -53,13 +53,17 @@
 			"NeckFeature": null
 		},
 		"Body": {
-			"BodyType": "bipedal",
+			"BodyType": null,
 			"UpperType": "human",
 			"ArmAnchor": null,
 			"LowerType": "human",
 			"LegAnchor": null,
-			"WingAnchor": "sprouting from $objective$ shoulderblades",
-			"TailAnchor": "extending from the base of $objective$ spine",
+			"WingAnchor": "sprouting from $possessive$ shoulderblades",
+			"TailAnchor": "extending from the base of $possessive$ spine",
+			"WingLoc": "upper back",
+			"TailLoc": "lower back",
+			"LegLoc": "pelvis",
+			"ArmLoc": "shoulders"
 		},
 		"Appendages": {
 			"Legs": "human legs",
@@ -158,9 +162,13 @@
 			"UpperType": "human",
 			"ArmAnchor": "in the normal place",
 			"LowerType": "enormous spider",
-			"LegAnchor": "extending from $objective$ lower body",
-			"WingAnchor": "sprouting from the back of $objective$ abdomen",
+			"LegAnchor": "extending from $possessive$ lower body",
+			"WingAnchor": "sprouting from the back of $possessive$ abdomen",
 			"TailAnchor": null,
+			"WingLoc": "the back of $possessive$ abdomen",
+			"TailLoc": null,
+			"LegLoc": "pelvis",
+			"ArmLoc": "shoulders"
 		},
 		"Appendages": {
 			"Name": "arachnid",
@@ -239,16 +247,20 @@
 			"Horns": null,
 			"HornSizes": null,
 			"HornAnchor": "topped with $horncount$ $hornsize$ $horncolor$ $horntype$",
-			"NeckFeature": "a thick layer of $neckcolor$ fluff sprouts from $objective$ neck",
+			"NeckFeature": "a thick layer of $neckcolor$ fluff sprouts from $possessive$ neck",
 		},
 		"Body": {
-			"BodyType": "bipedal",
+			"BodyType": null,
 			"UpperType": "anthropomorphic moth",
 			"ArmAnchor": "in the normal place",
 			"LowerType": "anthropomorphic moth",
-			"LegAnchor": "extending from $objective$ lower body",
-			"WingAnchor": "sprouting from the back of $objective$ torso",
-			"TailAnchor": "extending from the base of $objective$ spine",
+			"LegAnchor": "extending from $possessive$ lower body",
+			"WingAnchor": "sprouting from the back of $possessive$ torso",
+			"TailAnchor": "extending from the base of $possessive$ spine",
+			"WingLoc": "upper back",
+			"TailLoc": "lower back",
+			"LegLoc": "pelvis",
+			"ArmLoc": "shoulders"
 		},
 		"Appendages": {
 			"Name": "insectile",
@@ -264,7 +276,7 @@
 			"TailSizes": null,
 			"Wings": "$wingcount$ $wingsize$ fluffy $wingcolor$ moth-like wings",
 			"WingSizes": ["tiny", "small", "large", "huge"],
-			"BothFeature": "a layer of fluff around $objective$ forearms and ankles",
+			"BothFeature": "a layer of fluff around $possessive$ forearms and ankles",
 		},
 	},
 }
