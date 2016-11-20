@@ -10,6 +10,5 @@ namespace NadekoBot.DataModels
     {
         public long UserID { get; set; }
         public int Karma { get; set; }
-        public long LastGiven { get; set; }
     }
 }

@@ -12,12 +12,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace NadekoBot.Modules.Karma
 {
     class KarmaModule : DiscordModule
     {
+        public KarmaModule()
+        {
+            NadekoBot.Client.MessageReceived += CheckForKarma;
+        }
+
         public override string Prefix { get; } = NadekoBot.Config.CommandPrefixes.Karma;
+
+        private static List<String> listOfThanks = new List<string> { "thank", "thanks", "kudos" };
 
         // from https://stackoverflow.com/a/2730393
         private static string NumberToWords(int number)
@@ -69,9 +77,9 @@ namespace NadekoBot.Modules.Karma
             return words;
         }
 
-        private DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private ConcurrentDictionary<ulong, int> karmaCooldowns = new ConcurrentDictionary<ulong, int>();
 
-        private Tuple<Boolean, String, int> giveKarma (ulong targetUID, ulong userUID)
+        private Tuple<Boolean, String, int> GiveKarma(ulong targetUID, ulong userUID)
         {
             Boolean isGiven = false;
             String message = null;
@@ -86,19 +94,19 @@ namespace NadekoBot.Modules.Karma
             if (karma.ContainsKey((long)targetUID))
             { target = karma[(long)targetUID]; }
             else
-            { target = new UserKarma { UserID = (long)targetUID, Karma = 0, LastGiven = 0 }; }
+            { target = new UserKarma { UserID = (long)targetUID, Karma = 0 }; }
 
             if (karma.ContainsKey((long)userUID))
             { user = karma[(long)userUID]; }
             else
-            { user = new UserKarma { UserID = (long)userUID, Karma = 0, LastGiven = 0 }; }
+            { user = new UserKarma { UserID = (long)userUID, Karma = 0 }; }
 
-            DateTime last = DateTime.FromBinary(user.LastGiven);
 
-            if (last.AddSeconds(30).CompareTo(DateTime.Now) <= 0)
+            if (!karmaCooldowns.Keys.Contains(userUID))
             {
+                AddKarmaCooldown(userUID);
+
                 target.Karma += 1;
-                user.LastGiven = DateTime.Now.ToBinary();
 
                 // delete old
                 if (karma.ContainsKey(target.UserID))
@@ -111,7 +119,7 @@ namespace NadekoBot.Modules.Karma
                 DbHandler.Instance.Connection.Insert(user, typeof(UserKarma));
 
                 // process message and award
-                
+
                 isGiven = true;
                 if (target.Karma == 1) { message = "[target] has recieved their first [type]!"; }
                 else if (target.Karma % 5000 == 0) { message = "Thanks to [user], [target] has reached a enormous milestone!"; award = 500; }
@@ -121,55 +129,72 @@ namespace NadekoBot.Modules.Karma
                 else if (target.Karma % 50 == 0) { message = "Thanks to [user], [target] has reached a minor milestone!"; award = 25; }
                 else if (target.Karma % 10 == 0) { message = "Thanks to [user], [target] has reached a tiny milestone!"; award = 5; }
                 else { message = "[user] has given [target] [type]."; }
-            }
 
-            return Tuple.Create(isGiven, message, award);
+                return Tuple.Create(isGiven, message, award);
+            }
+            else { return Tuple.Create(false, "", 0); }
         }
 
-        private async System.Threading.Tasks.Task<bool> doStuff(CommandEventArgs e, string type)
+        private async void CheckForKarma(object sender, Discord.MessageEventArgs e)
         {
             try
             {
-                var targetStr = e.GetArg("target")?.Trim();
-                if (string.IsNullOrWhiteSpace(targetStr))
-                    return false;
-                var target = e.Server.FindUsers(targetStr).FirstOrDefault();
-                if (target == null)
-                { return false; }
-                else if (target == e.User)
-                { return false; }
+                if (e.Server == null || e.Channel.IsPrivate || e.Message.IsAuthor)
+                    return;
 
-                Tuple<Boolean, String, int> message = giveKarma(target.Id, e.User.Id);
+                var toMatch = @"(thank you|thanks|thank|thnx|thnx|tank|thx|shot|danke|praise be to|praise|kudos|tack) ([\w@#]+|""[\w@# ]+"")";
 
-                if (message.Item1)
+                if (Regex.IsMatch(e.Message.Text, toMatch, RegexOptions.IgnoreCase))
                 {
-                    if (message.Item3 != 0)
-                    {
-                        await FlowersHandler.AddFlowersAsync(target, "Reached a milestone", message.Item3, true).ConfigureAwait(false);
-                        await target.SendMessage($":crown:Congratulations!:crown:\nYou received: {message.Item3} {NadekoBot.Config.CurrencySign} for being a swell person.").ConfigureAwait(false);
-                    }
+                    MatchCollection matches = Regex.Matches(e.Message.Text, toMatch);
 
-                    if (message.Item2 != null)
+                    String targetStr = "";
+                    foreach (Match match in matches)
                     {
-                        String str = message.Item2.Replace("[user]", e.User.Name).Replace("[type]", "kudos").Replace("[target]", target.Name);
-                        if (message.Item3 > 0)
-                        { str += $" They have been awarded {NumberToWords(message.Item3)}{NadekoBot.Config.CurrencySign}!"; }
-                        var msg = await e.Channel.SendMessage(str).ConfigureAwait(false);
+                        targetStr = match.Groups[2].Value;
 
-                        ThreadPool.QueueUserWorkItem(async (state) =>
+                        if (string.IsNullOrWhiteSpace(targetStr))
+                            return;
+                        var target = e.Server.FindUsers(targetStr).FirstOrDefault();
+                        if (target == null)
+                        { return; }
+                        else if (target == e.User)
                         {
-                            try
+                            return;
+                        }
+
+                        Tuple<Boolean, String, int> message = GiveKarma(target.Id, e.User.Id);
+
+                        if (message.Item1)
+                        {
+                            if (message.Item3 != 0)
                             {
-                                await Task.Delay(6000).ConfigureAwait(false);
-                                await msg.Delete().ConfigureAwait(false);
+                                await FlowersHandler.AddFlowersAsync(target, "Reached a milestone", message.Item3, true).ConfigureAwait(false);
+                                await target.SendMessage($":crown:Congratulations!:crown:\nYou received: {message.Item3} {NadekoBot.Config.CurrencySign} for being a swell person.").ConfigureAwait(false);
                             }
-                            catch { }
-                        });
+
+                            if (message.Item2 != null)
+                            {
+                                String str = message.Item2.Replace("[user]", e.User.Name).Replace("[type]", "kudos").Replace("[target]", target.Name);
+                                if (message.Item3 > 0)
+                                { str += $" They have been awarded {NumberToWords(message.Item3)}{NadekoBot.Config.CurrencySign}!"; }
+                                var msg = await e.Channel.SendMessage(str).ConfigureAwait(false);
+
+                                ThreadPool.QueueUserWorkItem(async (state) =>
+                                {
+                                    try
+                                    {
+                                        await Task.Delay(6000).ConfigureAwait(false);
+                                        await msg.Delete().ConfigureAwait(false);
+                                    }
+                                    catch { }
+                                });
+                            }
+                        }
                     }
                 }
-                return true;
             }
-            catch (Exception ex) { Console.WriteLine(ex); return false; }
+            catch { }
         }
 
         public override void Install(ModuleManager manager)
@@ -213,97 +238,26 @@ namespace NadekoBot.Modules.Karma
                         await e.Channel.SendMessage(str).ConfigureAwait(false);
                     });
 
-                cgb.CreateCommand("kudos")
-                    .Description($"Give kudos to a user. | `kudos @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "kudos");
-                    });
-                cgb.CreateCommand("thanks,")
-                    .Description($"Guve thanks to a user. | `thanks, @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "thanks");
-                    });
-                cgb.CreateCommand("thanks")
-                    .Description($"Give thanks to a user. | `thanks @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "thanks");
-                    });
-                cgb.CreateCommand("thank")
-                    .Description($"Thank a user. | `thank @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "thanks");
-                    });
-                cgb.CreateCommand("praise be to")
-                    .Description($"Praise a user | `praise be to @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "praise");
-                    });
-                cgb.CreateCommand("praise")
-                    .Description($"Praise a user | `praise @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "praise");
-                    });
-                cgb.CreateCommand("thank you")
-                    .Description($"Thank a user | `thank you @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "thank");
-                    });
-                cgb.CreateCommand("danke")
-                    .Description($"Speak english you savage. | `danke @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "danked");
-                    });
-                cgb.CreateCommand("thx")
-                    .Description($"Thank a user | `thx @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "praise");
-                    });
-                cgb.CreateCommand("tanks")
-                    .Description($"Tank a user | `tank @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "tank");
-                    });
-                cgb.CreateCommand("shot,")
-                    .Description($"Speak english you savage | `shot, @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "shot");
-                    });
-                cgb.CreateCommand("shot")
-                    .Description($"Speak english you savage | `shot @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "shot");
-                    });
-                cgb.CreateCommand("спасибо ")
-                    .Description($"Speak english you savage | `спасибо  @someguy`")
-                    .Parameter("target", ParameterType.Unparsed)
-                    .Do(async e =>
-                    {
-                        await doStuff(e, "спасибо ");
-                    }); 
+            });
+        }
+
+        public void AddKarmaCooldown(ulong userId)
+        {
+            karmaCooldowns.TryAdd(userId, 0);
+            Task.Run(async () =>
+            {
+                int cd;
+                if (!karmaCooldowns.TryGetValue(userId, out cd))
+                {
+                    return;
+                }
+                if (karmaCooldowns.TryAdd(userId, 0))
+                {
+                    await Task.Delay(30 * 1000);
+                    int throwaway;
+                    karmaCooldowns.TryRemove(userId, out throwaway);
+                }
+
             });
         }
     }
