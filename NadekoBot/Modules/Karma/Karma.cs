@@ -144,9 +144,9 @@ namespace NadekoBot.Modules.Karma
 
                 var toMatch = @"(thank you|thanks|thank|thnx|thnx|tank|thx|shot|danke|praise be to|praise|kudos|tack) ([\w@#]+|""[\w@# ]+"")";
 
-                if (Regex.IsMatch(e.Message.Text, toMatch, RegexOptions.IgnoreCase))
+                if (Regex.IsMatch(e.Message.Text.ToLowerInvariant(), toMatch, RegexOptions.IgnoreCase))
                 {
-                    MatchCollection matches = Regex.Matches(e.Message.Text, toMatch);
+                    MatchCollection matches = Regex.Matches(e.Message.Text.ToLowerInvariant(), toMatch);
 
                     String targetStr = "";
                     foreach (Match match in matches)
