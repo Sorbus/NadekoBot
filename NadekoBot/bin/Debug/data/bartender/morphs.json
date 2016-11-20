@@ -81,7 +81,85 @@
 		},
 	},
 	1: {
-		"Code": "fox"
+		"Code": "fox",
+		"Name": "leeani",
+
+		"SkinType": [4],
+		"Ornaments": [0],
+		"SkinCovering": [4],
+
+		"Color": {
+			"Eye": [0],
+			"Hair": [0],
+			"Lip": [0], 
+			"Wing": [0],
+			"Tail": [0],
+			"Horn": [0],
+			"Neck": [0],
+			"Arm": [0],
+			"Leg": [0],
+			"Skin": [0],
+			"Ornament": [0],
+			"Covering": [0],
+			"Tongue": [0],
+		},
+
+		"Max": {
+			"Wings": 0,
+			"Tails": 1,
+			"Eyes": 2,
+			"Hair": 0,
+			"Ears": 2,
+			"Horns": 0,
+			"TongueSize": 5,
+			"TongueCount": 1,
+			"Arms": 2,
+			"Legs": 2,
+		},
+
+		"Transform": {
+			"Permanence": 0,
+		},
+		"Head": {
+			"Head": "vulpine head",
+			"Hair": "hair",
+			"Ears": "pointed ear",
+			"Tongue": "flat tongue",
+			"Teeth": "sharp teeth",
+			"Eyes": "keen eye",
+			"EarAnchor": "on top of",
+			"Horns": null,
+			"HornSizes": null,
+			"HornAnchor": "topped with",
+			"NeckFeature": null
+		},
+		"Body": {
+			"BodyType": null,
+			"UpperType": "anthropomorphic fox",
+			"ArmAnchor": null,
+			"LowerType": "anthropomorphic fox",
+			"LegAnchor": null,
+			"WingAnchor": "sprouting from $possessive$ shoulderblades",
+			"TailAnchor": "extending from the base of $possessive$ spine",
+			"WingLoc": "upper back",
+			"TailLoc": "lower back",
+			"LegLoc": "pelvis",
+			"ArmLoc": "shoulders"
+		},
+		"Appendages": {
+			"Legs": "digitigrade legs",
+			"Feet": "paws",
+			"LegFeature": null,
+			"FeetMod": "sharply clawed",
+			"Arms": "arms",
+			"ArmFeature": null,
+			"Hands": "hands",
+			"HandMod": "sharply clawed",
+			"Tail": "fluffy tail",
+			"TailSizes": ["stubby", "short", "modest", "long"],
+			"Wings": null,
+			"WingSizes": null,
+		},
 	},
 	2: {
 		"Code": "spider"

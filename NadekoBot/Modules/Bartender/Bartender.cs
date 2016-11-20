@@ -155,9 +155,9 @@ namespace NadekoBot.Modules.Bartender
                 {
                     r = rng.Next(0, tf.Balance.Length);
 
-                    if (!changes.Contains("big_" + tf.Balance[r]))
+                    if (!changes.Contains(tf.Balance[r]))
                     {
-                        changes.Add("big_" + tf.Balance[r]);
+                        changes.Add(tf.Balance[r]);
                         i += 1;
 
                         switch (tf.Balance[r])
@@ -165,37 +165,130 @@ namespace NadekoBot.Modules.Bartender
                             case "upper":
                                 if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.ArmType == key)
+                                
+                                if (original.ArmFeature != key )
                                 {
-                                    if (original.ArmCount >= value.Max.Arms)
+                                    changed.ArmFeature = key;
+                                    if (!value.Color.Arm.Contains(original.ArmColor))
+                                    { changed.ArmColor = getRandItem(value.Color.Arm); }
+                                }
+                                else if (original.ArmType != key || original.HandModification != key)
+                                {
+                                    Boolean done = false;
+                                    switch(rng.Next(0,1))
                                     {
-                                        changed.UpperType = key;
-                                        if (original.ArmCount > value.Max.Arms)
-                                        { changed.ArmCount -= 2 - value.Max.Arms % 2; }
+                                        case 0:
+                                            if (original.ArmType != key)
+                                            {
+                                                changed.ArmType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 1; }
+                                            break;
+                                        case 1:
+                                            if (original.HandModification != key)
+                                            {
+                                                changed.HandModification = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 0; }
+                                            break;
                                     }
-                                    else
-                                    { changed.ArmCount += 2 - value.Max.Arms % 2; }
+                                }
+                                else if (original.ArmCount != value.Max.Arms || original.HandType != key)
+                                {
+                                    Boolean done = false;
+                                    switch (rng.Next(0, 1))
+                                    {
+                                        case 0:
+                                            if (original.ArmCount != value.Max.Arms)
+                                            {
+                                                changed.ArmType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 1; }
+                                            break;
+                                        case 1:
+                                            if (original.HandType != key)
+                                            {
+                                                changed.HandType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 0; }
+                                            break;
+                                    }
                                 }
                                 else
-                                { changed.ArmType = key; }
+                                { changed.UpperType = key; }
+
                                 break;
                             case "lower":
                                 if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
-                                if (original.LegType == key)
+
+                                if (original.LegFeature != key)
                                 {
-                                    if (original.LegCount >= value.Max.Legs)
+                                    changed.LegFeature = key;
+                                    if (!value.Color.Leg.Contains(original.LegColor))
+                                    { changed.LegColor = getRandItem(value.Color.Leg); }
+                                }
+                                else if (original.LegType != key || original.FeetModification != key)
+                                {
+                                    Boolean done = false;
+                                    switch (rng.Next(0, 1))
                                     {
-                                        if (original.LowerType != key)
-                                        { changed.LowerType = key; }
-                                        else if (original.LegCount > value.Max.Legs)
-                                        { changed.LegCount -= 2 - value.Max.Legs % 2; }
+                                        case 0:
+                                            if (original.LegType != key)
+                                            {
+                                                changed.LegType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 1; }
+                                            break;
+                                        case 1:
+                                            if (original.FeetModification != key)
+                                            {
+                                                changed.FeetModification = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 0; }
+                                            break;
                                     }
-                                    else
-                                    { changed.LegCount += 2 - value.Max.Legs % 2; }
+                                }
+                                else if (original.LegCount != value.Max.Legs || original.FeetType != key)
+                                {
+                                    Boolean done = false;
+                                    switch (rng.Next(0, 1))
+                                    {
+                                        case 0:
+                                            if (original.LegCount != value.Max.Legs)
+                                            {
+                                                changed.LegType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 1; }
+                                            break;
+                                        case 1:
+                                            if (original.FeetType != key)
+                                            {
+                                                changed.FeetType = key;
+                                                done = true;
+                                            }
+                                            if (!done)
+                                            { done = true; goto case 0; }
+                                            break;
+                                    }
                                 }
                                 else
-                                { changed.ArmType = key; }
+                                { changed.UpperType = key; }
+
                                 break;
                             case "face":
                                 if (rng.Next(0, 100) < value.Transform.Permanence)
@@ -322,19 +415,7 @@ namespace NadekoBot.Modules.Bartender
                                 if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
-                            case "feature":
-                                if (rng.Next(0, 100) < value.Transform.Permanence)
-                                { break; }
-                                break;
-                            case "color":
-                                if (rng.Next(0, 100) < value.Transform.Permanence)
-                                { break; }
-                                break;
                             case "skin":
-                                if (rng.Next(0, 100) < value.Transform.Permanence)
-                                { break; }
-                                break;
-                            case "mod":
                                 if (rng.Next(0, 100) < value.Transform.Permanence)
                                 { break; }
                                 break;
@@ -355,10 +436,26 @@ namespace NadekoBot.Modules.Bartender
                     {
                         r = rng.Next(0, tf.Growth.Count);
 
-                        if (!changes.Contains("grow_" + tf.Growth.ElementAt(r).Key))
+                        if (!changes.Contains(tf.Growth.ElementAt(r).Key))
                         {
-                            changes.Add("grow_" + tf.Growth.ElementAt(r).Key);
+                            changes.Add(tf.Growth.ElementAt(r).Key);
                             i += 1;
+
+                            switch (tf.Growth.ElementAt(r).Key)
+                            {
+                                case "hair":
+                                    break;
+                                case "tongue":
+                                    break;
+                                case "wing":
+                                    break;
+                                case "tail":
+                                    break;
+                                case "horn":
+                                    break;
+                                case "ear":
+                                    break;
+                            }
                         }
                     }
                 }
@@ -372,9 +469,9 @@ namespace NadekoBot.Modules.Bartender
                     {
                         r = rng.Next(0, tf.ColorTargets.Count);
 
-                        if (!changes.Contains("color_" + tf.ColorTargets[r]))
+                        if (!changes.Contains(tf.ColorTargets[r]))
                         {
-                            changes.Add("color_" + tf.ColorTargets[r]);
+                            changes.Add(tf.ColorTargets[r]);
                             i += 1;
 
                             switch (tf.ColorTargets[r])
@@ -446,7 +543,22 @@ namespace NadekoBot.Modules.Bartender
 
                             if (drink_cat.Count > 0)
                             {
-
+                                StringBuilder str = new StringBuilder(2000);
+                                foreach (KeyValuePair<string, Drink> d in drink_cat)
+                                {
+                                    if (!d.Value.Dragon)
+                                    {
+                                        if (d.Value.Name != null)
+                                        {
+                                            str.Append(" - " + d.Value.Name + " (" + d.Value.Code + ", " + d.Value.Cost + NadekoBot.Config.CurrencySign + ").\n");
+                                        }
+                                        else
+                                        {
+                                            str.Append(" - " + d.Value.Code + " (" + d.Value.Cost + NadekoBot.Config.CurrencySign + ").\n");
+                                        }
+                                    }
+                                }
+                                await e.Channel.SendMessage($"Items in the **{e.GetArg("category").ToUpper()}** category:\n{str.ToString().CapitalizeFirst()}").ConfigureAwait(false);
                             }
                             else
                             { await e.Channel.SendMessage($"We don't have any drinks in that category, {e.User.Mention}.").ConfigureAwait(false); }
@@ -457,13 +569,6 @@ namespace NadekoBot.Modules.Bartender
 
                 cgb.CreateCommand(Prefix + "info")
                     .Description($"Get additional information on a specific drink. | `{Prefix}info \"mead\"`")
-                    .Parameter("drink", ParameterType.Required)
-                    .Do(async e =>
-                    {
-                    });
-
-                cgb.CreateCommand(Prefix + "buy")
-                    .Description($"Purchase a drink for yourself. | `{Prefix}buy \"sex on the beach\"`")
                     .Parameter("drink", ParameterType.Required)
                     .Do(async e =>
                     {
@@ -480,43 +585,106 @@ namespace NadekoBot.Modules.Bartender
                             return;
                         }
 
-                        //Payment~
-                        var amount = drink.Cost;
-                        var pts = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
-                        if (pts < amount)
+                        if (drink.Dragon)
                         {
-                            await e.Channel.SendMessage($"{e.User.Mention} you don't have enough {NadekoBot.Config.CurrencyName}s! \nYou still need {amount - pts} {NadekoBot.Config.CurrencySign} to be able to do this!").ConfigureAwait(false);
+                            await e.Message.Delete().ConfigureAwait(false);
+                            await e.Channel.SendMessage($"Trying to order off-menu, dear?").ConfigureAwait(false);
                             return;
                         }
-                        await FlowersHandler.RemoveFlowers(e.User, $"bought a {drink.Code}", amount).ConfigureAwait(false);
 
-                        //await e.User.SendMessage($"{drink.Flavor}").ConfigureAwait(false);
-
-                        MorphModel morph;
-
-                        if (morphs.ContainsKey((long)e.User.Id))
-                        { morph = morphs[(long)e.User.Id]; }
-                        else
-                        { morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human")); }
-
+                        StringBuilder str = new StringBuilder(2000);
                         if (drink.Name != null)
-                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.").ConfigureAwait(false); }
-                        else
-                        { await e.Channel.SendMessage($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.").ConfigureAwait(false); }
-
-
-                        if (drink.Transformative)
                         {
-                            try
-                            {
-                                Tuple<MorphModel, String, String> output = transformUser(morph, drink, e.User);
+                            str.Append(drink.Name + " (" + drink.Code + ", " + drink.Cost + NadekoBot.Config.CurrencySign + ").\n");
+                        }
+                        else
+                        {
+                            str.Append(drink.Code + " (" + drink.Cost + NadekoBot.Config.CurrencySign + ").\n");
+                        }
 
-                                if (morphs.ContainsKey((long)e.User.Id))
-                                { DbHandler.Instance.Delete<MorphModel>(morphs[(long)e.User.Id].Id.Value); }
+                        str.Append(drink.Description);
 
-                                DbHandler.Instance.Save<MorphModel>(output.Item1);
+                        await e.Channel.SendMessage(str.ToString().CapitalizeFirst()).ConfigureAwait(false);
+                    });
 
-                                await e.Channel.SendMessage(output.Item3).ConfigureAwait(false);
+                cgb.CreateCommand(Prefix + "buy")
+                    .Description($"Purchase a drink for yourself. | `{Prefix}buy \"sex on the beach\"`")
+                    .Parameter("drink", ParameterType.Required)
+                    .Do(async e =>
+                    {
+                    Drink drink;
+
+                    drink = Drinks.Find(t => t.Code.Equals(e.GetArg("drink").ToLowerInvariant()));
+
+                    var db = DbHandler.Instance.GetAllRows<MorphModel>();
+                    Dictionary<long, MorphModel> morphs = db.Where(t => t.UserId.Equals((long)e.User.Id)).ToDictionary(x => x.UserId, y => y);
+
+                    if (drink == null)
+                    {
+                        await e.Channel.SendMessage($"Sorry, {e.User.Mention}, that's not on the menu.").ConfigureAwait(false);
+                        return;
+                    }
+
+                    if (drink.Dragon)
+                    {
+                        await e.Message.Delete().ConfigureAwait(false);
+                    }
+
+                    //Payment~
+                    var amount = drink.Cost;
+                    var pts = DbHandler.Instance.GetStateByUserId((long)e.User.Id)?.Value ?? 0;
+                    if (pts < amount)
+                    {
+                        await e.Channel.SendMessage($"{e.User.Mention} you don't have enough {NadekoBot.Config.CurrencyName}s! \nYou still need {amount - pts} {NadekoBot.Config.CurrencySign} to be able to do this!").ConfigureAwait(false);
+                        return;
+                    }
+                    await FlowersHandler.RemoveFlowers(e.User, $"bought a {drink.Code}", amount).ConfigureAwait(false);
+
+                    //await e.User.SendMessage($"{drink.Flavor_2nd}").ConfigureAwait(false);
+
+                    MorphModel morph;
+
+                    if (morphs.ContainsKey((long)e.User.Id))
+                    { morph = morphs[(long)e.User.Id]; }
+                    else
+                    { morph = buildMorph((long)e.User.Id, Morphs.FirstOrDefault(x => x.Value.Code == "human")); }
+
+                    StringBuilder str = new StringBuilder(2000);
+
+                    if (drink.Name != null)
+                    { str.Append($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Name) ? "an" : "a")} {drink.Name}.\n\n{drink.Flavor_3rd}\n\n"); }
+                    else
+                    { str.Append($"{e.User.Mention} bought {PronounSelf[morph.Gender]} {(DescHelp.vowelFirst(drink.Code) ? "an" : "a")} {drink.Code}.\n\n{drink.Flavor_3rd}\n\n"); }
+
+
+                    if (drink.Transformative)
+                    {
+                        try
+                        {
+                            Tuple<MorphModel, String, String> output = transformUser(morph, drink, e.User);
+
+                            if (morphs.ContainsKey((long)e.User.Id))
+                            { DbHandler.Instance.Delete<MorphModel>(morphs[(long)e.User.Id].Id.Value); }
+
+                            DbHandler.Instance.Save<MorphModel>(output.Item1);
+
+                            str.Append(output.Item3);
+
+                                var swapper = new Dictionary<string, string>(
+                                    StringComparer.OrdinalIgnoreCase) {
+                                    {"$mention$", e.User.Mention },
+                                    {"$name$", e.User.Name },
+
+                                    {"$subjective$", ProseGen.PronounSubjective[morph.Gender]},
+                                    {"$objective$", ProseGen.PronounObjective[morph.Gender]},
+                                    {"$possessive$", ProseGen.PronounPossessive[morph.Gender]},
+                                    {"$are$", ProseGen.Are[morph.Gender] },
+                                    {"$has$", ProseGen.Has[morph.Gender]},
+                                };
+
+                                await e.Channel.SendMessage(
+                                    swapper.Aggregate(str.ToString(), (current, value) => current.Replace(value.Key, value.Value)
+                                    )).ConfigureAwait(false);
                             }
                             catch (Exception ex)
                             { Console.WriteLine(ex); }
@@ -549,6 +717,11 @@ namespace NadekoBot.Modules.Bartender
                         {
                             await e.Channel.SendMessage($"Sorry, {e.User.Mention}, that's not on the menu.").ConfigureAwait(false);
                             return;
+                        }
+
+                        if (drink.Dragon)
+                        {
+                            await e.Message.Delete().ConfigureAwait(false);
                         }
 
                         if (drink.Transformative == true)
@@ -608,9 +781,9 @@ namespace NadekoBot.Modules.Bartender
 
                             await e.Channel.SendIsTyping();
 
-                            if (morphs.ContainsKey((long)e.User.Id))
+                            if (morphs.ContainsKey((long)target.Id))
                             {
-                                MorphModel morph = morphs[(long)e.User.Id];
+                                MorphModel morph = morphs[(long)target.Id];
 
                                 await e.Channel.SendMessage(Prose.GetState(morph, target)).ConfigureAwait(false);
                             }
@@ -716,7 +889,7 @@ namespace NadekoBot.Modules.Bartender
 
                         try
                         {
-                            DbHandler.Instance.Save(buildMorph((long)e.User.Id, target_morph));
+                            DbHandler.Instance.Save(buildMorph((long)target.Id, target_morph));
                         }
                         catch (Exception ex)
                         {

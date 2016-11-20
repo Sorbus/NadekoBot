@@ -21,17 +21,17 @@ namespace NadekoBot.Modules.Bartender
         private Dictionary<int, TFOrnament> Ornament = NadekoBot.Config.Ornament;
         private Dictionary<int, TFSkin> Skin = NadekoBot.Config.Skin;
 
-        private static String[] PronounPossessive = new String[3] { "their", "her", "his" };
-        private static String[] PronounSubjective = new String[3] { "they", "she", "he" };
-        private static String[] PronounObjective = new String[3] { "them", "her", "him" };
+        public static String[] PronounPossessive = new String[3] { "their", "her", "his" };
+        public static String[] PronounSubjective = new String[3] { "they", "she", "he" };
+        public static String[] PronounObjective = new String[3] { "them", "her", "him" };
 
-        private static String[] Has = new String[3] { "have", "has", "has" };
-        private static String[] Are = new String[3] { "are", "is", "is" };
-        private static String[] Was = new String[3] { "were", "was", "was" };
+        public static String[] Has = new String[3] { "have", "has", "has" };
+        public static String[] Are = new String[3] { "are", "is", "is" };
+        public static String[] Was = new String[3] { "were", "was", "was" };
 
-        private static String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
+        public static String[] PronounSelf = new String[3] { "themself", "herself", "himself" };
 
-        private static readonly Regex re = new Regex(@"\$(\w+)\$", RegexOptions.Compiled);
+        public static readonly Regex re = new Regex(@"\$(\w+)\$", RegexOptions.Compiled);
 
         public string GetState(MorphModel morph, Discord.User target)
         {
@@ -104,7 +104,15 @@ namespace NadekoBot.Modules.Bartender
                 else { str.Append(" no tongue,"); }
                 str.Append(" and $teethtype$.\n\n");
 
-                str.Append((Ornament[morph.SkinOrnaments].Name != null) ? "$possessive$ $skincolor$ $skintype$ is $skinornament$" : "$subjective$ $has$ $skincolor$ $skintype$");
+                if (Skin[morph.SkinType].Text != null)
+                {
+                    str.Append((Ornament[morph.SkinOrnaments].Name != null) ? "$possessive$ $skincolor$ $skintype$ is $skinornament$" : "$subjective$ $has$ $skincolor$ $skintype$");
+
+                    if ((Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover) ==
+                        (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover))
+                    { str.Append(", and "); }
+                    else { str.Append(", "); }
+                }
 
                 if ((Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0) &&
                     (Skin[morph.LegCovering].Cover != null && morph.LegCount > 0) &&
@@ -112,15 +120,15 @@ namespace NadekoBot.Modules.Bartender
                 {
                     if ((Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover) ==
                         (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover))
-                    { str.Append(", and $possessive$ entire body is $torsocovering$."); }
+                    { str.Append("$possessive$ entire body is $torsocovering$."); }
                     else if (Skin[morph.ArmCovering].Cover == Skin[morph.LegCovering].Cover)
-                    { str.Append(", $possessive$ arms and legs are $armcovering$, and $possessive$ torso is $torsocovering$."); }
+                    { str.Append("$possessive$ arms and legs are $armcovering$, and $possessive$ torso is $torsocovering$."); }
                     else if (Skin[morph.ArmCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                    { str.Append(", $possessive$ arms and torso are $armcovering$, and $possessive$ legs are $legcovering$."); }
+                    { str.Append("$possessive$ arms and torso are $armcovering$, and $possessive$ legs are $legcovering$."); }
                     else if (Skin[morph.LegCovering].Cover == Skin[morph.TorsoCovering].Cover)
-                    { str.Append(", $possessive$ legs and torso are $legcovering$, and $possessive$ arms are $armcovering$."); }
+                    { str.Append("$possessive$ legs and torso are $legcovering$, and $possessive$ arms are $armcovering$."); }
                     else
-                    { str.Append(", $possessive$ arms are $armcovering$, $possessive$ legs are $legcovering$, and $possessive$ torso is $torsocovering$."); }
+                    { str.Append("$possessive$ arms are $armcovering$, $possessive$ legs are $legcovering$, and $possessive$ torso is $torsocovering$."); }
 
                 }
                 else if ((Skin[morph.ArmCovering].Cover != null && morph.ArmCount > 0) &&
@@ -169,11 +177,11 @@ namespace NadekoBot.Modules.Bartender
 
                 if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && Morphs[morph.TailType].Appendages.Tail != null &&
                     Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0 && morph.WingCount > 0)
-                { str.Append(" $subjective$ $has$ $wingtype$ $wingposition$ and $tailtype$ $tailposition$"); }
+                { str.Append(" $subjective$ $has$ $wingcount$ $wingsize$ $wingtype$ $wingposition$ and $tailcount$ $tailsize$ $tailtype$ $tailposition$"); }
                 else if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && morph.WingCount > 0)
-                { str.Append(" $subjective$ $has$ $wingtype$ $wingposition$."); }
+                { str.Append(" $subjective$ $has$ $wingcount$ $wingsize$ $wingtype$ $wingposition$."); }
                 else if (Morphs[morph.TailType].Appendages.Tail != null && Morphs[morph.LowerType].Body.TailAnchor != null && morph.TailCount > 0)
-                { str.Append(" $subjective$ $has$ $tailtype$ $tailposition$."); }
+                { str.Append(" $subjective$ $has$ $tailcount$ $tailsize$ $tailtype$ $tailposition$."); }
 
                 if (Morphs[morph.ArmFeature].Appendages.ArmFeature != null && Morphs[morph.LegFeature].Appendages.LegFeature != null)
                 {
@@ -190,14 +198,16 @@ namespace NadekoBot.Modules.Bartender
                 var swapper = new Dictionary<string, string>(
                     StringComparer.OrdinalIgnoreCase) {
                     {"$mention$", target.Mention },
+                    {"$name$", target.Name },
 
                     {"$weight$", DescHelp.getWeight(morph) },
                     {"$morphtype$", DescHelp.getDominantType(morph, Morphs) },
 
                     {"$subjective$", PronounSubjective[morph.Gender]},
-                    {"$has$", Has[morph.Gender]},
+                    {"$objective$", PronounObjective[morph.Gender]},
                     {"$possessive$", PronounPossessive[morph.Gender]},
                     {"$are$", Are[morph.Gender] },
+                    {"$has$", Has[morph.Gender]},
 
                     //{"$bodytype$",(morph.UpperType == morph.LowerType) ? Morphs[morph.LowerType].Body.BodyType : "tauric " + Morphs[morph.LowerType].Body.BodyType },
                     {"$a_uppertype$", (DescHelp.vowelFirst(Morphs[morph.UpperType].Body.UpperType) ? "an " : "a ") + Morphs[morph.UpperType].Body.UpperType },
@@ -213,14 +223,14 @@ namespace NadekoBot.Modules.Bartender
 
                     {"$wingtype$", Morphs[morph.WingType].Appendages.Wings},
                     {"$wingsize$", (Morphs[morph.WingType].Appendages.WingSizes != null) ? Morphs[morph.WingType].Appendages.WingSizes[morph.WingSize] : ""},
-                    {"$wingcount$", BarHelp.NumberToWords(morph.WingCount)},
+                    {"$wingcount$", (morph.WingCount == 1) ? "a" : BarHelp.NumberToWords(morph.WingCount) },
                     {"$wingposition$", Morphs[morph.UpperType].Body.WingAnchor },
                     {"$wingcolor$", Colors[morph.WingColor].Name },
 
                     {"$tailtype$", Morphs[morph.TailType].Appendages.Tail},
                     {"$tailsize$", (Morphs[morph.TailType].Appendages.TailSizes != null) ? Morphs[morph.TailType].Appendages.TailSizes[morph.TailSize] : ""},
-                    {"$tailcount$", BarHelp.NumberToWords(morph.TailCount)},
-                    {"$tailpositon$", Morphs[morph.LowerType].Body.TailAnchor },
+                    {"$tailcount$", (morph.TailCount == 1) ? "a" : BarHelp.NumberToWords(morph.TailCount) },
+                    {"$tailposition$", Morphs[morph.LowerType].Body.TailAnchor },
                     {"$tailcolor$", Colors[morph.TailColor].Name },
 
                     {"$headtype$", Morphs[morph.FaceType].Head.Head },
@@ -270,6 +280,8 @@ namespace NadekoBot.Modules.Bartender
                     {"$legcolor$", Colors[morph.LegColor].Name },
                     {"$bothfeature$", Morphs[morph.ArmFeature].Appendages.BothFeature },
 
+                   
+                    
                     {"  ", " "},
                 };
 

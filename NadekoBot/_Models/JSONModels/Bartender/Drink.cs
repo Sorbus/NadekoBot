@@ -8,14 +8,15 @@ namespace NadekoBot.Classes.JSONModels
 {
     public class Drink
     {
-        public Drink(string p, string n, int c, string t, string d, string f, bool s, bool w, TFDetails tf)
+        public Drink(string p, string n, int c, string t, string d, string f2, string f3, bool s, bool w, TFDetails tf)
         {
             Code = p;
             Name = n;
             Cost = c;
             Category = t;
             Description = d;
-            Flavor = f;
+            Flavor_2nd = f2;
+            Flavor_3rd = f3;
             Dragon = s;
             Transformative = w;
             Transform = tf;
@@ -25,7 +26,8 @@ namespace NadekoBot.Classes.JSONModels
         public int Cost { get; set; }
         public string Category { get; set; }
         public string Description { get; set; }
-        public string Flavor { get; set; }
+        public string Flavor_2nd { get; set; }
+        public string Flavor_3rd { get; set; }
         public Boolean Dragon { get; set; }
         public Boolean Transformative { get; set; }
 
@@ -34,7 +36,7 @@ namespace NadekoBot.Classes.JSONModels
     public class TFDetails
     {
         public TFDetails(string target, int changecount, String[] balance, int[] weightchange,
-            int[] musculaturechange, SortedList<String, int[]> growth, int[] colors, List<String> colortargets,
+            int[] musculaturechange, SortedList<String, int[]> growth, string[] colorrange, int[] colors, List<String> colortargets,
             int[] skinpattern, int growcount, int colorcount)
         {
             Target = target;
@@ -46,6 +48,7 @@ namespace NadekoBot.Classes.JSONModels
             MusculatureChange = musculaturechange;
             Growth = growth;
             Colors = colors;
+            ColorRange = colorrange;
             ColorTargets = colortargets;
             SkinPattern = skinpattern;
 
@@ -63,6 +66,7 @@ namespace NadekoBot.Classes.JSONModels
         
         public SortedList<String, int[]> Growth { get; set; }
 
+        public String[] ColorRange { get; set; }
         public int[] Colors { get; set; }
         public List<String> ColorTargets { get; set; }
 

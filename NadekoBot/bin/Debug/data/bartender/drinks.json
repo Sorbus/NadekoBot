@@ -5,13 +5,14 @@
 		"Cost": 0,
 		"Category": "test",
 		"Description": "This is not for you.",
-		"Flavor": "Something arrives. It is hazy around the edges, not quite visible. It tastes of electricity and change.",
+		"Flavor_2nd": "Something arrives. It is hazy around the edges, not quite visible. It tastes of electricity and change.",
+		"Flavor_3rd": "Something arrives for $name$. It is hazy around the edges, not quite visible, and for a few moments $subjective$ $are$ not either.",
  		"Dragon": false,
 		"Transformative": true,
 		"Transform": {
 			"Target": "spidertaur",
 			"ChangeCount": 3,
-			"Balance" : ["upper","lower","face","tongue","hair","horn","wing","tail","feature","color","skin","mod"],
+			"Balance" : ["upper","lower","face","tongue","hair","horn","wing","tail","skin"],
 			"Theme": "static",
 
 			"WeightChange": [0],
@@ -40,7 +41,7 @@
 		"Cost": 10,
 		"Category": "wine",
 		"Description": "A sweet honey wine",
-		"Flavor": "Your mead arrives in a outrageously ornamental stein, all bone and skulls and steel. It tastes sweet, almost cloying, but after a few moments the subtle flavor of honey comes through, flowers and nectar and freedom.",
+		"Flavor_2nd": "Your mead arrives in a outrageously ornamental stein, all bone and skulls and steel. It tastes sweet, almost cloying, but after a few moments the subtle flavor of honey comes through, flowers and nectar and freedom.",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -50,7 +51,7 @@
 		"Cost": 1,
 		"Category": "beer",
 		"Description": "I don't know, do you like beer?",
-		"Flavor": "It tastes like beer. I don't know, I can't stand the stuff. Give me a break.",
+		"Flavor_2nd": "It tastes like beer. I don't know, I can't stand the stuff. Give me a break.",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -60,7 +61,7 @@
 		"Cost": 2,
 		"Category": "cocktail",
 		"Description": "A provocatively named drink. Normally it's harmless and fruity, but our variant is a bit more fun.",
-		"Flavor": "The drink arrives in a tall highball glass, orange and inviting, condensation already beading its sides. It tastes of summer and the sun, of long days spent in idle relaxation. As you drink it the taste spreads throughout your body, leaving you relaxed and languid.",
+		"Flavor_2nd": "The drink arrives in a tall highball glass, orange and inviting, condensation already beading its sides. It tastes of summer and the sun, of long days spent in idle relaxation. As you drink it the taste spreads throughout your body, leaving you relaxed and languid.",
  		"Dragon": false,
 		"Transformative": true,
 		"Transform": {
@@ -75,7 +76,7 @@
 		"Cost": 10,
 		"Category": "Transformative",
 		"Description": "Concentrated nectar from a rare flower. May have transformative properties.",
-		"Flavor": "The drink arrives in a tiny glass vial. There's hardly any of the red liquid there. It roils in your mouth as you drink it, and by the time you begin to swallow it is gone, absorbed through your mouth.",
+		"Flavor_2nd": "The drink arrives in a tiny glass vial. There's hardly any of the red liquid there. It roils in your mouth as you drink it, and by the time you begin to swallow it is gone, absorbed through your mouth.",
  		"Dragon": true,
 		"Transformative": true,
 		"Transform": {
@@ -88,7 +89,7 @@
 		"Cost": 1,
 		"Category": "cider",
 		"Description": "Made in the traditional farmhouse style, but slightly sweetened with apple juice and honey.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -98,7 +99,47 @@
 		"Cost": 1,
 		"Category": "cider",
 		"Description": "This hot, spicy drink is the perfect choice for autumn.",
-		"Flavor": "",
+		"Flavor_2nd": "",
+ 		"Dragon": false,
+		"Transformative": false
+	},
+	{
+		"Code": "blackberry cider",
+		"Name": null,
+		"Cost": 1,
+		"Category": "cider",
+		"Description": "",
+		"Flavor_2nd": "",
+ 		"Dragon": false,
+		"Transformative": false
+	},
+	{
+		"Code": "raspberry cider",
+		"Name": null,
+		"Cost": 1,
+		"Category": "cider",
+		"Description": "",
+		"Flavor_2nd": "",
+ 		"Dragon": false,
+		"Transformative": false
+	},
+	{
+		"Code": "pomegranate cider",
+		"Name": null,
+		"Cost": 1,
+		"Category": "cider",
+		"Description": "",
+		"Flavor_2nd": "",
+ 		"Dragon": false,
+		"Transformative": false
+	},
+	{
+		"Code": "mandarin cider",
+		"Name": null,
+		"Cost": 1,
+		"Category": "cider",
+		"Description": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -108,7 +149,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -118,7 +159,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -128,7 +169,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "Perfect for a celebration or just drinking by yourself.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -138,7 +179,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "A light, dry wine that pairs well with fish, chicken, and pork.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -147,7 +188,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "An aromatic wine, perfect for sipping.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -157,7 +198,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "A popular white wine that pairs well with fish and chicken.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -167,7 +208,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "A versatile light white wine with herbal notes.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -177,7 +218,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "A spicy red wine which pairs well with all sorts of meat.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -187,7 +228,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "This red wine is easy to drink and pairs with any food. It is a good introduction to red wines.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -197,7 +238,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "One of the world's best red wines, it is full-bodied and pairs well with red meat.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -207,7 +248,7 @@
 		"Cost": 1,
 		"Category": "wine",
 		"Description": "A noble and fruity red wine, it pairs well with grilled salmon, chicken, lamb, and Japanese dishes.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -217,7 +258,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -227,7 +268,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "A traditional hot chocolate, rich and creamy.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -237,7 +278,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "Made in a Mexican style, with just a dash of chile. We think that this is the *perfect* hot chocolate.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": true
 	},
 	{
@@ -246,7 +287,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "As black as your soul on a dark night, perfect for filling your mind with bitter ideas.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -256,7 +297,7 @@
 		"Cost": 1,
 		"Category": "non-alcoholic",
 		"Description": "While often derided as basic, this drink carries all the flavors of fall.",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -265,7 +306,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "Served in a (clean) shoe,",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -275,7 +316,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "with lots of lemon",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -285,7 +326,7 @@
 		"Cost": 0,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -295,7 +336,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -305,7 +346,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -315,7 +356,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -325,7 +366,7 @@
 		"Cost": 1,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -335,7 +376,7 @@
 		"Cost": 4,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	}
@@ -346,7 +387,7 @@
 		"Cost": 4,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -356,7 +397,7 @@
 		"Cost": 4,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -366,7 +407,7 @@
 		"Cost": 6,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -376,7 +417,7 @@
 		"Cost": 7,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -386,7 +427,7 @@
 		"Cost": 2,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -395,7 +436,7 @@
 		"Cost": 2,
 		"Category": "",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": false
 	},
@@ -404,7 +445,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -413,7 +454,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -422,7 +463,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -431,7 +472,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -440,7 +481,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -449,7 +490,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -458,7 +499,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -467,7 +508,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -476,7 +517,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -485,7 +526,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -494,7 +535,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -503,7 +544,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -512,7 +553,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -521,7 +562,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -530,7 +571,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},
@@ -539,7 +580,7 @@
 		"Cost": 2,
 		"Category": "pill",
 		"Description": "",
-		"Flavor": "",
+		"Flavor_2nd": "",
  		"Dragon": false,
 		"Transformative": true
 	},{
@@ -548,8 +589,45 @@
 		"Cost": 5,
 		"Category": "beer",
 		"Description": "A bitter-sweet beer",
-		"Flavor": "The drink, fresh from Norrland arrives in the finest Volvo availble. It stops only meters before a tall norrlandish person walks out holding a can of ''Norrlands guld folköl'' Which he gently places down on the table infront of you before running off somewhere...",
+		"Flavor_2nd": "The drink, fresh from Norrland arrives in the finest Volvo availble. It stops only meters before a tall norrlandish person walks out holding a can of ''Norrlands guld folköl'' Which he gently places down on the table infront of you before running off somewhere...",
  		"Dragon": false,
 		"Transformative": false
+	},
+	{
+		"Code": "memory of the void",
+		"Name": "... something ...",
+		"Cost": 77,
+		"Category": "test",
+		"Description": "This is not for you.",
+		"Flavor_2nd": "It flickers and jitters and jumps, like your eyes can't quite see it, can't quite grasp what it is. In one moment you're holding it, in the next it's pouring into you, and then it is gone, all gone, gone into memory and death and the void. This was not for you. None of this is for you. Soon you will know that.",
+		"Flavor_3rd": "It flickers and jitters and jumps, like your eyes can't quite see it, can't quite grasp what it is. In one moment $subjective$ $are$ holding it, in the next it's pouring into $objective$, and then it is gone, all gone, gone into memory and death and the void. This was not for you. You should not have seen this. None of this is for you. Soon you will know that.",
+ 		"Dragon": true,
+		"Transformative": true,
+		"Transform": {
+			"Target": null,
+			"ChangeCount": 0,
+			"Balance" : [null],
+			"Theme": "static",
+
+			"WeightChange": [0],
+			"MusculatureChange": [0],
+
+			"GrowCount": 0,
+			"Growth": {
+				"hair": [0],
+				"tongue": [0],
+				"wing": [0],
+				"tail": [0],
+				"horn": [0],
+				"ear": [0]
+			},
+
+			"ColorCount": 8,
+			"ColorRange": ["impossible"],
+			"Colors": [0],
+			"ColorTargets": ["wing", "tail", "eye", "horn", "skin", "ornament", "arm", "leg", "neck", "covering", "tongue"],
+
+			"SkinPattern": [0],
+		},
 	},
 ]
