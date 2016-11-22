@@ -13,7 +13,7 @@
 			"Target": "spidertaur",
 			"ChangeCount": 3,
 			"Balance" : ["upper","lower","face","tongue","hair","horn","wing","tail","skin"],
-			"Theme": "static",
+			"Theme": "debug",
 
 			"WeightChange": [0],
 			"MusculatureChange": [0],
@@ -25,12 +25,11 @@
 				"wing": [1],
 				"tail": [1],
 				"horn": [1],
-				"ear": [1]
 			},
 
 			"ColorCount": 5,
 			"Colors": [1,2,3,4,5],
-			"ColorTargets": ["wing", "tail", "eye", "horn", "skin", "ornament", "arm", "leg", "neck", "covering", "tongue"],
+			"ColorTargets": ["wing", "tail", "eye", "horn", "skin", "ornament", "arm", "leg", "neck", "covering", "tongue", "lip"],
 
 			"SkinPattern": [0],
 		},

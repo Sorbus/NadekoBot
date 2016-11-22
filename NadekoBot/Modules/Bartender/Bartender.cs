@@ -11,6 +11,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace NadekoBot.Modules.Bartender
 {
@@ -96,8 +97,8 @@ namespace NadekoBot.Modules.Bartender
             morph.LegCovering = getRandItem(target_morph.Value.SkinCovering);
             morph.CoveringColor = getRandItem(target_morph.Value.Color.Covering);
 
-            morph.HandModification = target_morph.Key;
-            morph.FeetModification = target_morph.Key;
+            morph.HandMod = target_morph.Key;
+            morph.FeetMod = target_morph.Key;
             morph.HandType = target_morph.Key;
             morph.FeetType = target_morph.Key;
 
@@ -172,7 +173,7 @@ namespace NadekoBot.Modules.Bartender
                                     if (!value.Color.Arm.Contains(original.ArmColor))
                                     { changed.ArmColor = getRandItem(value.Color.Arm); }
                                 }
-                                else if (original.ArmType != key || original.HandModification != key)
+                                else if (original.ArmType != key || original.HandMod != key)
                                 {
                                     Boolean done = false;
                                     switch(rng.Next(0,1))
@@ -187,9 +188,9 @@ namespace NadekoBot.Modules.Bartender
                                             { done = true; goto case 1; }
                                             break;
                                         case 1:
-                                            if (original.HandModification != key)
+                                            if (original.HandMod != key)
                                             {
-                                                changed.HandModification = key;
+                                                changed.HandMod = key;
                                                 done = true;
                                             }
                                             if (!done)
@@ -236,7 +237,7 @@ namespace NadekoBot.Modules.Bartender
                                     if (!value.Color.Leg.Contains(original.LegColor))
                                     { changed.LegColor = getRandItem(value.Color.Leg); }
                                 }
-                                else if (original.LegType != key || original.FeetModification != key)
+                                else if (original.LegType != key || original.FeetMod != key)
                                 {
                                     Boolean done = false;
                                     switch (rng.Next(0, 1))
@@ -251,9 +252,9 @@ namespace NadekoBot.Modules.Bartender
                                             { done = true; goto case 1; }
                                             break;
                                         case 1:
-                                            if (original.FeetModification != key)
+                                            if (original.FeetMod != key)
                                             {
-                                                changed.FeetModification = key;
+                                                changed.FeetMod = key;
                                                 done = true;
                                             }
                                             if (!done)
@@ -444,16 +445,31 @@ namespace NadekoBot.Modules.Bartender
                             switch (tf.Growth.ElementAt(r).Key)
                             {
                                 case "hair":
+                                    changed.HairLength += tf.Growth.ElementAt(r).Value[rng.Next(0, tf.Growth.ElementAt(r).Value.Length)];
                                     break;
                                 case "tongue":
+                                    changed.TongueLength += tf.Growth.ElementAt(r).Value[rng.Next(0, tf.Growth.ElementAt(r).Value.Length)];
                                     break;
                                 case "wing":
+                                    changed.WingSize += tf.Growth.ElementAt(r).Value[rng.Next(0, tf.Growth.ElementAt(r).Value.Length)];
+                                    if (changed.WingSize >= Morphs[original.WingType].Appendages.WingSizes.Length)
+                                    { changed.WingSize = Morphs[original.WingType].Appendages.WingSizes.Length - 1; }
+                                    else if (changed.WingSize < 0)
+                                    { changed.WingSize = 0; }
                                     break;
                                 case "tail":
+                                    changed.TailSize += tf.Growth.ElementAt(r).Value[rng.Next(0, tf.Growth.ElementAt(r).Value.Length)];
+                                    if (changed.TailSize >= Morphs[original.TailSize].Appendages.TailSizes.Length)
+                                    { changed.TailSize = Morphs[original.TailSize].Appendages.TailSizes.Length - 1; }
+                                    else if (changed.TailSize < 0)
+                                    { changed.TailSize = 0; }
                                     break;
                                 case "horn":
-                                    break;
-                                case "ear":
+                                    changed.HornSize += tf.Growth.ElementAt(r).Value[rng.Next(0, tf.Growth.ElementAt(r).Value.Length)];
+                                    if (changed.HornSize >= Morphs[original.HornSize].Head.HornSizes.Length)
+                                    { changed.HornSize = Morphs[original.HornSize].Head.HornSizes.Length - 1; }
+                                    else if (changed.HornSize < 0)
+                                    { changed.HornSize = 0; }
                                     break;
                             }
                         }
@@ -497,6 +513,8 @@ namespace NadekoBot.Modules.Bartender
                                 case "covering":
                                     break;
                                 case "tongue":
+                                    break;
+                                case "lip":
                                     break;
                                 default:
                                     break;

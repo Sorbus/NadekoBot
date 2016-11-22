@@ -113,10 +113,10 @@ namespace NadekoBot.Modules.Bartender
             else { c[m.EarType] = 1; }
             if (c.ContainsKey(m.TongueType)) { c[m.TongueType] += 1; }
             else { c[m.TongueType] = 1; }
-            if (c.ContainsKey(m.HandModification)) { c[m.HandModification] += 1; }
-            else { c[m.HandModification] = 1; }
-            if (c.ContainsKey(m.FeetModification)) { c[m.FeetModification] += 1; }
-            else { c[m.FeetModification] = 1; }
+            if (c.ContainsKey(m.HandMod)) { c[m.HandMod] += 1; }
+            else { c[m.HandMod] = 1; }
+            if (c.ContainsKey(m.FeetMod)) { c[m.FeetMod] += 1; }
+            else { c[m.FeetMod] = 1; }
             if (c.ContainsKey(m.HandType)) { c[m.HandType] += 1; }
             else { c[m.HandType] = 1; }
             if (c.ContainsKey(m.FeetType)) { c[m.FeetType] += 1; }
@@ -194,7 +194,8 @@ namespace NadekoBot.Modules.Bartender
 
         public static Boolean isChanged(MorphModel first, MorphModel second, string item)
         {
-            if (typeof(MorphModel).GetMethod(item).Invoke(first, null).Equals(typeof(MorphModel).GetMethod(item).Invoke(second, null)))
+            // if (typeof(MorphModel).GetMethod(item).Invoke(first, null).Equals(typeof(MorphModel).GetMethod(item).Invoke(second, null)))
+            if (typeof(MorphModel).GetField(item).GetValue(first).Equals(typeof(MorphModel).GetField(item).GetValue(second)))
             { return false; }
             return true;
         } 
@@ -252,5 +253,6 @@ namespace NadekoBot.Modules.Bartender
             }
             return "";
         }
+
     }
 }

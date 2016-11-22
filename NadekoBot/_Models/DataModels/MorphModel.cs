@@ -57,8 +57,8 @@ namespace NadekoBot.DataModels
         public int LegCovering { get; set; }
         public int CoveringColor { get; set; }
 
-        public int HandModification { get; set; }
-        public int FeetModification { get; set; }
+        public int HandMod { get; set; }
+        public int FeetMod { get; set; }
         public int HandType { get; set; }
         public int FeetType { get; set; }
 
@@ -135,8 +135,8 @@ namespace NadekoBot.DataModels
                 LegCovering = this.LegCovering,
                 CoveringColor = this.CoveringColor,
 
-                HandModification = this.HandModification,
-                FeetModification = this.FeetModification,
+                HandMod = this.HandMod,
+                FeetMod = this.FeetMod,
                 HandType = this.HandType,
                 FeetType = this.FeetType,
 

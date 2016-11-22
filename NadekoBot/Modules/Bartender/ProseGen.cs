@@ -163,16 +163,16 @@ namespace NadekoBot.Modules.Bartender
                 { str.Append(", and $possessive$ torso is $torsocovering$."); }
                 else { str.Append("."); }
 
-                if (Morphs[morph.HandModification].Appendages.HandMod != null && Morphs[morph.FeetModification].Appendages.FeetMod != null && morph.LegCount > 0 && morph.ArmCount > 0)
+                if (Morphs[morph.HandMod].Appendages.HandMod != null && Morphs[morph.FeetMod].Appendages.FeetMod != null && morph.LegCount > 0 && morph.ArmCount > 0)
                 {
-                    if (Morphs[morph.HandModification].Appendages.HandMod == Morphs[morph.FeetModification].Appendages.FeetMod)
+                    if (Morphs[morph.HandMod].Appendages.HandMod == Morphs[morph.FeetMod].Appendages.FeetMod)
                     { str.Append(" $possessive$ $handtype$ and $feettype$ are $handmodification$."); }
                     else
                     { str.Append(" $possessive$ $handtype$ are $handmodification$ and $possessive$ $feettype$ are $feetmodification$."); }
                 }
-                else if (Morphs[morph.HandModification].Appendages.HandMod != null && morph.ArmCount > 0)
+                else if (Morphs[morph.HandMod].Appendages.HandMod != null && morph.ArmCount > 0)
                 { str.Append(" $possessive$ $handtype$ are $handmoficiation$."); }
-                else if (Morphs[morph.FeetModification].Appendages.FeetMod != null && morph.LegCount > 0)
+                else if (Morphs[morph.FeetMod].Appendages.FeetMod != null && morph.LegCount > 0)
                 { str.Append(" $possessive$ $feettype$ are $feetmodification$."); }
 
                 if (Morphs[morph.WingType].Appendages.Wings != null && Morphs[morph.UpperType].Body.WingAnchor != null && Morphs[morph.TailType].Appendages.Tail != null &&
@@ -249,8 +249,8 @@ namespace NadekoBot.Modules.Bartender
 
                     {"$feettype$", Morphs[morph.FeetType].Appendages.Feet },
                     {"$handtype$", Morphs[morph.HandType].Appendages.Hands },
-                    {"$handmodification$", Morphs[morph.HandModification].Appendages.HandMod },
-                    {"$feetmodification$", Morphs[morph.FeetModification].Appendages.FeetMod },
+                    {"$handmodification$", Morphs[morph.HandMod].Appendages.HandMod },
+                    {"$feetmodification$", Morphs[morph.FeetMod].Appendages.FeetMod },
 
                     {"$torsocovering$", Skin[morph.TorsoCovering].Cover },
                     {"$legcovering$", Skin[morph.LegCovering].Cover },
@@ -303,6 +303,9 @@ namespace NadekoBot.Modules.Bartender
 
             switch (tf.Theme)
             {
+                case "debug":
+                    PrintChanges(old, now, changes);
+                    break;
                 case "dust":
                     if (true) // included to make code folding work.
                     {
@@ -380,6 +383,278 @@ namespace NadekoBot.Modules.Bartender
             }
 
             return new Tuple<String, String>(str_2nd.ToString(), str_3rd.ToString());
+        }
+
+        public void PrintChanges(MorphModel old, MorphModel now, List<String> changes)
+        {
+            if (changes.Contains("upper")) // 7: ArmType, ArmFeature, ArmColor, ArmCount, HandModification, HandType, UpperType
+            {
+                if (DescHelp.isChanged(old, now, "ArmColor"))
+                {
+                    Console.WriteLine($"Arm Color: {Colors[old.ArmColor].Name} -> {Colors[now.ArmColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "ArmCount"))
+                {
+                    Console.WriteLine($"Arm Count: {old.ArmCount} -> {now.ArmCount}");
+                }
+                if (DescHelp.isChanged(old, now, "ArmType"))
+                {
+                    Console.WriteLine($"Arm Type: {Morphs[old.ArmType].Appendages.Arms} -> {Morphs[now.ArmType].Appendages.Arms}");
+                }
+                if (DescHelp.isChanged(old, now, "HandType"))
+                {
+                    Console.WriteLine($"Hand Type: {Morphs[old.HandType].Appendages.Hands} -> {Morphs[now.HandType].Appendages.Hands}");
+                }
+                if (DescHelp.isChanged(old, now, "UpperType"))
+                {
+                    Console.WriteLine($"Upper Type: {Morphs[old.UpperType].Body.UpperType} -> {Morphs[now.UpperType].Body.UpperType}");
+                }
+                if (DescHelp.isChanged(old, now, "ArmFeature"))
+                {
+                    Console.WriteLine($"Arm Feature: {Morphs[old.ArmFeature].Appendages.ArmFeature} -> {Morphs[now.ArmFeature].Appendages.ArmFeature}");
+                }
+                if (DescHelp.isChanged(old, now, "HandtModification"))
+                {
+                    Console.WriteLine($"Foot Modification: {Morphs[old.HandMod].Appendages.HandMod} -> {Morphs[now.HandMod].Appendages.HandMod}");
+                }
+            }
+            if (changes.Contains("lower")) // 7: LegType, LegFeature, LegColor, LegCount, FootModification, FootType, LowerType
+            {
+                if (DescHelp.isChanged(old, now, "LegColor"))
+                {
+                    Console.WriteLine($"Leg Color: {Colors[old.LegColor].Name} -> {Colors[now.LegColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "LegCount"))
+                {
+                    Console.WriteLine($"Leg Count: {old.LegCount} -> {now.LegCount}");
+                }
+                if (DescHelp.isChanged(old, now, "LegType"))
+                {
+                    Console.WriteLine($"Leg Type: {Morphs[old.LegType].Appendages.Legs} -> {Morphs[now.LegType].Appendages.Legs}");
+                }
+                if (DescHelp.isChanged(old, now, "FeetType"))
+                {
+                    Console.WriteLine($"Feet Type: {Morphs[old.FeetType].Appendages.Feet} -> {Morphs[now.FeetType].Appendages.Feet}");
+                }
+                if (DescHelp.isChanged(old, now, "LowerType"))
+                {
+                    Console.WriteLine($"Lower Type: {Morphs[old.LowerType].Body.LowerType} -> {Morphs[now.LowerType].Body.LowerType}");
+                }
+                if (DescHelp.isChanged(old, now, "LegFeature"))
+                {
+                    Console.WriteLine($"Leg Feature: {Morphs[old.LegFeature].Appendages.LegFeature} -> {Morphs[now.LegFeature].Appendages.LegFeature}");
+                }
+                if (DescHelp.isChanged(old, now, "FeettModification"))
+                {
+                    Console.WriteLine($"Foot Modification: {Morphs[old.FeetMod].Appendages.FeetMod} -> {Morphs[now.FeetMod].Appendages.FeetMod}");
+                }
+
+            }
+            if (changes.Contains("face")) // 8: EyeType, EyeColor, EarType, TongueType, TeethType, LipColor, EyeCount, FaceType
+            {
+                if (DescHelp.isChanged(old, now, "EyeColor"))
+                {
+                    Console.WriteLine($"Eye Color: {Colors[old.EyeColor].Name} -> {Colors[now.EyeColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "EyeType"))
+                {
+                    Console.WriteLine($"Eye Type: {Morphs[old.EyeType].Head.Eyes} -> {Morphs[now.EyeType].Head.Eyes}");
+                }
+                if (DescHelp.isChanged(old, now, "EyeCount"))
+                {
+                    Console.WriteLine($"Eye Count: {old.EyeCount} -> {now.EyeCount}");
+                }
+                if (DescHelp.isChanged(old, now, "TongueType"))
+                {
+                    Console.WriteLine($"Tongue Type: {Morphs[old.TongueType].Head.Tongue} -> {Morphs[now.TongueType].Head.Tongue}");
+                }
+                if (DescHelp.isChanged(old, now, "TeethType"))
+                {
+                    Console.WriteLine($"Teeth Type: {Morphs[old.TeethType].Head.Teeth} -> {Morphs[now.TeethType].Head.Teeth}");
+                }
+                if (DescHelp.isChanged(old, now, "FaceType"))
+                {
+                    Console.WriteLine($"Face Type: {Morphs[old.FaceType].Head.Head} -> {Morphs[now.FaceType].Head.Head}");
+                }
+                if (DescHelp.isChanged(old, now, "EarType"))
+                {
+                    Console.WriteLine($"Ear Type: {Morphs[old.EarType].Head.Ears} -> {Morphs[now.EarType].Head.Ears}");
+                }
+                if (DescHelp.isChanged(old, now, "LipColor"))
+                {
+                    Console.WriteLine($"Lip Color: {Colors[old.LipColor].Name} -> {Colors[now.LipColor].Name}");
+                }
+            }
+            if (changes.Contains("tongue")) // 4: TongueType, TongueColor, TongueCount, TongueLength
+            {
+                if (DescHelp.isChanged(old, now, "TongueColor"))
+                {
+                    Console.WriteLine($"Tongue Color: {Colors[old.TongueColor].Name} -> {Colors[now.TongueColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "TongueType"))
+                {
+                    Console.WriteLine($"Tongue Type: {Morphs[old.TongueType].Head.Tongue} -> {Morphs[now.TongueType].Head.Tongue}");
+                }
+                if (DescHelp.isChanged(old, now, "TongueCount"))
+                {
+                    Console.WriteLine($"Tongue Count: {old.TongueCount} -> {now.TongueCount}");
+                }
+                if (DescHelp.isChanged(old, now, "TongueLength"))
+                {
+                    Console.WriteLine($"Tongue Size: {old.TongueLength} -> {now.TongueLength}");
+                }
+            }
+            if (changes.Contains("hair")) // 3: HairType, HairColor, HairLength
+            {
+                if (DescHelp.isChanged(old, now, "HairColor")){
+                    Console.WriteLine($"Hair Color: {Colors[old.HairColor].Name} -> {Colors[now.HairColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "HairType"))
+                {
+                    Console.WriteLine($"Hair Type: {Morphs[old.HairType].Head.Hair} -> {Morphs[now.HairType].Head.Hair}");
+                }
+                if (DescHelp.isChanged(old, now, "HairLength"))
+                {
+                    Console.WriteLine($"Hair Size: {old.HairLength} -> {now.HairLength}");
+                }
+            }
+            if (changes.Contains("horn")) // 4: HornCount, HornType, HornColor, HornSize
+            {
+                if (DescHelp.isChanged(old, now, "HornColor")){
+                    Console.WriteLine($"Horn Color: {Colors[old.HornColor].Name} -> {Colors[now.HornColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "HornType"))
+                {
+                    Console.WriteLine($"Horn Type: {Morphs[old.HornType].Head.Horns} -> {Morphs[now.HornType].Head.Horns}");
+                }
+                if (DescHelp.isChanged(old, now, "HornCount"))
+                {
+                    Console.WriteLine($"Horn Count: {old.HornCount} -> {now.HornCount}");
+                }
+                if (DescHelp.isChanged(old, now, "HornSize"))
+                {
+                    Console.WriteLine($"Horn Size: {old.HornSize} -> {now.HornSize}");
+                }
+            }
+            if (changes.Contains("wing")) // 4: WingCount, WingType, WingColor, WingSize
+            {
+                if (DescHelp.isChanged(old, now, "WingColor"))
+                {
+                    Console.WriteLine($"Wing Color: {Colors[old.WingColor].Name} -> {Colors[now.WingColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "WingType"))
+                {
+                    Console.WriteLine($"Wing Type: {Morphs[old.WingType].Appendages.Wings} -> {Morphs[now.WingType].Appendages.Wings}");
+                }
+                if (DescHelp.isChanged(old, now, "WingCount"))
+                {
+                    Console.WriteLine($"Wing Count: {old.WingCount} -> {now.WingCount}");
+                }
+                if (DescHelp.isChanged(old, now, "WingSize"))
+                {
+                    Console.WriteLine($"Wing Size: {old.WingSize} -> {now.WingSize}");
+                }
+            }
+            if (changes.Contains("tail")) // 4: TailCount, TailType, TailColor, TailSize
+            {
+                if (DescHelp.isChanged(old, now, "TailColor"))
+                {
+                    Console.WriteLine($"Tail Color: {Colors[old.TailColor].Name} -> {Colors[now.TailColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "TailType"))
+                {
+                    Console.WriteLine($"Tail Type: {Morphs[old.TailType].Appendages.Tail} -> {Morphs[now.TailType].Appendages.Tail}");
+                }
+                if (DescHelp.isChanged(old, now, "TailCount"))
+                {
+                    Console.WriteLine($"Tail Count: {old.TailCount} -> {now.TailCount}");
+                }
+                if (DescHelp.isChanged(old, now, "TailSize"))
+                {
+                    Console.WriteLine($"Tail Size: {old.TailSize} -> {now.TailSize}");
+                }
+            }
+            if (changes.Contains("skin")) // 8: SkinType, SkinColor, SkinOrnaments, OrnamentColor, ArmCovering, TorsoCovering, LegCovering, CoveringColor
+            {
+                if (DescHelp.isChanged(old, now, "OrnamentColor"))
+                {
+                    Console.WriteLine($"Ornament Color: {Colors[old.OrnamentColor].Name} -> {Colors[now.OrnamentColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "CoveringColor"))
+                {
+                    Console.WriteLine($"Covering Color: {Colors[old.CoveringColor].Name} -> {Colors[now.CoveringColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "SkinColor"))
+                {
+                    Console.WriteLine($"Skin Color: {Colors[old.SkinColor].Name} -> {Colors[now.SkinColor].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "SkinType"))
+                {
+                    Console.WriteLine($"Skin Type: {Skin[old.SkinType].Text} -> {Skin[now.SkinType].Text}");
+                }
+                if (DescHelp.isChanged(old, now, "SkinOrnament"))
+                {
+                    Console.WriteLine($"Skin Ornament: {Ornament[old.SkinOrnaments].Name} -> {Ornament[now.SkinOrnaments].Name}");
+                }
+                if (DescHelp.isChanged(old, now, "ArmCovering"))
+                {
+                    Console.WriteLine($"Arm Covering: {Skin[old.ArmCovering].Cover} -> {Skin[now.ArmCovering].Cover}");
+                }
+                if (DescHelp.isChanged(old, now, "LegCovering"))
+                {
+                    Console.WriteLine($"Leg Covering: {Skin[old.LegCovering].Cover} -> {Skin[now.LegCovering].Cover}");
+                }
+                if (DescHelp.isChanged(old, now, "TorsoCovering"))
+                {
+                    Console.WriteLine($"Torso Covering: {Skin[old.TorsoCovering].Cover} -> {Skin[now.TorsoCovering].Cover}");
+                }
+            }
+            if (changes.Contains("ornament")) // OrnamentColor
+            {
+                if (DescHelp.isChanged(old, now, "OrnamentColor"))
+                {
+                    Console.WriteLine($"Ornament Color: {Colors[old.OrnamentColor].Name} -> {Colors[now.OrnamentColor].Name}");
+                }
+            }
+            if (changes.Contains("arm")) // ArmColor
+            {
+                if (DescHelp.isChanged(old, now, "ArmColor"))
+                {
+                    Console.WriteLine($"Arm Color: {Colors[old.ArmColor].Name} -> {Colors[now.ArmColor].Name}");
+                }
+            }
+            if (changes.Contains("leg")) // LegColor
+            {
+                if (DescHelp.isChanged(old, now, "LegColor"))
+                {
+                    Console.WriteLine($"Leg Color: {Colors[old.LegColor].Name} -> {Colors[now.LegColor].Name}");
+                }
+            }
+            if (changes.Contains("neck")) // NeckColor
+            {
+                if (DescHelp.isChanged(old, now, "NeckColor")){
+                    Console.WriteLine($"Neck Color: {Colors[old.NeckColor].Name} -> {Colors[now.NeckColor].Name}");
+                }
+            }
+            if (changes.Contains("covering")) // CoveringColor
+            {
+                if (DescHelp.isChanged(old, now, "CoveringColor"))
+                {
+                    Console.WriteLine($"Covering Color: {Colors[old.CoveringColor].Name} -> {Colors[now.CoveringColor].Name}");
+                }
+            }
+            if (changes.Contains("eye")) // EyeColor
+            {
+                if (DescHelp.isChanged(old, now, "EyeColor")){
+                    Console.WriteLine($"Eye Color: {Colors[old.EyeColor].Name} -> {Colors[now.EyeColor].Name}");
+                }
+            }
+            if (changes.Contains("lip")) // LipColor
+            {
+                if (DescHelp.isChanged(old, now, "LipColor")){
+                    Console.WriteLine($"Lip Color: {Colors[old.LipColor].Name} -> {Colors[now.LipColor].Name}");
+                }
+            }
         }
     }
 }
