@@ -1,4 +1,5 @@
 ﻿using NadekoBot.DataModels;
+using NadekoBot.DataModels.Bartender;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,7 @@ namespace NadekoBot.Classes
             Connection.CreateTable<MusicPlaylist>();
             Connection.CreateTable<Incident>();
             Connection.CreateTable<MorphModel>();
+            Connection.CreateTable<InventoryModel>();
             Connection.Execute(Queries.TransactionTriggerQuery);
             try
             {

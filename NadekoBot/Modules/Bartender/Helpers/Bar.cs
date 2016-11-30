@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace NadekoBot.Modules.Bartender
+namespace NadekoBot.Modules.Bartender.Helpers
 {
-    class BarHelp
+    class Bar
     {
         // from https://stackoverflow.com/a/2730393
         public static string NumberToWords(int number)
@@ -81,5 +81,7 @@ namespace NadekoBot.Modules.Bartender
             { return 0; }
         }
 
+        public static int getRandItem(int[] a)
+        { return a[_.rng.Next(0, a.Length)]; }
     }
 }

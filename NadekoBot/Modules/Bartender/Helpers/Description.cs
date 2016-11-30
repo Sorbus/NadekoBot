@@ -1,6 +1,6 @@
 ﻿using NadekoBot.Classes;
 using NadekoBot.Classes.JSONModels;
-using NadekoBot.DataModels;
+using NadekoBot.DataModels.Bartender;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Permissions.Classes;
 using System;
@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace NadekoBot.Modules.Bartender
+namespace NadekoBot.Modules.Bartender.Helpers
 {
-    class DescHelp
+    class Desc
     {
         public static Boolean isBaseline(MorphModel m)
         {

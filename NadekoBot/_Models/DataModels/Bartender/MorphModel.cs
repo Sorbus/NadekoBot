@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NadekoBot.Classes.JSONModels;
 
-namespace NadekoBot.DataModels
+namespace NadekoBot.DataModels.Bartender
 {
     class MorphModel : IDataModel
     {

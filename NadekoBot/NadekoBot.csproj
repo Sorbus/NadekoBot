@@ -189,11 +189,16 @@
     <Compile Include="Modules\Administration\Commands\CustomReactionsCommands.cs" />
     <Compile Include="Modules\Administration\Commands\SelfAssignedRolesCommand.cs" />
     <Compile Include="Modules\Administration\Commands\SelfCommands.cs" />
-    <Compile Include="Modules\Bartender\BarHelp.cs" />
+    <Compile Include="Modules\Bartender\Commands\State.cs" />
+    <Compile Include="Modules\Bartender\Helpers\Bar.cs" />
     <Compile Include="Modules\Bartender\Bartender.cs" />
-    <Compile Include="Modules\Bartender\DescHelp.cs" />
-    <Compile Include="Modules\Bartender\ProseGen.cs" />
-    <Compile Include="Modules\Bartender\StringExtension.cs" />
+    <Compile Include="Modules\Bartender\Commands\Menu.cs" />
+    <Compile Include="Modules\Bartender\Helpers\Description.cs" />
+    <Compile Include="Modules\Bartender\Commands\Inventory.cs" />
+    <Compile Include="Modules\Bartender\Helpers\Morphs.cs" />
+    <Compile Include="Modules\Bartender\Prose\Generator.cs" />
+    <Compile Include="Modules\Bartender\Helpers\StringExtension.cs" />
+    <Compile Include="Modules\Bartender\_.cs" />
     <Compile Include="Modules\ClashOfClans\ClashOfClans.cs" />
     <Compile Include="Classes\DBHandler.cs" />
     <Compile Include="Classes\FlowersHandler.cs" />
@@ -217,9 +222,10 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SQLite.cs" />
+    <Compile Include="_Models\DataModels\Bartender\InventoryModel.cs" />
     <Compile Include="_Models\DataModels\TestDataModel.cs" />
     <Compile Include="_Models\DataModels\Incident.cs" />
-    <Compile Include="_Models\DataModels\MorphModel.cs" />
+    <Compile Include="_Models\DataModels\Bartender\MorphModel.cs" />
     <Compile Include="_Models\JSONModels\AnimeResult.cs" />
     <Compile Include="_Models\JSONModels\Bartender\Drink.cs" />
     <Compile Include="_Models\JSONModels\Bartender\TFAppendages.cs" />
