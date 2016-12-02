@@ -2601,4 +2601,13 @@
   <data name="listservers_usage" xml:space="preserve">
     <value>`{0}listservers 3`</value>
   </data>
+  <data name="menucategory_cmd" xml:space="preserve">
+    <value>menu</value>
+  </data>
+  <data name="menucategory_desc" xml:space="preserve">
+    <value>List items in one of the drink menu's categories.</value>
+  </data>
+  <data name="menucategory_usage" xml:space="preserve">
+    <value>`{0}menu \"beer\"`</value>
+  </data>
 </root>

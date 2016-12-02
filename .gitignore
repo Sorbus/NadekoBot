@@ -352,3 +352,6 @@ __pycache__/
 ### VisualStudio Patch ###
 build/
 src/NadekoBot/credentials.json
+credentials.json
+credentials_example.json
+data/

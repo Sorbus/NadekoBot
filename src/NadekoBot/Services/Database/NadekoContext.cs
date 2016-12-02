@@ -25,6 +25,7 @@ namespace NadekoBot.Services.Database
         public DbSet<MusicPlaylist> MusicPlaylists { get; set; }
         public DbSet<CustomReaction> CustomReactions { get; set; }
         public DbSet<CurrencyTransaction> CurrencyTransactions { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
 
         //logging
         public DbSet<LogSetting> LogSettings { get; set; }

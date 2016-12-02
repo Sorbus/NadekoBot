@@ -3948,6 +3948,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to menu.
+        /// </summary>
+        public static string menucategory_cmd {
+            get {
+                return ResourceManager.GetString("menucategory_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to List items in one of the drink menu&apos;s categories..
+        /// </summary>
+        public static string menucategory_desc {
+            get {
+                return ResourceManager.GetString("menucategory_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}menu \&quot;beer\&quot;`.
+        /// </summary>
+        public static string menucategory_usage {
+            get {
+                return ResourceManager.GetString("menucategory_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to migratedata.
         /// </summary>
         public static string migratedata_cmd {
