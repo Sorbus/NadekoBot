@@ -51,6 +51,9 @@ namespace NadekoBot.Services.Database
         private ICustomReactionRepository _customReactions;
         public ICustomReactionRepository CustomReactions => _customReactions ?? (_customReactions = new CustomReactionsRepository(_context));
 
+        private IKarmaRepository _karma;
+        public IKarmaRepository Karma => _karma ?? (_karma = new KarmaRepository(_context));
+
         public UnitOfWork(NadekoContext context)
         {
             _context = context;

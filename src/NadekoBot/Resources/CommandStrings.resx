@@ -2601,4 +2601,13 @@
   <data name="listservers_usage" xml:space="preserve">
     <value>`{0}listservers 3`</value>
   </data>
+  <data name="karmastatus_cmd" xml:space="preserve">
+    <value>karma</value>
+  </data>
+  <data name="karmastatus_desc" xml:space="preserve">
+    <value>Check how much karma you or another user has.</value>
+  </data>
+  <data name="karmastatus_usage" xml:space="preserve">
+    <value>`{0}karma` or `{0}karma @someone`</value>
+  </data>
 </root>
