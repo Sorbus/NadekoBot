@@ -49,6 +49,7 @@ namespace NadekoBot.Services.Database.Models
         public string PermissionRole { get; set; } = "Nadeko";
 
         public HashSet<CommandCooldown> CommandCooldowns { get; set; } = new HashSet<CommandCooldown>();
+        public HashSet<ModuleCooldown> ModuleCooldowns { get; set; } = new HashSet<ModuleCooldown>();
 
         //filtering
         public bool FilterInvites { get; set; }

@@ -3975,6 +3975,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to modcooldown modcd.
+        /// </summary>
+        public static string modcooldown_cmd {
+            get {
+                return ResourceManager.GetString("modcooldown_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Sets a cooldown for a module for an entire server. Set to 0 to remove the cooldown..
+        /// </summary>
+        public static string modcooldown_desc {
+            get {
+                return ResourceManager.GetString("modcooldown_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}modcd &quot;module&quot; 5`.
+        /// </summary>
+        public static string modcooldown_usage {
+            get {
+                return ResourceManager.GetString("modcooldown_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to modules mdls.
         /// </summary>
         public static string modules_cmd {

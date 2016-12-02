@@ -2601,4 +2601,13 @@
   <data name="listservers_usage" xml:space="preserve">
     <value>`{0}listservers 3`</value>
   </data>
+  <data name="modcooldown_cmd" xml:space="preserve">
+    <value>modcooldown modcd</value>
+  </data>
+  <data name="modcooldown_desc" xml:space="preserve">
+    <value>Sets a cooldown for a module for an entire server. Set to 0 to remove the cooldown.</value>
+  </data>
+  <data name="modcooldown_usage" xml:space="preserve">
+    <value>`{0}modcd "module" 5`</value>
+  </data>
 </root>

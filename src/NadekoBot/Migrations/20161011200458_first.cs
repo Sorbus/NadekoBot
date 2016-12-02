@@ -504,6 +504,27 @@ namespace NadekoBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ModuleCooldown",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    ModuleName = table.Column<string>(nullable: true),
+                    GuildConfigId = table.Column<int>(nullable: true),
+                    Seconds = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ModuleCooldown", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ModuleCooldown_GuildConfigs_GuildConfigId",
+                        column: x => x.GuildConfigId,
+                        principalTable: "GuildConfigs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FilterChannelId",
                 columns: table => new
                 {
