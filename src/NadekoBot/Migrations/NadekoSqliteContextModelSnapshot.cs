@@ -133,6 +133,24 @@ namespace NadekoBot.Migrations
                     b.ToTable("CommandCooldown");
                 });
 
+            modelBuilder.Entity("NadekoBot.Services.Database.Models.ModuleCooldown", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd();
+
+                b.Property<string>("ModuleName");
+
+                b.Property<int?>("GuildConfigId");
+
+                b.Property<int>("Seconds");
+
+                b.HasKey("Id");
+
+                b.HasIndex("GuildConfigId");
+
+                b.ToTable("ModuleCooldown");
+            });
+
             modelBuilder.Entity("NadekoBot.Services.Database.Models.ConvertUnit", b =>
                 {
                     b.Property<int>("Id")
@@ -671,6 +689,13 @@ namespace NadekoBot.Migrations
                 {
                     b.HasOne("NadekoBot.Services.Database.Models.GuildConfig")
                         .WithMany("CommandCooldowns")
+                        .HasForeignKey("GuildConfigId");
+                });
+
+            modelBuilder.Entity("NadekoBot.Services.Database.Models.ModuleCooldown", b =>
+                {
+                    b.HasOne("NadekoBot.Services.Database.Models.GuildConfig")
+                        .WithMany("ModuleCooldowns")
                         .HasForeignKey("GuildConfigId");
                 });
 

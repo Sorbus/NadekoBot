@@ -29,6 +29,7 @@ namespace NadekoBot.Services.Database.Repositories.Impl
                 .Include(gc => gc.FilterWordsChannelIds)
                 .Include(gc => gc.FilteredWords)
                 .Include(gc => gc.CommandCooldowns)
+                .Include(gc => gc.ModuleCooldowns)
                 .ToList();
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace NadekoBot.Services.Database.Repositories.Impl
                             .Include(gc => gc.FilteredWords)
                             .Include(gc => gc.GenerateCurrencyChannelIds)
                             .Include(gc => gc.CommandCooldowns)
+                            .Include(gc => gc.ModuleCooldowns)
                             .FirstOrDefault(c => c.GuildId == guildId);
 
             if (config == null)

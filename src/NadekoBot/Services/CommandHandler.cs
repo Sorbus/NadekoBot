@@ -272,7 +272,7 @@ namespace NadekoBot.Services
                 }
 
 
-                if (CmdCdsCommands.HasCooldown(cmd, guild, user))
+                if (CmdCdsCommands.HasCooldown(cmd, guild, user, message.Channel))
                     return new Tuple<Command, PermissionCache, IResult>(cmd, null, SearchResult.FromError(CommandError.Exception, $"That command is on cooldown for you."));
 
                 return new Tuple<Command, PermissionCache, IResult>(commands[i], null, await commands[i].Execute(message, parseResult));
