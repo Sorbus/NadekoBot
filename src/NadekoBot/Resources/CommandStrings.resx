@@ -2609,6 +2609,7 @@
   </data>
   <data name="karmastatus_usage" xml:space="preserve">
     <value>`{0}karma` or `{0}karma @someone`</value>
+  </data>
   <data name="modcooldown_cmd" xml:space="preserve">
     <value>modcooldown modcd</value>
   </data>
