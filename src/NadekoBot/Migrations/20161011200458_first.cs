@@ -81,6 +81,20 @@ namespace NadekoBot.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Karma",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Autoincrement", true),
+                    Amount = table.Column<long>(nullable: false),
+                    UserId = table.Column<ulong>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Karma", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomReactions",
                 columns: table => new
                 {
@@ -636,6 +650,12 @@ namespace NadekoBot.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Karma_UserId",
+                table: "Karma",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Donators_UserId",
                 table: "Donators",
                 column: "UserId",
@@ -752,6 +772,9 @@ namespace NadekoBot.Migrations
 
             migrationBuilder.DropTable(
                 name: "Currency");
+
+            migrationBuilder.DropTable(
+                name: "Karma");
 
             migrationBuilder.DropTable(
                 name: "CustomReactions");

@@ -200,6 +200,23 @@ namespace NadekoBot.Migrations
                     b.ToTable("CurrencyTransactions");
                 });
 
+            modelBuilder.Entity("NadekoBot.Services.Database.Models.Karma", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd();
+
+                b.Property<long>("Amount");
+
+                b.Property<ulong>("UserId");
+
+                b.HasKey("Id");
+
+                b.HasIndex("UserId")
+                    .IsUnique();
+
+                b.ToTable("Karma");
+            });
+
             modelBuilder.Entity("NadekoBot.Services.Database.Models.CustomReaction", b =>
                 {
                     b.Property<int>("Id")
