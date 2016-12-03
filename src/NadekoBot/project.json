@@ -16,11 +16,10 @@
     },
     "define": []
   },
+  "runtimes": {
+    "win10-x64": {}
+  },
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "type": "platform",
-      "version": "1.0.0"
-    },
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0",
     "Newtonsoft.Json": "9.0.1",
