@@ -3111,6 +3111,33 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
+        ///    Looks up a localized string similar to karma.
+        /// </summary>
+        public static string karmastatus_cmd {
+            get {
+                return ResourceManager.GetString("karmastatus_cmd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to Check how much karma you or another user has..
+        /// </summary>
+        public static string karmastatus_desc {
+            get {
+                return ResourceManager.GetString("karmastatus_desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///    Looks up a localized string similar to `{0}karma` or `{0}karma @someone`.
+        /// </summary>
+        public static string karmastatus_usage {
+            get {
+                return ResourceManager.GetString("karmastatus_usage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///    Looks up a localized string similar to kick k.
         /// </summary>
         public static string kick_cmd {

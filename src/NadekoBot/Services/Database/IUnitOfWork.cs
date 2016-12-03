@@ -25,6 +25,8 @@ namespace NadekoBot.Services.Database
         ICurrencyTransactionsRepository CurrencyTransactions { get; }
         IMusicPlaylistRepository MusicPlaylists { get; }
 
+        IKarmaRepository Karma { get; }
+
         int Complete();
         Task<int> CompleteAsync();
     }
