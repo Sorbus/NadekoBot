@@ -12,6 +12,5 @@ namespace NadekoBot.Services.Database.Repositories
         Karma GetOrCreate(ulong userId);
         long GetUserKarma(ulong userId);
         bool TryUpdateState(ulong userId, long change);
-        // IEnumerable<Karma> GetTopRichest(int count);
     }
 }

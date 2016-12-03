@@ -30,30 +30,22 @@ namespace NadekoBot.Services.Database.Repositories.Impl
             return kar;
         }
 
-        public IEnumerable<Karma> GetTopRichest(int count) =>
-            _set.OrderByDescending(c => c.Amount).Take(count).ToList();
-
         public long GetUserKarma(ulong userId) =>
             GetOrCreate(userId).Amount;
 
         public bool TryUpdateState(ulong userId, long change)
         {
-            var cur = GetOrCreate(userId);
+            var kar = GetOrCreate(userId);
 
             if (change == 0)
                 return true;
 
             if (change > 0)
             {
-                cur.Amount += change;
+                kar.Amount += change;
                 return true;
             }
-            //change is negative
-            if (cur.Amount + change >= 0)
-            {
-                cur.Amount += change;
-                return true;
-            }
+
             return false;
         }
     }

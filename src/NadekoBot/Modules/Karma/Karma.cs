@@ -105,7 +105,7 @@ namespace NadekoBot.Modules.Karma
                     }
 
                     AddKarmaCooldown(imsg.Author.Id);
-                    AddKarmaAsync(target.Id).ConfigureAwait(false);
+                    await KarmaHandler.AddKarmaAsync((target.Id), 1).ConfigureAwait(true);
 
                     StringBuilder message = new StringBuilder(2000);
                     message.Append($"**{msg.Author.Username}** gave karma to {target.Mention}!");
@@ -160,25 +160,7 @@ namespace NadekoBot.Modules.Karma
         {
             using (var uow = DbHandler.UnitOfWork())
             {
-                return uow.Currency.GetUserCurrency(id);
-            }
-        }
-
-        public static async Task AddKarmaAsync(ulong receiverId)
-        {
-            await AddKarmaAsync(receiverId, 1);
-        }
-
-        public static async Task AddKarmaAsync(ulong receiverId, long amount)
-        {
-            if (amount < 0)
-                throw new ArgumentNullException(nameof(amount));
-
-
-            using (var uow = DbHandler.UnitOfWork())
-            {
-                uow.Currency.TryUpdateState(receiverId, amount);
-                await uow.CompleteAsync();
+                return uow.Karma.GetUserKarma(id);
             }
         }
     }
