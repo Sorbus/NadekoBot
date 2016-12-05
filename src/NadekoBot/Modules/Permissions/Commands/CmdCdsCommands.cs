@@ -103,6 +103,7 @@ namespace NadekoBot.Modules.Permissions
                         {
                             ModuleName = module.Name.ToLowerInvariant(),
                             Seconds = secs,
+                            ChannelId = (long)imsg.Channel.Id
                         };
                         config.ModuleCooldowns.Add(cc);
                         localSet.Add(cc);
@@ -166,7 +167,7 @@ namespace NadekoBot.Modules.Permissions
                         });
                     }
                 }
-                if ((mdRule = modcds.FirstOrDefault(cc => cc.ModuleName == cmd.Module.Name.ToLowerInvariant())) != null)
+                if ((mdRule = modcds.FirstOrDefault(mc => (mc.ModuleName == cmd.Module.Name.ToLowerInvariant() && mc.ChannelId == (long)channel.Id))) != null)
                 {
                     var activeCdsForGuild = activeCooldowns.GetOrAdd(guild.Id, new ConcurrentHashSet<ActiveCooldown>());
                     if (activeCdsForGuild.FirstOrDefault(ac => ac.UserId == channel.Id && ac.Command == cmd.Module.Name.ToLowerInvariant()) != null)

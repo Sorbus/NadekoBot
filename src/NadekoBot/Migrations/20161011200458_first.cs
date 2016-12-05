@@ -511,6 +511,7 @@ namespace NadekoBot.Migrations
                         .Annotation("Autoincrement", true),
                     ModuleName = table.Column<string>(nullable: true),
                     GuildConfigId = table.Column<int>(nullable: true),
+                    ChannelId = table.Column<long>(nullable: true),
                     Seconds = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
