@@ -144,6 +144,8 @@ namespace NadekoBot.Migrations
 
                 b.Property<int>("Seconds");
 
+                b.Property<long>("ChannelId");
+
                 b.HasKey("Id");
 
                 b.HasIndex("GuildConfigId");

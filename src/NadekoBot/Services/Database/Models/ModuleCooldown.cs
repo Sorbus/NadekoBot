@@ -10,5 +10,6 @@ namespace NadekoBot.Services.Database.Models
     {
         public int Seconds { get; set; }
         public string ModuleName { get; set; }
+        public long ChannelId { get; set; }
     }
 }
