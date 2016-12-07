@@ -90,7 +90,7 @@ namespace NadekoBot.Modules.Games
                         {
                             var sent = await channel.SendFileAsync(
                                 GetRandomCurrencyImagePath(), 
-                                $"❗ A random { Gambling.Gambling.CurrencyName } appeared! Pick it up by typing `{NadekoBot.ModulePrefixes[typeof(Games).Name]}pick`")
+                                $"❗ A random { Gambling.Gambling.CurrencyName } appeared! Swig it down by typing `{NadekoBot.ModulePrefixes[typeof(Games).Name]}sip`")
                                     .ConfigureAwait(false);
                             plantedFlowers.AddOrUpdate(channel.Id, new List<IUserMessage>() { sent }, (id, old) => { old.Add(sent); return old; });
                         }
@@ -121,7 +121,7 @@ namespace NadekoBot.Modules.Games
                 await Task.WhenAll(msgs.Select(toDelete => toDelete.DeleteAsync())).ConfigureAwait(false);
 
                 await CurrencyHandler.AddCurrencyAsync((IGuildUser)imsg.Author, "Picked flower(s).", msgs.Count, false).ConfigureAwait(false);
-                var msg = await channel.SendMessageAsync($"**{imsg.Author.Username}** picked {msgs.Count}{Gambling.Gambling.CurrencySign}!").ConfigureAwait(false);
+                var msg = await channel.SendMessageAsync($"**{imsg.Author.Username}** sipped {msgs.Count}{Gambling.Gambling.CurrencySign}!").ConfigureAwait(false);
                 var t = Task.Run(async () =>
                 {
                     await Task.Delay(10000).ConfigureAwait(false);
@@ -146,7 +146,7 @@ namespace NadekoBot.Modules.Games
                 IUserMessage msg;
                 var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(Gambling.Gambling.CurrencyName[0]);
                 
-                var msgToSend = $"Oh how Nice! **{imsg.Author.Username}** planted {(vowelFirst ? "an" : "a")} {Gambling.Gambling.CurrencyName}. Pick it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}pick";
+                var msgToSend = $"Oh how Swell! **{imsg.Author.Username}** poured {(vowelFirst ? "an" : "a")} {Gambling.Gambling.CurrencyName}. Sip it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
                 if (file == null)
                 {
                     msg = await channel.SendMessageAsync(Gambling.Gambling.CurrencySign).ConfigureAwait(false);

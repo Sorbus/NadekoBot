@@ -4380,7 +4380,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to pick.
+        ///    Looks up a localized string similar to pick sip.
         /// </summary>
         public static string pick_cmd {
             get {
@@ -4398,7 +4398,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}pick`.
+        ///    Looks up a localized string similar to `{0}pick` or `{0}sip`.
         /// </summary>
         public static string pick_usage {
             get {
@@ -4461,7 +4461,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to plant.
+        ///    Looks up a localized string similar to plant pour.
         /// </summary>
         public static string plant_cmd {
             get {
@@ -4479,7 +4479,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}plant`.
+        ///    Looks up a localized string similar to `{0}plant` or `{0}pour`.
         /// </summary>
         public static string plant_usage {
             get {
