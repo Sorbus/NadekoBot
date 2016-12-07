@@ -1351,7 +1351,7 @@
     <value>`{0}pollend`</value>
   </data>
   <data name="pick_cmd" xml:space="preserve">
-    <value>pick sip claim</value>
+    <value>pick sip</value>
   </data>
   <data name="pick_desc" xml:space="preserve">
     <value>Picks the currency planted in this channel.</value>
@@ -1360,7 +1360,7 @@
     <value>`{0}pick` or `{0}sip`</value>
   </data>
   <data name="plant_cmd" xml:space="preserve">
-    <value>plant pour drop</value>
+    <value>plant pour</value>
   </data>
   <data name="plant_desc" xml:space="preserve">
     <value>Spend a unit of currency to plant it in this channel. (If bot is restarted or crashes, the currency will be lost)</value>
