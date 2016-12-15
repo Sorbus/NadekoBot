@@ -147,6 +147,8 @@ namespace NadekoBot.Modules.Games
                 var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(Gambling.Gambling.CurrencyName[0]);
                 
                 var msgToSend = $"Oh how Swell! **{imsg.Author.Username}** poured {(vowelFirst ? "an" : "a")} {Gambling.Gambling.CurrencyName}. Claim it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
+                await imsg.DeleteAsync();
+
                 if (file == null)
                 {
                     msg = await channel.SendMessageAsync(Gambling.Gambling.CurrencySign).ConfigureAwait(false);
