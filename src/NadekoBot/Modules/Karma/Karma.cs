@@ -24,7 +24,7 @@ namespace NadekoBot.Modules.Karma
     public partial class Karma : DiscordModule
     {
         private ConcurrentDictionary<ulong, Boolean> karmaCooldowns = new ConcurrentDictionary<ulong, Boolean>();
-        private String toMatch = @"(?:[Tt](?:hank(?:s*)(?: +you)*|h(?:n*)x|a(?:nk|ck))|[Ss]hot|[Dd]anke|[Pp]raise(?: +be +to)*|[Kk]udos) +(?:([\w]+)|<@!([0-9]{18})>)";
+        private String toMatch = @"(?:[Tt](?:hank(?:s*)(?:,*)(?: +you)*|h(?:n*)x|a(?:nk|ck))|[Ss]hot|[Dd]anke|[Pp]raise(?: +be +to)*|[Kk]udos) +(?:([\w]+)|<@!([0-9]{18})>)";
 
         public Karma(ILocalization loc, CommandService cmds, ShardedDiscordClient client) : base(loc, cmds, client)
         {
