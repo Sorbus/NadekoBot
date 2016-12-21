@@ -76,14 +76,12 @@ namespace NadekoBot.Modules.Games
 
                 var t = Task.Run(async () =>
                 {
-                    var lastGeneration = lastGenerations.GetOrAdd(channel.Id, DateTime.MinValue);
+                    DateTime lastGeneration = lastGenerations.GetOrAdd(channel.Id, DateTime.Now);
 
                     if (DateTime.Now - TimeSpan.FromSeconds(cooldown) < lastGeneration) //recently generated in this channel, don't generate again
                         return;
 
-                    var num = rng.Next(1, 101) + chance * 100;
-
-                    if (num > 100)
+                    if (rng.Next(0, 100) < chance)
                     {
                         lastGenerations.AddOrUpdate(channel.Id, DateTime.Now, (id, old) => DateTime.Now);
                         try
