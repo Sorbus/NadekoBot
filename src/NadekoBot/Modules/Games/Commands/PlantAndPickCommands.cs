@@ -78,7 +78,7 @@ namespace NadekoBot.Modules.Games
                 {
                     DateTime lastGeneration = lastGenerations.GetOrAdd(channel.Id, DateTime.Now);
 
-                    if (DateTime.Now - TimeSpan.FromSeconds(cooldown) < lastGeneration) //recently generated in this channel, don't generate again
+                    if (DateTime.Now - TimeSpan.FromMinutes(cooldown) < lastGeneration) //recently generated in this channel, don't generate again
                         return;
 
                     if (rng.Next(0, 100) < chance)

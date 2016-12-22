@@ -17,7 +17,7 @@ namespace NadekoBot.Services.Database.Models
         public bool ForwardToAllOwners { get; set; } = true;
 
         public float CurrencyGenerationChance { get; set; } = 0.02f;
-        public int CurrencyGenerationCooldown { get; set; } = 10;
+        public int CurrencyGenerationCooldown { get; set; } = 7;
 
         public HashSet<ModulePrefix> ModulePrefixes { get; set; } = new HashSet<ModulePrefix>();
 
