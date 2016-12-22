@@ -125,7 +125,7 @@ namespace NadekoBot.Modules.Karma
 
                     var t = Task.Run(async () =>
                     {
-                        await Task.Delay(5 * 1000).ConfigureAwait(false);
+                        await Task.Delay(30 * 1000).ConfigureAwait(false);
                         try { await toDelete.DeleteAsync().ConfigureAwait(false); } catch { }
                     });
 
