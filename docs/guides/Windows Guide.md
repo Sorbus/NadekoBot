@@ -2,7 +2,8 @@ ________________________________________________________________________________
 *Thanks to @Flatbread and Mirai for making this guide*
 ________________________________________________________________________________
 
-### Setting Up NadekoBot on Windows
+## Setting Up NadekoBot on Windows
+
 #### Prerequisites 
 - 1) [.NET Core SDK][.NET Core SDK]
 - 2) [Git][Git]
@@ -11,18 +12,19 @@ ________________________________________________________________________________
 - 5) Soundcloud Account (if you want soundcloud support)
 - 6) [7zip][7zip] (or whatever you are using, WinRar)
 - 7) [Notepad++][Notepad++]
-- 8) Windows 8 or newer
+- 8) Windows 8 or later
 
 ####Guide 
 - Make sure you have installed both [Git][Git] and the [.NET Core SDK][.NET Core SDK].
-- Create a folder somewhere and name it `Nadeko`.
-- Head to the [Windows Installer releases page][WinInstaller] and save the zip as prompted.
-- Extract the contents of the zip you just downloaded to the `Nadeko` folder that we created earlier.
-- You should see another folder in the `Nadeko` folder, something along the lines of `NadekoBotInstallerWin-master` copy the contents of this folder, to the `Nadeko` folder, then (optionally) remove the empty, `NadekoBotInstallerWin-master` folder
-- You should now see three files, most importantly, `NadekoInstaller.bat` after moving the contents of the folder mentioned above to the `Nadeko` folder (You may not see the `.bat` part of the filename).
-- Run/Launch/Open `NadekoInstaller.bat` and you will see it running in the command prompt.
+- Create a **new folder** anywhere you like and name it `Nadeko`.
+- Next, [Right-Click on this link](https://github.com/Kwoth/NadekoBotInstallerWin/raw/master/NadekoInstaller.bat) and select **Save link as** and save the file `NadekoInstaller.bat` inside the `Nadeko` folder that we created earlier. (**DO NOT** rename the file `NadekoInstaller.bat`)
+- Once that's done, double-click on `NadekoInstaller.bat` to run it.
+- From the options, 
+	- Choose `1` to get the **most recent build**.
+	- Choose `2` to get the **stable build**.
 - Wait a while for the file to finish installing, it'll display it's progress in the command prompt.
 - You should now have a new folder named `NadekoBot` inside the `Nadeko` folder we previously created.
+- Once Installation is completed, press any key to close the command prompt.
 
 ####Creating DiscordBot application
 - Go to [the Discord developer application page][DiscordApp].
@@ -34,7 +36,7 @@ ________________________________________________________________________________
 - Keep this window open for now.
 
 ####Setting up credentials.json file
-- In our `NadekoBot` folder you should see a `src` folder, then *another* `NadekoBot` folder, in this final folder, you should see a `.json` file named `credentials.json`. (Note: If you do not see a **.json** after `credentials.json `, do not add the `**.json**`. You most likely have `"Hide file extensions"` enabled.)
+- In our `NadekoBot` folder you should see a `src` folder, then *another* `NadekoBot` folder, in this final folder, you should see a `.json` file named `credentials.json`. (Note: If you do not see a `.json` after `credentials.json`, do not add the `.json`. You most likely have **"Hide file extensions"** enabled.)
 - If you mess up the setup of `credentials.json`, rename `credentials_example.json` to `credentials.json`.
 - Open the file with [Notepad++][Notepad++].
 - In there you will see fields such as `Token`, `ClientId`, `BotId` and `OwnerIDs`.
@@ -57,14 +59,24 @@ ________________________________________________________________________________
 - The bot should have been added to your server.
 
 ####Starting the bot
-- Go to the folder which you extracted the zip to earlier, and run the `NadekoRun.bat` file
-- Your bot should now be online in the server we added her to.
-- Note: Your bot will be offline in case you close the `NadekoBot` command prompt window.
+- Go to the `Nadeko` folder that we have created earlier, and run the `NadekoInstaller.bat` file.
+- From the options,
+	- Choose `3` to **run the bot normally**.	
+	(with normal-run the bot will shutdown and will stay offline if it disconnects by the use of `.die` command until you manually run it again. Useful if you want to test the bot.)
+	- Choose `4` to **run the bot with auto restart**.	
+	(with auto restart the bot will restart itself if it disconnects by the use of `.die` command. Useful if you want to have restart function for any reason.)
 
 ####Updating NadekoBot
 - Make sure the bot is closed and is not running (Run `.die` in a connected server to ensure it's not running).
-- Run `NadekoInstaller.bat` again and wait for it to finish.
-- Run `NadekoRun.bat`.
+- Once that's checked, go to the `Nadeko` folder.
+- Run the `NadekoInstaller.bat` file.
+- From the options, 
+	- Choose `1` to get the **most recent build**.
+	- Choose `2` to get the **stable build**.
+- Follow the messages and press any key to continue.
+- Wait for it to finish. 
+- Press any key to close the window when it shows **Installation complete.** 
+- [Start the bot again.](http://nadekobot.readthedocs.io/en/latest/guides/Windows%20Guide/#starting-the-bot)
 - You've updated and are running again, easy as that!
 ________________________________________________________________________________
 
@@ -80,7 +92,7 @@ ________________________________________________________________________________
     - On the left tab, access `Credentials`. Click `Create Credentials` button. Click on `API Key`. A new window will appear with your `Google API key`. 
     - Copy the key.
     - Open up `credentials.json`. 
-    - For `"GoogleAPIKey"`, replace `null` with the new key we copied and put quotation marks before and after the API key, like how the `Token` and `ClientId` should be set up.
+    - For `"GoogleAPIKey"`, paste your API key inbetween the quotation marks, like how the `Token` and `ClientId` should be set up.
 - Follow these steps on how to setup Soundcloud API key:
     - Go to [Soundcloud][Soundcloud]. 
     - Enter a name for the app and create it. 
@@ -94,14 +106,13 @@ ________________________________________________________________________________
 - Create a folder named `ffmpeg` in your main Windows directory. We will use **C:\ffmpeg** (for our guide)
 - Download FFMPEG through the link https://ffmpeg.zeranoe.com/builds/ (download static build)
 - Extract it using `7zip` and place the folder `ffmpeg-xxxxx-git-xxxxx-xxxx-static` inside **C:\ffmpeg**
-- Before proceeding, check out this gif to set up `ffmpeg` PATH correctly [http://i.imgur.com/aR5l1Hn.gif](http://i.imgur.com/aR5l1Hn.gif) *(thanks to PooPeePants#7135)*
+- Before proceeding, check out this gif to set up `ffmpeg` PATH correctly ![LINK TO gif](http://i.imgur.com/aR5l1Hn.gif) *(thanks to PooPeePants#7135)*
 - Go to My Computer, right click and select Properties. On the left tab, select Advanced System Settings. Under the Advanced tab, select Environmental Variables near the bottom. One of the variables should be called "Path". Add a semi-colon (;) to the end followed by your FFMPEG's **bin** install location (**for example C:\ffmpeg\ffmpeg-xxxxx-git-xxxxx-xxxx-static\bin**). Save and close.
 - Setup your API keys as explained above.
 - Restart your computer.
 
-[.NET Core SDK]: https://go.microsoft.com/fwlink/?LinkID=827524
+[.NET Core SDK]: https://www.microsoft.com/net/core#windowscmd
 [Git]: https://git-scm.com/download/win
-[WinInstaller]: https://github.com/Kwoth/NadekoBotInstallerWin/archive/master.zip
 [FFMPEG]: https://github.com/Soundofdarkness/FFMPEG-Inst/releases
 [7zip]: http://www.7-zip.org/download.html
 [DiscordApp]: https://discordapp.com/developers/applications/me

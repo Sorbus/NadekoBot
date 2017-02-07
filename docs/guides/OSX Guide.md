@@ -1,4 +1,5 @@
-### Setting Up NadekoBot on OSX
+## Setting Up NadekoBot on OSX
+
 #### Prerequisites 
 - [Homebrew][Homebrew]
 - Google Account
@@ -29,7 +30,7 @@ brew install tmux
 
 - `ln -s /usr/local/opt/openssl/lib/libcrypto.1.0.0.dylib /usr/local/lib/`
 - `ln -s /usr/local/opt/openssl/lib/libssl.1.0.0.dylib /usr/local/lib/`
-- Download the .NET Core SDK, found [here.](https://go.microsoft.com/fwlink/?LinkID=827526)
+- Download the [.NET Core SDK](https://www.microsoft.com/net/core#macos), found [here.](https://go.microsoft.com/fwlink/?LinkID=835011)
 - Open the `.pkg` file you downloaded and install it.
 - `ln -s /usr/local/share/dotnet/dotnet /usr/local/bin`
 
@@ -54,35 +55,40 @@ A dialog box will open asking if you want to install `xcode-select`. Select inst
 
 ####Downloading and building Nadeko
 
-**METHOD I**
+Use the following command to get and run `linuxAIO.sh`:		
+(Remember **DO NOT** rename the file `linuxAIO.sh`)
 
-- `cd ~`
-- `curl -L https://github.com/Kwoth/NadekoBot-BashScript/raw/master/nadeko_installer.sh | sh`
+`cd ~ && wget -N https://github.com/Kwoth/NadekoBot-BashScript/raw/master/linuxAIO.sh && bash linuxAIO.sh`
 
-####Creating DiscordBot application
-- Go to [the Discord developer application page.][DiscordApp]
-- Log in with your Discord account.
-- On the left side, press `New Application`.
-- Fill out the `App Name` (your bot's name, in this case), put the image you want, and add an app description(optional).
-- Create the application.
-- Click on `Create a Bot User` and confirm it.
-- Keep this window open for now.
+Follow the on screen instructions:
+
+1. To Get the latest build. (most recent updates)
+2. To Get the stable build.
+
+Choose either `1` or `2` then press `enter` key.	
+Once Installation is completed you should see the options again.	
+Next, choose `5` to exit. 
+
+####Creating and Inviting bot
+
+- Read here how to [create a DiscordBot application](http://nadekobot.readthedocs.io/en/latest/guides/Windows%20Guide/#creating-discordbot-application)
+- [Visual Invite Guide](http://discord.kongslien.net/guide.html) *NOTE: Client ID is your Bot ID*
+- Copy your `Client ID` from your [applications page](https://discordapp.com/developers/applications/me).
+- Replace the `12345678` in this link `https://discordapp.com/oauth2/authorize?client_id=12345678&scope=bot&permissions=66186303` with your `Client ID`.
+- The link should now look like this: `https://discordapp.com/oauth2/authorize?client_id=**YOUR_CLENT_ID_HERE**&scope=bot&permissions=66186303`.
+- Go to the newly created link and pick the server we created, and click `Authorize`.
+- The bot should have been added to your server.
  
 ####Setting up Credentials.json file
 - Open up the `NadekoBot` folder, which should be in your home directory, then `NadekoBot` folder then `src` folder and then the additonal `NadekoBot` folder.
-- In our `NadekoBot` folder you should have `.json` file named `credentials.json`. (Note: If you do not see a **.json** after `credentials.json `, do not add the `**.json**`. You most likely have `"Hide file extensions"` enabled.)
-- If you mess up the setup of `credentials.json`, rename `credentials_example.json` to `credentials.json`.
-- Open the file with your Text editor.
-- In your [applications page][DiscordApp] (the window you were asked to keep open earlier), under the `Bot User` section, you will see `Token:click to reveal`, click to reveal the token.
-- Copy your bot's token, and on the `"Token"` line of your `credentials.json`, replace `null` with your bot token and put quotation marks before and after the token, like so `"Example.Token"`
-- Copy the `Client ID` on the page and replace the null part of the `ClientId` line with it, and put quotation marks before and after, like earlier.
-- Again, copy the same `Client ID` and replace the null part of the `BotId` line with it, and do **not** put quotation marks before and after the ID.
-- Go to a server on discord and attempt to mention yourself, but put a backslash at the start as shown below
-- So the message `\@fearnlj01#3535` will appears as `<@145521851676884992>` after you send the message (to make it slightly easier, add the backslash after you type the mention out)
-- The message will appear as a mention if done correctly, copy the numbers from the message you sent (`145521851676884992`) and replace the `0` on the `OwnerIds` section with your user ID shown earlier.
-- Save `credentials.json` (make sure you aren't saving it as `credentials.json.txt`)
-- If done correctly, you are now the bot owner. You can add multiple owners by seperating each owner ID with a comma within the square brackets.
- 
+- EDIT it as it is guided here: [Setting up credentials.json](http://nadekobot.readthedocs.io/en/latest/guides/Windows%20Guide/#setting-up-credentialsjson-file)
+- **If** you already have Nadeko 1.0 setup and have `credentials.json` and `NadekoBot.db`, you can just copy and paste the `credentials.json` to `NadekoBot/src/NadekoBot` and `NadekoBot.db` to `NadekoBot/src/NadekoBot/bin/Release/netcoreapp1.0/data`.
+- **If** you have Nadeko 0.9x follow the [Upgrading Guide](http://nadekobot.readthedocs.io/en/latest/guides/Upgrading%20Guide/)
+
+####Setting NadekoBot Music
+
+For Music Setup and API keys check [Setting up NadekoBot for Music](http://nadekobot.readthedocs.io/en/latest/guides/Windows%20Guide/#setting-up-nadekobot-for-music) and [JSON Explanations](http://nadekobot.readthedocs.io/en/latest/JSON%20Explanations/).
+
 ####Running NadekoBot
 
 - Using tmux
@@ -101,48 +107,32 @@ A dialog box will open asking if you want to install `xcode-select`. Select inst
 
 - Start Nadeko using .NET Core:
 
-`cd ~/NadekoBot/src/NadekoBot/`
+`cd ~ && bash linuxAIO.sh`
 
-`dotnet run --configuration Release`
+From the options,
 
-CHECK THE BOT IN DISCORD, IF EVERYTHING IS WORKING
+Choose `3` To Run the bot normally.		
+**NOTE:** With option `3` (Running Normally), if you use `.die` [command](http://nadekobot.readthedocs.io/en/latest/Commands%20List/#administration) in discord. The bot will shut down and will stay offline untill you manually run it again. (best if you want to check the bot.)
 
-Now time to move bot to background and to do that, press CTRL+B+D (this will detach the nadeko session using TMUX)
+Choose `4` To Run the bot with Auto Restart.	
+**NOTE:** With option `4` (Running with Auto Restart), bot will auto run if you use `.die` [command](http://nadekobot.readthedocs.io/en/latest/Commands%20List/#administration) making the command `.die` to be used as restart.	
+**NOTE:** [To stop the bot you will have to kill the session.](http://nadekobot.readthedocs.io/en/latest/guides/OSX%20Guide/#some-more-info)
 
-*If you used Screen press CTRL+A+D (this will detach the nadeko screen)*
+**Now check your Discord, the bot should be online**
 
-####Inviting your bot to your server 
-- [Invite Guide](http://discord.kongslien.net/guide.html)
-- Copy your `Client ID` from your [applications page](https://discordapp.com/developers/applications/me).
-- Replace the `12345678` in this link `https://discordapp.com/oauth2/authorize?client_id=12345678&scope=bot&permissions=66186303` with your `Client ID`.
-- The link should now look like this: `https://discordapp.com/oauth2/authorize?client_id=**YOUR_CLENT_ID_HERE**&scope=bot&permissions=66186303`.
-- Go to the newly created link and pick the server we created, and click `Authorize`.
-- The bot should have been added to your server.  
-  
-####Setting NadekoBot Music
-
-For Music Setup and API keys check [Setting up NadekoBot for Music](http://nadekobot.readthedocs.io/en/1.0/guides/Windows%20Guide/#setting-up-nadekobot-for-music) and [JSON Explanations](http://nadekobot.readthedocs.io/en/1.0/JSON%20Explanations/).
+Now time to move bot to background and to do that, press CTRL+B+D (this will detach the nadeko session using TMUX)	
+If you used Screen press CTRL+A+D (this will detach the nadeko screen) 
 
 ####Updating Nadeko
 
-Nadeko is really easy to update as of version 1.0! just copy and paste the command below to update Nadeko to the latest version
-
-`cd ~/NadekoBot/ && git init && git pull`
-
-####Alternative Method to Install Nadeko
-
-*If you fail to install the bot using [METHOD I](http://nadekobot.readthedocs.io/en/1.0/guides/OSX%20Guide/#downloading-and-building-nadeko) try:*
-
-**METHOD II**
-
-- `cd ~`
-- `git clone -b 1.0 --recursive https://github.com/Kwoth/NadekoBot.git`
-- `cd ~/NadekoBot/discord.net`
-- `dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json`
-- `dotnet restore`
-- `cd ~/NadekoBot/src/NadekoBot/`
-- `dotnet restore` 
-- `dotnet build --configuration Release`
+- Connect to the terminal.
+- `tmux kill-session -t nadeko` [(don't forget to replace **nadeko** in the command to what ever you named your bot's session)](http://nadekobot.readthedocs.io/en/latest/guides/OSX%20Guide/#some-more-info)
+- Make sure the bot is **not** running.
+- `tmux new -s nadeko` (**nadeko** is the name of the session)
+- `cd ~ && bash linuxAIO.sh`
+- Choose either `1` or `2` to update the bot with **latest build** or **stable build** respectively.
+- Choose either `3` or `4` to run the bot again with **normally** or **auto restart** respectively.
+- Done. You can close terminal now.
 
 ####Some more Info
 
@@ -157,6 +147,23 @@ Nadeko is really easy to update as of version 1.0! just copy and paste the comma
 - If you want to see the sessions after logging back again, type `screen -ls`, and that will give you the list of screens. 
 - If you want to switch to/ see that screen, type `screen -r nadeko` (nadeko is the name of the screen we created before so, replace `nadeko` with the screen name you created.)
 - If you want to kill the NadekoBot screen, type `screen -X -S nadeko quit`
+
+####Alternative Method to Install Nadeko
+
+**METHOD I**
+
+- `cd ~ && curl -L https://github.com/Kwoth/NadekoBot-BashScript/raw/master/nadeko_installer.sh | sh`
+
+**METHOD II**
+
+- `cd ~`
+- `git clone -b 1.0 --recursive https://github.com/Kwoth/NadekoBot.git`
+- `cd ~/NadekoBot/discord.net`
+- `dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json`
+- `dotnet restore`
+- `cd ~/NadekoBot/src/NadekoBot/`
+- `dotnet restore` 
+- `dotnet build --configuration Release`
 
 [Homebrew]: http://brew.sh/
 [DiscordApp]: https://discordapp.com/developers/applications/me

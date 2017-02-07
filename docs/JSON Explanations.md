@@ -34,32 +34,49 @@ Setting up your API keys
 ====================
 ####This part is completely optional, **However it is necessary for music to work properly**
 - **GoogleAPIKey** - Required for Youtube Song Search, Playlist queuing, and URL Shortener. `~i` and `~img`. 
-  - You can get this api Key [here](https://console.developers.google.com/apis)
+  You can get this api Key [here](https://console.developers.google.com/apis)
 - **SoundCloudClientID** - Required to queue soundloud songs from sc links.
-  - You will need to create a new app [here](http://soundcloud.com/you/apps). **Please note you must be logged into SoundCloud**
+  You will need to create a new app [here](http://soundcloud.com/you/apps). **Please note you must be logged into SoundCloud**
     - Simply click Register a new application and enter a name.
     - Copy the Client ID and click "save app" then paste the Client Id it into your `credentials.json` 
 - **MashapeKey** - Required for Urban Disctionary, Hashtag search, and Hearthstone cards.
-  - You need to create an account on their [api marketplace](https://market.mashape.com/), after that go to `market.mashape.com/YOURNAMEHERE/applications/default-application` and press **Get the keys** in the top right corner.
+  You need to create an account on their [api marketplace](https://market.mashape.com/), after that go to `market.mashape.com/YOURNAMEHERE/applications/default-application` and press **Get the keys** in the top right corner.
     - Copy the key and paste it into `credentials.json`
 - **LOLAPIKey** - Required for all League of Legends commands. 
-  - You can get this key [here](http://api.champion.gg/)
+  You can get this key [here](http://api.champion.gg/)
 - **OsuAPIKey** - Required for Osu commands
-  - You can get this key [here](https://osu.ppy.sh/p/api) **You will need to log in and like the soundcloud it may take a few tries**
+  You can get this key [here](https://osu.ppy.sh/p/api) **You will need to log in and like the soundcloud it may take a few tries**
 - **CarbonKey** -This key is for Carobnitex.net stats. 
-  - Most likely unnecessary **Needed only if your bot is listed on Carbonitex.net**
+  Most likely unnecessary **Needed only if your bot is listed on Carbonitex.net**
   
 Additional options
 ==================== 
 - **TotalShards** - Required if the bot will be connected to more than 2500 servers 
-  - Most likely unnecessary to change until your bot is added to more than 2000 servers  
+  Most likely unnecessary to change until your bot is added to more than 2000 servers  
 [//]: # (- **Db** - Allows for advanced database configuration  )
 [//]: # (  - Leave this with the `null` value for standard operation - change this to `examples` to [This is only a comment so doesn't need proper detail])
   
 
 Config.json
 ===========
-In the folder where `NadekoBot.exe` is located you should also see a `Data` folder. In this folder you will find `config.json` among other files.
-`config.json` contains user specific commands, such as: if DM's sent to the bot are forwarded to you, Blacklisted Ids, Servers, and channels...etc.
+`config.json` is now removed with the addition of `NadekoBot.db` so if you have Nadeko 0.9x follow the [upgrading guide](http://nadekobot.readthedocs.io/en/latest/guides/Upgrading%20Guide/) to upgrade your bot.
 
-**If you do not see** `config.json` **you need to rename** `config_example.json` **to** `config.json`
+DB files
+========
+Nadeko uses few db files in order to open these database files `NadekoBot\src\NadekoBot\bin\Release\netcoreapp1.0\data\NadekoBot.db` (1.0) or `data\NadekoBot.sqlite` (0.9x) you will need [DB Browser for SQLite](http://sqlitebrowser.org/).
+
+To make changes
+
+- go to **Browse Data** tab
+- click on **Table** drop-down list
+- choose the table you want to edit
+- click on the cell you want to edit
+- edit it on the right-hand side 
+- click on **Apply** 
+- click on **Write Changes**
+
+and that will save all the changes.
+
+![nadekodb](https://cdn.discordapp.com/attachments/251504306010849280/254067055240806400/nadekodb.gif)
+
+[CleverBot APIs]: https://cleverbot.io/keys

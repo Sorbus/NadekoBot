@@ -24,7 +24,7 @@ namespace NadekoBot.Modules.Searches
                 obj["name"].GetHashCode();
         }
 
-        private string[] trashTalk { get; } = { "Better ban your counters. You are going to carry the game anyway.",
+        private static string[] trashTalk { get; } = { "Better ban your counters. You are going to carry the game anyway.",
                                                 "Go with the flow. Don't think. Just ban one of these.",
                                                 "DONT READ BELOW! Ban Urgot mid OP 100%. Im smurf Diamond 1.",
                                                 "Ask your teammates what would they like to play, and ban that.",
@@ -51,23 +51,19 @@ namespace NadekoBot.Modules.Searches
                                                     $"limit={showCount}")
                                                     .ConfigureAwait(false))["data"] as JArray;
                     var dataList = data.Distinct(new ChampionNameComparer()).Take(showCount).ToList();
-                    var sb = new StringBuilder();
-                    sb.AppendLine($"**Showing {dataList.Count} top banned champions.**");
-                    sb.AppendLine($"`{trashTalk[new NadekoRandom().Next(0, trashTalk.Length)]}`");
+                    var eb = new EmbedBuilder().WithColor(NadekoBot.OkColor).WithTitle(Format.Underline($"{dataList.Count} most banned champions"));
                     for (var i = 0; i < dataList.Count; i++)
                     {
-                        if (i % 2 == 0 && i != 0)
-                            sb.AppendLine();
-                        sb.Append($"`{i + 1}.` **{dataList[i]["name"]}**  ");
-                        //sb.AppendLine($" ({dataList[i]["general"]["banRate"]}%)");
+                        var champ = dataList[i];
+                        eb.AddField(efb => efb.WithName(champ["name"].ToString()).WithValue(champ["general"]["banRate"] + "%").WithIsInline(true));
                     }
 
-                    await channel.SendMessageAsync(sb.ToString()).ConfigureAwait(false);
+                    await channel.EmbedAsync(eb.Build(), Format.Italics(trashTalk[new NadekoRandom().Next(0, trashTalk.Length)])).ConfigureAwait(false);
                 }
             }
             catch (Exception)
             {
-                await channel.SendMessageAsync($":anger: Fail: Champion.gg didsabled ban data until next patch. Sorry for the inconvenience.").ConfigureAwait(false);
+                await channel.SendMessageAsync("Something went wrong.").ConfigureAwait(false);
             }
         }
     }

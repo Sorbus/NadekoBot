@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 using Google.Apis.Urlshortener.v1;
 using Google.Apis.Urlshortener.v1.Data;
 using NLog;
-using System.Collections;
 
 namespace NadekoBot.Services.Impl
 {
@@ -52,6 +51,8 @@ namespace NadekoBot.Services.Impl
             return (await query.ExecuteAsync()).Items.Select(i => i.Id.PlaylistId);
         }
 
+        private readonly Regex YtVideoIdRegex = new Regex("(?:youtu\\.be\\/|v\\/|u\\/\\w\\/|embed\\/|watch\\?v=|\\&v=)(?<id>[^#\\&\\?]*)", RegexOptions.Compiled);
+
         public async Task<IEnumerable<string>> GetRelatedVideosAsync(string id, int count = 1)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -60,7 +61,7 @@ namespace NadekoBot.Services.Impl
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
-            var match = new Regex("(?:youtu\\.be\\/|v=)(?<id>[\\da-zA-Z\\-_]*)").Match(id);
+            var match = YtVideoIdRegex.Match(id);
             if (match.Length > 1)
             {
                 id = match.Groups["id"].Value;
@@ -80,6 +81,16 @@ namespace NadekoBot.Services.Impl
             if (count <= 0)
                 throw new ArgumentOutOfRangeException(nameof(count));
 
+            string id = "";
+            var match = YtVideoIdRegex.Match(keywords);
+            if (match.Length > 1)
+            {
+                id = match.Groups["id"].Value;
+            }
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                return new[] { "http://www.youtube.com/watch?v=" + id };
+            }
             var query = yt.Search.List("snippet");
             query.MaxResults = count;
             query.Q = keywords;
@@ -91,6 +102,10 @@ namespace NadekoBot.Services.Impl
         {
             if (string.IsNullOrWhiteSpace(url))
                 throw new ArgumentNullException(nameof(url));
+
+            if (string.IsNullOrWhiteSpace(NadekoBot.Credentials.GoogleApiKey))
+                return url;
+
             try
             {
                 var response = await sh.Url.Insert(new Url { LongUrl = url }).ExecuteAsync();

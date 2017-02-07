@@ -43,6 +43,7 @@ namespace NadekoBot.Modules.Music.Classes
 
         public event EventHandler<Song> OnCompleted = delegate { };
         public event EventHandler<Song> OnStarted = delegate { };
+        public event Action<bool> OnPauseChanged = delegate { };
 
         public IVoiceChannel PlaybackVoiceChannel { get; private set; }
 
@@ -168,7 +169,7 @@ namespace NadekoBot.Modules.Music.Classes
             });
         }
 
-        public void TogglePause() => Paused = !Paused;
+        public void TogglePause() => OnPauseChanged(Paused = !Paused);
 
         public int SetVolume(int volume)
         {
@@ -245,7 +246,7 @@ namespace NadekoBot.Modules.Music.Classes
             });
         }
 
-        internal async Task UpdateSongDurationsAsync()
+        public async Task UpdateSongDurationsAsync()
         {
             var curSong = CurrentSong;
             var toUpdate = playlist.Where(s => s.SongInfo.ProviderType == MusicType.Normal &&

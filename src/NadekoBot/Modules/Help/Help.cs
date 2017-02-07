@@ -8,11 +8,7 @@ using NadekoBot.Attributes;
 using System;
 using System.IO;
 using System.Text;
-using Discord.WebSocket;
-using System.Collections;
 using System.Collections.Generic;
-using NadekoBot.Services.Database;
-using System.Threading;
 
 namespace NadekoBot.Modules.Help
 {
@@ -34,7 +30,7 @@ namespace NadekoBot.Modules.Help
             }
         }
 
-        public Help(ILocalization loc, CommandService cmds, ShardedDiscordClient client) : base(loc, cmds, client)
+        public Help() : base()
         {
         }
 
@@ -42,7 +38,7 @@ namespace NadekoBot.Modules.Help
         public async Task Modules(IUserMessage umsg)
         {
 
-            await umsg.Channel.SendMessageAsync("`List of modules:` ```xl\n• " + string.Join("\n• ", _commands.Modules.Select(m => m.Name)) + $"\n``` `Type \"-commands module_name\" to get a list of commands in that module.`")
+            await umsg.Channel.SendMessageAsync("📜 **List of modules:** ```css\n• " + string.Join("\n• ", NadekoBot.CommandService.Modules.Select(m => m.Name)) + $"\n``` ℹ️ **Type** `-commands module_name` **to get a list of commands in that module.** ***e.g.*** `-commands games`")
                                        .ConfigureAwait(false);
         }
 
@@ -54,7 +50,7 @@ namespace NadekoBot.Modules.Help
             module = module?.Trim().ToUpperInvariant();
             if (string.IsNullOrWhiteSpace(module))
                 return;
-            var cmds = _commands.Commands.Where(c => c.Module.Name.ToUpperInvariant().StartsWith(module))
+            var cmds = NadekoBot.CommandService.Commands.Where(c => c.Module.Name.ToUpperInvariant().StartsWith(module))
                                                   .OrderBy(c => c.Text)
                                                   .Distinct(new CommandTextEqualityComparer())
                                                   .AsEnumerable();
@@ -62,18 +58,18 @@ namespace NadekoBot.Modules.Help
             var cmdsArray = cmds as Command[] ?? cmds.ToArray();
             if (!cmdsArray.Any())
             {
-                await channel.SendMessageAsync("That module does not exist.").ConfigureAwait(false);
+                await channel.SendErrorAsync("That module does not exist.").ConfigureAwait(false);
                 return;
             }
             if (module != "customreactions" && module != "conversations")
             {
-                await channel.SendTableAsync("`List Of Commands:`\n", cmdsArray, el => $"{el.Text,-15} {"["+el.Aliases.Skip(1).FirstOrDefault()+"]",-8}").ConfigureAwait(false);
+                await channel.SendTableAsync("📃 **List Of Commands:**\n", cmdsArray, el => $"{el.Text,-15} {"["+el.Aliases.Skip(1).FirstOrDefault()+"]",-8}").ConfigureAwait(false);
             }
             else
             {
-                await channel.SendMessageAsync("`List Of Commands:`\n• " + string.Join("\n• ", cmdsArray.Select(c => $"{c.Text}")));
+                await channel.SendMessageAsync("📃 **List Of Commands:**\n• " + string.Join("\n• ", cmdsArray.Select(c => $"{c.Text}")));
             }
-            await channel.SendMessageAsync($"`You can type \"{NadekoBot.ModulePrefixes[typeof(Help).Name]}h CommandName\" to see the help about that specific command.`").ConfigureAwait(false);
+            await channel.SendConfirmAsync($"ℹ️ **Type** `\"{NadekoBot.ModulePrefixes[typeof(Help).Name]}h CommandName\"` **to see the help for that specified command.** ***e.g.*** `-h >8ball`").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -88,20 +84,22 @@ namespace NadekoBot.Modules.Help
                 await ch.SendMessageAsync(HelpString).ConfigureAwait(false);
                 return;
             }
-            var com = _commands.Commands.FirstOrDefault(c => c.Text.ToLowerInvariant() == comToFind || c.Aliases.Select(a=>a.ToLowerInvariant()).Contains(comToFind));
+            var com = NadekoBot.CommandService.Commands.FirstOrDefault(c => c.Text.ToLowerInvariant() == comToFind || c.Aliases.Select(a=>a.ToLowerInvariant()).Contains(comToFind));
 
             if (com == null)
             {
-                await channel.SendMessageAsync("`No command found.`");
+                await channel.SendErrorAsync("I can't find that command. Please check the **command** and **command prefix** before trying again.");
                 return;
             }
-            var str = $"**__Help for:__ `{com.Text}`**";
+            var str = $"**`{com.Text}`**";
             var alias = com.Aliases.Skip(1).FirstOrDefault();
             if (alias != null)
-                str += $" / `{alias}`";
-            if (com != null)
-                await channel.SendMessageAsync(str + $@"{Environment.NewLine}**Desc:** {string.Format(com.Summary, com.Module.Prefix)} {GetCommandRequirements(com)}
-**Usage:** {string.Format(com.Remarks, com.Module.Prefix)}").ConfigureAwait(false);
+                str += $" **/ `{alias}`**";
+                var embed = new EmbedBuilder()
+                .AddField(fb => fb.WithIndex(1).WithName(str).WithValue($"{ string.Format(com.Summary, com.Module.Prefix)} { GetCommandRequirements(com)}").WithIsInline(true))
+                .AddField(fb => fb.WithIndex(2).WithName("**Usage**").WithValue($"{string.Format(com.Remarks, com.Module.Prefix)}").WithIsInline(false))
+                .WithColor(NadekoBot.OkColor);
+            await channel.EmbedAsync(embed.Build()).ConfigureAwait(false);
         }
 
         private string GetCommandRequirements(Command cmd)
@@ -111,7 +109,7 @@ namespace NadekoBot.Modules.Help
                       .Select(ca =>
                       {
                           if (ca.AttributeType == typeof(OwnerOnlyAttribute))
-                              return "**Bot owner only.**";
+                              return "**Bot Owner only.**";
                           else if (ca.AttributeType == typeof(RequirePermissionAttribute))
                               return $"**Requires {(GuildPermission)ca.ConstructorArguments.FirstOrDefault().Value} server permission.**".Replace("Guild", "Server");
                           else
@@ -125,13 +123,12 @@ namespace NadekoBot.Modules.Help
         public Task Hgit(IUserMessage umsg)
         {
             var helpstr = new StringBuilder();
-            helpstr.AppendLine(@"For more information and how to setup your own NadekoBot, go to: <http://github.com/Kwoth/NadekoBot/wiki>
-You can support the project on patreon: <https://patreon.com/nadekobot> or paypal: `nadekodiscordbot@gmail.com`");
+            helpstr.AppendLine("You can support the project on patreon: <https://patreon.com/nadekobot> or paypal: <https://www.paypal.me/Kwoth>\n");
             helpstr.AppendLine("##Table Of Contents");
-            helpstr.AppendLine(string.Join("\n", NadekoBot.CommandService.Modules.Select(m => $"- [{m.Name}](#{m.Name.ToLowerInvariant()})")));
+            helpstr.AppendLine(string.Join("\n", NadekoBot.CommandService.Modules.Where(m => m.Name.ToLowerInvariant() != "help").OrderBy(m => m.Name).Prepend(NadekoBot.CommandService.Modules.FirstOrDefault(m=>m.Name.ToLowerInvariant()=="help")).Select(m => $"- [{m.Name}](#{m.Name.ToLowerInvariant()})")));
             helpstr.AppendLine();
             string lastModule = null;
-            foreach (var com in _commands.Commands.OrderBy(com=>com.Module.Name).GroupBy(c=>c.Text).Select(g=>g.First()))
+            foreach (var com in NadekoBot.CommandService.Commands.OrderBy(com=>com.Module.Name).GroupBy(c=>c.Text).Select(g=>g.First()))
             {
                 if (com.Module.Name != lastModule)
                 {
@@ -159,9 +156,9 @@ You can support the project on patreon: <https://patreon.com/nadekobot> or paypa
         {
             var channel = (ITextChannel)umsg.Channel;
 
-            await channel.SendMessageAsync(
-@"**LIST OF COMMANDS**: <http://nadekobot.readthedocs.io/en/1.0/Commands%20List/>
-**Hosting Guides and docs can be found here**: <http://nadekobot.readthedocs.io/en/1.0/>").ConfigureAwait(false);
+            await channel.SendConfirmAsync(
+@"**LIST OF COMMANDS**: <http://nadekobot.readthedocs.io/en/latest/Commands%20List/>
+**Hosting Guides and docs can be found here**: <http://nadekobot.readthedocs.io/en/latest/>").ConfigureAwait(false);
         }
 
         [NadekoCommand, Usage, Description, Aliases]
@@ -170,7 +167,7 @@ You can support the project on patreon: <https://patreon.com/nadekobot> or paypa
         {
             var channel = (ITextChannel)umsg.Channel;
 
-            await channel.SendMessageAsync(
+            await channel.SendConfirmAsync(
 $@"You can support the NadekoBot project on patreon. <https://patreon.com/nadekobot> or
 You can send donations to `nadekodiscordbot@gmail.com`
 Don't forget to leave your discord name or id in the message.

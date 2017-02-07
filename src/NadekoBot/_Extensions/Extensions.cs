@@ -1,12 +1,13 @@
 ﻿using Discord;
+using Discord.API;
 using Discord.WebSocket;
-using ImageProcessorCore;
+using ImageSharp;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -67,98 +68,49 @@ namespace NadekoBot.Extensions
         public static async Task<IUserMessage> SendMessageAsync(this IGuildUser user, string message, bool isTTS = false) =>
             await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendMessageAsync(message, isTTS).ConfigureAwait(false);
 
+        public static async Task<IUserMessage> SendConfirmAsync(this IGuildUser user, string text)
+             => await (await user.CreateDMChannelAsync()).SendMessageAsync("", embed: new Embed() { Description = text, Color = NadekoBot.OkColor });
+
+        public static async Task<IUserMessage> SendConfirmAsync(this IGuildUser user, string title, string text, string url = null)
+             => await(await user.CreateDMChannelAsync()).SendMessageAsync("", embed: new Embed() { Description = text, Title = title, Url = url, Color = NadekoBot.OkColor });
+
+        public static async Task<IUserMessage> SendErrorAsync(this IGuildUser user, string title, string error, string url = null)
+             => await (await user.CreateDMChannelAsync()).SendMessageAsync("", embed: new Embed() { Description = error, Title = title, Url = url, Color = NadekoBot.ErrorColor });
+
+        public static async Task<IUserMessage> SendErrorAsync(this IGuildUser user, string error)
+             => await (await user.CreateDMChannelAsync()).SendMessageAsync("", embed: new Embed() { Description = error, Color = NadekoBot.ErrorColor });
+
         public static async Task<IUserMessage> SendFileAsync(this IGuildUser user, string filePath, string caption = null, bool isTTS = false) =>
             await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(filePath, caption, isTTS).ConfigureAwait(false);
 
         public static async Task<IUserMessage> SendFileAsync(this IGuildUser user, Stream fileStream, string fileName, string caption = null, bool isTTS = false) =>
             await (await user.CreateDMChannelAsync().ConfigureAwait(false)).SendFileAsync(fileStream, fileName, caption, isTTS).ConfigureAwait(false);
 
-        public static async Task<IUserMessage> Reply(this IUserMessage msg, string content) =>
-            await msg.Channel.SendMessageAsync(content).ConfigureAwait(false);
-
         public static bool IsAuthor(this IUserMessage msg) =>
             NadekoBot.Client.GetCurrentUser().Id == msg.Author.Id;
 
         public static IEnumerable<IUser> Members(this IRole role) =>
             NadekoBot.Client.GetGuild(role.GuildId)?.GetUsers().Where(u => u.Roles.Contains(role)) ?? Enumerable.Empty<IUser>();
+        
+        public static Task<IUserMessage> EmbedAsync(this IMessageChannel ch, Discord.API.Embed embed, string msg = "")
+             => ch.SendMessageAsync(msg, embed: embed);
 
-        public static async Task<IUserMessage[]> ReplyLong(this IUserMessage msg, string content, string[] breakOn = null, string addToPartialEnd = "", string addToPartialStart = "")
-        {
-            if (content.Length == 0) return null;
-            var characterLimit = 1750;
-            if (content.Length < characterLimit) return new[] { await msg.Channel.SendMessageAsync(content).ConfigureAwait(false) };
-            if (breakOn == null) breakOn = new[] { "\n", "   ", " " };
-            var list = new List<IUserMessage>();
-            var splitItems = new List<string>();
-            foreach (var breaker in breakOn)
-            {
-                if (splitItems.Count == 0)
-                {
-                    splitItems = Regex.Split(content, $"(?={breaker})").Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-                }
-                else
-                {
-                    for (int i = 0; i < splitItems.Count; i++)
-                    {
-                        var temp = splitItems[i];
-                        if (temp.Length > characterLimit)
-                        {
-                            var splitDeep = Regex.Split(temp, $"(?={breaker})").Where(s => !string.IsNullOrWhiteSpace(s));
-                            splitItems.RemoveAt(i);
-                            splitItems.InsertRange(i, splitDeep);
-                        }
-                    }
-                }
-                if (splitItems.All(s => s.Length < characterLimit)) break;
-            }
-            //We remove any entries that are larger than 2000 chars
-            if (splitItems.Any(s => s.Length >= characterLimit))
-            {
-                splitItems = splitItems.Where(s => s.Length < characterLimit).ToList();
-            }
-            //ensured every item can be sent (if individually)
-            var firstItem = true;
-            Queue<string> buildItems = new Queue<string>(splitItems);
-            StringBuilder builder = new StringBuilder();
+        public static Task<IUserMessage> SendErrorAsync(this IMessageChannel ch, string title, string error, string url = null)
+             => ch.SendMessageAsync("", embed: new Embed() { Description = error, Title = title, Url = url, Color = NadekoBot.ErrorColor });
 
-            while (buildItems.Count > 0)
-            {
-                if (builder.Length == 0)
-                {
-                    //first item to add
-                    if (!firstItem)
-                        builder.Append(addToPartialStart);
-                    else
-                        firstItem = false;
-                    builder.Append(buildItems.Dequeue());
-                }
-                else
-                {
-                    builder.Append(buildItems.Dequeue());
-                }
-                if (buildItems.Count == 0)
-                {
-                    list.Add(await msg.Channel.SendMessageAsync(builder.ToString()));
-                    builder.Clear();
-                }
-                else
-                {
-                    var peeked = buildItems.Peek();
-                    if (builder.Length + peeked.Length + addToPartialEnd.Length > characterLimit)
-                    {
-                        builder.Append(addToPartialEnd);
-                        list.Add(await msg.Channel.SendMessageAsync(builder.ToString()));
-                        builder.Clear();
-                    }
-                }
-            }
-            return list.ToArray();
-        }
+        public static Task<IUserMessage> SendErrorAsync(this IMessageChannel ch, string error)
+             => ch.SendMessageAsync("", embed: new Embed() { Description = error, Color = NadekoBot.ErrorColor });
+
+        public static Task<IUserMessage> SendConfirmAsync(this IMessageChannel ch, string title, string text, string url = null)
+             => ch.SendMessageAsync("", embed: new Embed() { Description = text, Title = title, Url = url, Color = NadekoBot.OkColor });
+
+        public static Task<IUserMessage> SendConfirmAsync(this IMessageChannel ch, string text)
+             => ch.SendMessageAsync("", embed: new Embed() { Description = text, Color = NadekoBot.OkColor });
 
         public static Task<IUserMessage> SendTableAsync<T>(this IMessageChannel ch, string seed, IEnumerable<T> items, Func<T, string> howToPrint, int columns = 3)
         {
             var i = 0;
-            return ch.SendMessageAsync($@"{seed}```xl
+            return ch.SendMessageAsync($@"{seed}```css
 {string.Join("\n", items.GroupBy(item => (i++) / columns)
                         .Select(ig => string.Concat(ig.Select(el => howToPrint(el)))))}
 ```");
@@ -212,6 +164,18 @@ namespace NadekoBot.Extensions
             if (str.Length < maxLength)
                 return str;
             return string.Concat(str.Take(maxLength - 3)) + (hideDots ? "" : "...");
+        }
+
+        public static string ToTitleCase(this string str)
+        {
+            var tokens = str.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+            for (var i = 0; i < tokens.Length; i++)
+            {
+                var token = tokens[i];
+                tokens[i] = token.Substring(0, 1).ToUpper() + token.Substring(1);
+            }
+
+            return string.Join(" ", tokens);
         }
 
         /// <summary>
@@ -286,6 +250,9 @@ namespace NadekoBot.Extensions
             return ms;
 
         }
+
+        public static string ToJson<T>(this T any, Formatting formatting = Formatting.Indented) => 
+            JsonConvert.SerializeObject(any, formatting);
 
         public static int KiB(this int value) => value * 1024;
         public static int KB(this int value) => value * 1000;

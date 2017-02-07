@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,12 +54,12 @@ namespace NadekoBot.Modules.Administration
                                 break;
                         }
                     }
-                    await umsg.Channel.SendMessageAsync("Migration done.").ConfigureAwait(false);
+                    await umsg.Channel.SendMessageAsync("🆙 **Migration done.**").ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
                     _log.Error(ex);
-                    await umsg.Channel.SendMessageAsync(":warning: Error while migrating, check logs for more informations.").ConfigureAwait(false);
+                    await umsg.Channel.SendMessageAsync("⚠️ **Error while migrating, check `logs` for more informations.**").ConfigureAwait(false);
                 }
             }
 
@@ -75,9 +74,9 @@ namespace NadekoBot.Modules.Administration
                     MigrateDb0_9(uow);
 
                     //NOW save it
-                    botConfig.MigrationVersion = 1;
                     _log.Warn("Writing to disc");
                     uow.Complete();
+                    botConfig.MigrationVersion = 1;
                 }
             }
 
@@ -110,7 +109,7 @@ namespace NadekoBot.Modules.Administration
                     var byeMsg = (string)reader["ByeText"];
                     var grdel = false;
                     var byedel = grdel;
-                    var gc = uow.GuildConfigs.For(gid);
+                    var gc = uow.GuildConfigs.For(gid, set => set);
 
                     if (greetDM)
                         gc.SendDmGreetMessage = greet;
@@ -123,23 +122,24 @@ namespace NadekoBot.Modules.Administration
                     gc.ByeMessageChannelId = byeChannel;
                     gc.ChannelByeMessageText = byeMsg;
 
-                    gc.AutoDeleteByeMessages = gc.AutoDeleteGreetMessages = grdel;
+                    gc.AutoDeleteGreetMessagesTimer = gc.AutoDeleteByeMessagesTimer = grdel ? 30 : 0;
                     _log.Info(++i);
                 }
 
                 var com2 = db.CreateCommand();
-                com.CommandText = "SELECT * FROM CurrencyState";
+                com.CommandText = "SELECT * FROM CurrencyState GROUP BY UserId";
 
                 i = 0;
                 var reader2 = com.ExecuteReader();
                 while (reader2.Read())
                 {
                     _log.Info(++i);
-                    uow.Currency.Add(new Currency()
+                    var curr = new Currency()
                     {
                         Amount = (long)reader2["Value"],
                         UserId = (ulong)(long)reader2["UserId"]
-                    });
+                    };
+                    uow.Currency.Add(curr);
                 }
                 db.Close();
                 try { File.Move("data/nadekobot.sqlite", "data/DELETE_ME_nadekobot.sqlite"); } catch { }

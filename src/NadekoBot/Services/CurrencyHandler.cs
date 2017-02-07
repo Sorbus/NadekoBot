@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
-using NadekoBot.Services.Database;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Gambling;
 using NadekoBot.Services.Database.Models;
@@ -18,7 +14,7 @@ namespace NadekoBot.Services
             var success = await RemoveCurrencyAsync(author.Id, reason, amount);
 
             if (success && sendMessage)
-                try { await author.SendMessageAsync($"`You lost:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
+                try { await author.SendErrorAsync($"`You lost:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
 
             return success;
         }
@@ -51,7 +47,7 @@ namespace NadekoBot.Services
             await AddCurrencyAsync(author.Id, reason, amount);
 
             if (sendMessage)
-                try { await author.SendMessageAsync($"`You received:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
+                try { await author.SendConfirmAsync($"`You received:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
         }
 
         public static async Task AddCurrencyAsync(ulong receiverId, string reason, long amount)

@@ -1,8 +1,5 @@
 ﻿using NadekoBot.Services.Database.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NadekoBot.Services.Database
@@ -24,6 +21,7 @@ namespace NadekoBot.Services.Database
         ICurrencyRepository Currency { get; }
         ICurrencyTransactionsRepository CurrencyTransactions { get; }
         IMusicPlaylistRepository MusicPlaylists { get; }
+        IPokeGameRepository PokeGame { get; }
 
         IKarmaRepository Karma { get; }
 

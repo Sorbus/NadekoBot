@@ -24,30 +24,43 @@ namespace NadekoBot.Modules.Music.Classes
         public string Query { get; set; }
         public string Title { get; set; }
         public string Uri { get; set; }
+    public string AlbumArt { get; set; }
     }
     public class Song
     {
-        public StreamState State { get; set; }
+    public StreamState State { get; set; }
         public string PrettyName =>
-            $"**【 {SongInfo.Title.TrimTo(55)} 】**`{(SongInfo.Provider ?? "-")}` `by {QueuerName}`";
+            $"**{SongInfo.Title.TrimTo(55)} `{(SongInfo.Provider ?? "-")} by {QueuerName}`**";
+        //$"{SongInfo.Title.TrimTo(70)}";
         public SongInfo SongInfo { get; }
-        public string QueuerName { get; set; }
-
         public MusicPlayer MusicPlayer { get; set; }
+        
+        public string PrettyUser =>
+            $"{QueuerName}";
+        public string QueuerName { get; set; }
+        
+        public string PrettyProvider =>
+            $"{(SongInfo.Provider ?? "No Provider")}";
 
         public string PrettyCurrentTime()
         {
             var time = TimeSpan.FromSeconds(bytesSent / 3840 / 50);
-            var str = $"【{(int)time.TotalMinutes}m {time.Seconds}s】**/** ";
+            //var str = $"{(int)time.TotalMinutes}m {time.Seconds}s / ";
+			var str = $"";
             if (TotalLength == TimeSpan.Zero)
-                str += "**?**";
+                str += "(?)";
             else if (TotalLength == TimeSpan.MaxValue)
                 str += "**∞**";
             else
-                str += $"【{(int)TotalLength.TotalMinutes}m {TotalLength.Seconds}s】";
+                str += $"{(int)TotalLength.TotalMinutes}m {TotalLength.Seconds}s";
             return str;
         }
-
+		public string PrettyMusicPlayTime()
+		{
+		var time = TimeSpan.FromSeconds(bytesSent / 3840 / 50);
+        var str = $"{(int)time.TotalMinutes}m {time.Seconds}s";
+		return str;
+		}
         const int milliseconds = 20;
         const int samplesPerFrame = (48000 / 1000) * milliseconds;
         const int frameBytes = 3840; //16-bit, 2 channels
@@ -96,25 +109,46 @@ namespace NadekoBot.Modules.Music.Classes
             SongBuffer inStream = new SongBuffer(MusicPlayer, filename, SongInfo, skipTo, frameBytes * 100);
             var bufferTask = inStream.BufferSong(cancelToken).ConfigureAwait(false);
 
-            bytesSent = 0;
-
             try
             {
                 var attempt = 0;             
 
-                var prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken);
+                var prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken, 1.MiB()); //Fast connection can do this easy
+                var finished = false;
+                var count = 0;
                 var sw = new Stopwatch();
+                var slowconnection = false;
                 sw.Start();
-                var t = await Task.WhenAny(prebufferingTask, Task.Delay(5000, cancelToken));
-                if (t != prebufferingTask)
+                while (!finished)
                 {
-                    _log.Debug("Prebuffering timed out or canceled. Cannot get any data from the stream.");
-                    return;
-                }
-                else if(prebufferingTask.IsCanceled)
-                {
-                    _log.Debug("Prebuffering timed out. Cannot get any data from the stream.");
-                    return;
+                    var t = await Task.WhenAny(prebufferingTask, Task.Delay(2000, cancelToken));
+                    if (t != prebufferingTask)
+                    {
+                        count++;
+                        if (count == 10)
+                        {
+                            slowconnection = true;
+                            prebufferingTask = CheckPrebufferingAsync(inStream, cancelToken, 20.MiB());
+                            _log.Warn("Slow connection buffering more to ensure no disruption, consider hosting in cloud");
+                            continue;
+                        }
+                        
+                        if (inStream.BufferingCompleted && count == 1)
+                        {
+                            _log.Debug("Prebuffering canceled. Cannot get any data from the stream.");
+                            return;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                     }
+                    else if (prebufferingTask.IsCanceled)
+                    {
+                        _log.Debug("Prebuffering canceled. Cannot get any data from the stream.");
+                        return;
+                    }
+                    finished = true;
                 }
                 sw.Stop();
                 _log.Debug("Prebuffering successfully completed in "+ sw.Elapsed);
@@ -146,8 +180,13 @@ namespace NadekoBot.Modules.Music.Classes
                                 MusicPlayer.SongCancelSource.Cancel();
                                 break;
                             }
+                            if (slowconnection)
+                            {
+                                _log.Warn("Slow connection has disrupted music, waiting a bit for buffer");
+                                await Task.Delay(1000, cancelToken).ConfigureAwait(false);
+                            }
                             else
-                                await Task.Delay(100, cancelToken).ConfigureAwait(false);                         
+                                await Task.Delay(100, cancelToken).ConfigureAwait(false);
                         }
                         else
                             attempt = 0;
@@ -176,9 +215,9 @@ namespace NadekoBot.Modules.Music.Classes
             }
         }
 
-        private async Task CheckPrebufferingAsync(SongBuffer inStream, CancellationToken cancelToken)
+        private async Task CheckPrebufferingAsync(SongBuffer inStream, CancellationToken cancelToken, long size)
         {
-            while (!inStream.BufferingCompleted && inStream.Length < 10.MiB())
+            while (!inStream.BufferingCompleted && inStream.Length < size)
             {
                 await Task.Delay(100, cancelToken);
             }
@@ -285,6 +324,7 @@ namespace NadekoBot.Modules.Music.Classes
                         Uri = svideo.StreamLink,
                         ProviderType = musicType,
                         Query = svideo.TrackLink,
+            AlbumArt = svideo.artwork_url,
                     })
                     { TotalLength = TimeSpan.FromMilliseconds(svideo.Duration) };
                 }
@@ -299,6 +339,7 @@ namespace NadekoBot.Modules.Music.Classes
                         Uri = svideo.StreamLink,
                         ProviderType = MusicType.Normal,
                         Query = svideo.TrackLink,
+            AlbumArt = svideo.artwork_url,
                     })
                     { TotalLength = TimeSpan.FromMilliseconds(svideo.Duration) };
                 }
@@ -309,7 +350,7 @@ namespace NadekoBot.Modules.Music.Classes
                 var allVideos = await Task.Run(async () => { try { return await YouTube.Default.GetAllVideosAsync(link).ConfigureAwait(false); } catch { return Enumerable.Empty<YouTubeVideo>(); } }).ConfigureAwait(false);
                 var videos = allVideos.Where(v => v.AdaptiveKind == AdaptiveKind.Audio);
                 var video = videos
-                    .Where(v => v.AudioBitrate < 192)
+                    .Where(v => v.AudioBitrate < 256)
                     .OrderByDescending(v => v.AudioBitrate)
                     .FirstOrDefault();
 
