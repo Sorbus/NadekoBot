@@ -2627,6 +2627,7 @@
   </data>
   <data name="modcooldown_usage" xml:space="preserve">
     <value>`{0}modcd "module" 5`</value>
+  </data>
   <data name="hentaibomb_cmd" xml:space="preserve">
     <value>hentaibomb</value>
   </data>
