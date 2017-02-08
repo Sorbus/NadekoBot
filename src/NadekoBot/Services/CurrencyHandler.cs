@@ -4,68 +4,86 @@ using Discord;
 using NadekoBot.Extensions;
 using NadekoBot.Modules.Gambling;
 using NadekoBot.Services.Database.Models;
+using NadekoBot.Services.Database;
 
 namespace NadekoBot.Services
 {
     public static class CurrencyHandler
     {
-        public static async Task<bool> RemoveCurrencyAsync(IGuildUser author, string reason, long amount, bool sendMessage)
+        public static async Task<bool> RemoveCurrencyAsync(IUser author, string reason, long amount, bool sendMessage)
         {
             var success = await RemoveCurrencyAsync(author.Id, reason, amount);
 
             if (success && sendMessage)
-                try { await author.SendErrorAsync($"`You lost:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
+                try { await author.SendErrorAsync($"`You lost:` {amount} {NadekoBot.BotConfig.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
 
             return success;
         }
 
-        public static async Task<bool> RemoveCurrencyAsync(ulong authorId, string reason, long amount)
+        public static async Task<bool> RemoveCurrencyAsync(ulong authorId, string reason, long amount, IUnitOfWork uow = null)
         {
             if (amount < 0)
                 throw new ArgumentNullException(nameof(amount));
 
 
-            using (var uow = DbHandler.UnitOfWork())
+            if (uow == null)
             {
-                var success = uow.Currency.TryUpdateState(authorId, -amount);
-                if (!success)
-                    return false;
-                uow.CurrencyTransactions.Add(new CurrencyTransaction()
+                using (uow = DbHandler.UnitOfWork())
                 {
-                    UserId = authorId,
-                    Reason = reason,
-                    Amount = -amount,
-                });
-                await uow.CompleteAsync().ConfigureAwait(false);
+                    var toReturn = InternalRemoveCurrency(authorId, reason, amount, uow);
+                    await uow.CompleteAsync().ConfigureAwait(false);
+                    return toReturn;
+                }
             }
 
+            return InternalRemoveCurrency(authorId, reason, amount, uow);
+        }
+
+        private static bool InternalRemoveCurrency(ulong authorId, string reason, long amount, IUnitOfWork uow)
+        {
+            var success = uow.Currency.TryUpdateState(authorId, -amount);
+            if (!success)
+                return false;
+            uow.CurrencyTransactions.Add(new CurrencyTransaction()
+            {
+                UserId = authorId,
+                Reason = reason,
+                Amount = -amount,
+            });
             return true;
         }
 
-        public static async Task AddCurrencyAsync(IGuildUser author, string reason, long amount, bool sendMessage)
+        public static async Task AddCurrencyAsync(IUser author, string reason, long amount, bool sendMessage)
         {
             await AddCurrencyAsync(author.Id, reason, amount);
 
             if (sendMessage)
-                try { await author.SendConfirmAsync($"`You received:` {amount} {Gambling.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
+                try { await author.SendConfirmAsync($"`You received:` {amount} {NadekoBot.BotConfig.CurrencySign}\n`Reason:` {reason}").ConfigureAwait(false); } catch { }
         }
 
-        public static async Task AddCurrencyAsync(ulong receiverId, string reason, long amount)
+        public static async Task AddCurrencyAsync(ulong receiverId, string reason, long amount, IUnitOfWork uow = null)
         {
             if (amount < 0)
                 throw new ArgumentNullException(nameof(amount));
 
+            var transaction = new CurrencyTransaction()
+            {
+                UserId = receiverId,
+                Reason = reason,
+                Amount = amount,
+            };
 
-            using (var uow = DbHandler.UnitOfWork())
+            if (uow == null)
+                using (uow = DbHandler.UnitOfWork())
+                {
+                    uow.Currency.TryUpdateState(receiverId, amount);
+                    uow.CurrencyTransactions.Add(transaction);
+                    await uow.CompleteAsync();
+                }
+            else
             {
                 uow.Currency.TryUpdateState(receiverId, amount);
-                uow.CurrencyTransactions.Add(new CurrencyTransaction()
-                {
-                    UserId = receiverId,
-                    Reason = reason,
-                    Amount = amount,
-                });
-                await uow.CompleteAsync();
+                uow.CurrencyTransactions.Add(transaction);
             }
         }
     }

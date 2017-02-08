@@ -16,8 +16,6 @@ namespace NadekoBot.Services.Database.Repositories.Impl
         public IEnumerable<GuildConfig> GetAllGuildConfigs() =>
             _set.Include(gc => gc.LogSetting)
                     .ThenInclude(ls => ls.IgnoredChannels)
-                .Include(gc => gc.LogSetting)
-                    .ThenInclude(ls => ls.IgnoredVoicePresenceChannelIds)
                 .Include(gc => gc.RootPermission)
                     .ThenInclude(gc => gc.Previous)
                 .Include(gc => gc.RootPermission)
@@ -29,6 +27,10 @@ namespace NadekoBot.Services.Database.Repositories.Impl
                 .Include(gc => gc.FilteredWords)
                 .Include(gc => gc.CommandCooldowns)
                 .Include(gc => gc.ModuleCooldowns)
+                .Include(gc => gc.GuildRepeaters)
+                .Include(gc => gc.AntiRaidSetting)
+                .Include(gc => gc.AntiSpamSetting)
+                    .ThenInclude(x => x.IgnoredChannels)
                 .ToList();
 
         /// <summary>
@@ -44,10 +46,8 @@ namespace NadekoBot.Services.Database.Repositories.Impl
             {
                 config = _set
                                 .Include(gc => gc.FollowedStreams)
-                                 .Include(gc => gc.LogSetting)
-                                    .ThenInclude(ls => ls.IgnoredChannels)
                                 .Include(gc => gc.LogSetting)
-                                    .ThenInclude(ls => ls.IgnoredVoicePresenceChannelIds)
+                                    .ThenInclude(ls => ls.IgnoredChannels)
                                 .Include(gc => gc.FilterInvitesChannelIds)
                                 .Include(gc => gc.FilterWordsChannelIds)
                                 .Include(gc => gc.FilteredWords)
@@ -72,6 +72,13 @@ namespace NadekoBot.Services.Database.Repositories.Impl
                 _context.SaveChanges();
             }
             return config;
+        }
+
+        public GuildConfig LogSettingsFor(ulong guildId)
+        {
+            return _set.Include(gc => gc.LogSetting)
+                            .ThenInclude(gc => gc.IgnoredChannels)
+               .FirstOrDefault();
         }
 
         public GuildConfig PermissionsFor(ulong guildId)

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Discord;
 using Discord.Commands;
 using NadekoBot.Attributes;
 using NadekoBot.Services;
@@ -21,23 +20,21 @@ namespace NadekoBot.Modules.Administration
     public partial class Administration
     {
         [Group]
-        public class Migration
+        public class Migration : ModuleBase
         {
             private const int CURRENT_VERSION = 1;
 
-            private Logger _log { get; }
+            private static Logger _log { get; }
 
-            public Migration()
+            static Migration()
             {
                 _log = LogManager.GetCurrentClassLogger();
             }
 
             [NadekoCommand, Usage, Description, Aliases]
             [OwnerOnly]
-            public async Task MigrateData(IUserMessage umsg)
+            public async Task MigrateData()
             {
-                var channel = (ITextChannel)umsg.Channel;
-
                 var version = 0;
                 using (var uow = DbHandler.UnitOfWork())
                 {
@@ -54,12 +51,12 @@ namespace NadekoBot.Modules.Administration
                                 break;
                         }
                     }
-                    await umsg.Channel.SendMessageAsync("🆙 **Migration done.**").ConfigureAwait(false);
+                    await Context.Channel.SendMessageAsync("🆙 **Migration done.**").ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {
                     _log.Error(ex);
-                    await umsg.Channel.SendMessageAsync("⚠️ **Error while migrating, check `logs` for more informations.**").ConfigureAwait(false);
+                    await Context.Channel.SendMessageAsync("⚠️ **Error while migrating, check `logs` for more informations.**").ConfigureAwait(false);
                 }
             }
 
@@ -92,54 +89,66 @@ namespace NadekoBot.Modules.Administration
                 db.Open();
 
                 var com = db.CreateCommand();
-                com.CommandText = "SELECT * FROM Announcement";
-
-                var reader = com.ExecuteReader();
                 var i = 0;
-                while (reader.Read())
+                try
                 {
-                    var gid = (ulong)(long)reader["ServerId"];
-                    var greet = (long)reader["Greet"] == 1;
-                    var greetDM = (long)reader["GreetPM"] == 1;
-                    var greetChannel = (ulong)(long)reader["GreetChannelId"];
-                    var greetMsg = (string)reader["GreetText"];
-                    var bye = (long)reader["Bye"] == 1;
-                    var byeDM = (long)reader["ByePM"] == 1;
-                    var byeChannel = (ulong)(long)reader["ByeChannelId"];
-                    var byeMsg = (string)reader["ByeText"];
-                    var grdel = false;
-                    var byedel = grdel;
-                    var gc = uow.GuildConfigs.For(gid, set => set);
+                    com.CommandText = "SELECT * FROM Announcement";
 
-                    if (greetDM)
-                        gc.SendDmGreetMessage = greet;
-                    else
-                        gc.SendChannelGreetMessage = greet;
-                    gc.GreetMessageChannelId = greetChannel;
-                    gc.ChannelGreetMessageText = greetMsg;
+                    var reader = com.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var gid = (ulong)(long)reader["ServerId"];
+                        var greet = (long)reader["Greet"] == 1;
+                        var greetDM = (long)reader["GreetPM"] == 1;
+                        var greetChannel = (ulong)(long)reader["GreetChannelId"];
+                        var greetMsg = (string)reader["GreetText"];
+                        var bye = (long)reader["Bye"] == 1;
+                        var byeDM = (long)reader["ByePM"] == 1;
+                        var byeChannel = (ulong)(long)reader["ByeChannelId"];
+                        var byeMsg = (string)reader["ByeText"];
+                        var grdel = false;
+                        var byedel = grdel;
+                        var gc = uow.GuildConfigs.For(gid, set => set);
 
-                    gc.SendChannelByeMessage = bye;
-                    gc.ByeMessageChannelId = byeChannel;
-                    gc.ChannelByeMessageText = byeMsg;
+                        if (greetDM)
+                            gc.SendDmGreetMessage = greet;
+                        else
+                            gc.SendChannelGreetMessage = greet;
+                        gc.GreetMessageChannelId = greetChannel;
+                        gc.ChannelGreetMessageText = greetMsg;
 
-                    gc.AutoDeleteGreetMessagesTimer = gc.AutoDeleteByeMessagesTimer = grdel ? 30 : 0;
-                    _log.Info(++i);
+                        gc.SendChannelByeMessage = bye;
+                        gc.ByeMessageChannelId = byeChannel;
+                        gc.ChannelByeMessageText = byeMsg;
+
+                        gc.AutoDeleteGreetMessagesTimer = gc.AutoDeleteByeMessagesTimer = grdel ? 30 : 0;
+                        _log.Info(++i);
+                    }
                 }
-
+                catch {
+                    _log.Warn("Greet/bye messages won't be migrated");
+                }
                 var com2 = db.CreateCommand();
                 com.CommandText = "SELECT * FROM CurrencyState GROUP BY UserId";
 
                 i = 0;
-                var reader2 = com.ExecuteReader();
-                while (reader2.Read())
+                try
                 {
-                    _log.Info(++i);
-                    var curr = new Currency()
+                    var reader2 = com.ExecuteReader();
+                    while (reader2.Read())
                     {
-                        Amount = (long)reader2["Value"],
-                        UserId = (ulong)(long)reader2["UserId"]
-                    };
-                    uow.Currency.Add(curr);
+                        _log.Info(++i);
+                        var curr = new Currency()
+                        {
+                            Amount = (long)reader2["Value"],
+                            UserId = (ulong)(long)reader2["UserId"]
+                        };
+                        uow.Currency.Add(curr);
+                    }
+                }
+                catch
+                {
+                    _log.Warn("Currency won't be migrated");
                 }
                 db.Close();
                 try { File.Move("data/nadekobot.sqlite", "data/DELETE_ME_nadekobot.sqlite"); } catch { }
@@ -195,12 +204,9 @@ namespace NadekoBot.Modules.Administration
                             guildConfig.GenerateCurrencyChannelIds = new HashSet<GCChannelId>(data.GenerateCurrencyChannels.Select(gc => new GCChannelId() { ChannelId = gc.Key }));
                             selfAssRoles.AddRange(data.ListOfSelfAssignableRoles.Select(r => new SelfAssignedRole() { GuildId = guildConfig.GuildId, RoleId = r }).ToArray());
                             var logSetting = guildConfig.LogSetting;
-                            guildConfig.LogSetting.IsLogging = data.LogChannel != null;
-                            guildConfig.LogSetting.ChannelId = data.LogChannel ?? 0;
                             guildConfig.LogSetting.IgnoredChannels = new HashSet<IgnoredLogChannel>(data.LogserverIgnoreChannels.Select(id => new IgnoredLogChannel() { ChannelId = id }));
 
-                            guildConfig.LogSetting.LogUserPresence = data.LogPresenceChannel != null;
-                            guildConfig.LogSetting.UserPresenceChannelId = data.LogPresenceChannel ?? 0;
+                            guildConfig.LogSetting.LogUserPresenceId = data.LogPresenceChannel;
 
 
                             guildConfig.FollowedStreams = new HashSet<FollowedStream>(data.ObservingStreams.Select(x =>

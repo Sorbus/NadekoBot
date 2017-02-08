@@ -30,6 +30,31 @@ namespace NadekoBot.Modules.Music.Classes
     {
         private IAudioClient audioClient { get; set; }
 
+        /// <summary>
+        /// Player will prioritize different queuer name
+        /// over the song position in the playlist
+        /// </summary>
+        public bool FairPlay { get; set; } = false;
+
+        /// <summary>
+        /// Song will stop playing after this amount of time. 
+        /// To prevent people queueing radio or looped songs 
+        /// while other people want to listen to other songs too.
+        /// </summary>
+        public uint MaxPlaytimeSeconds { get; set; } = 0;
+
+
+        // this should be written better
+        public TimeSpan TotalPlaytime => 
+            playlist.Any(s => s.TotalTime == TimeSpan.MaxValue) ? 
+            TimeSpan.MaxValue : 
+            new TimeSpan(playlist.Sum(s => s.TotalTime.Ticks));
+
+        /// <summary>
+        /// Users who recently got their music wish
+        /// </summary>
+        private ConcurrentHashSet<string> recentlyPlayedUsers { get; } = new ConcurrentHashSet<string>();
+
         private readonly List<Song> playlist = new List<Song>();
         public IReadOnlyCollection<Song> Playlist => playlist;
 
@@ -41,11 +66,12 @@ namespace NadekoBot.Modules.Music.Classes
 
         public float Volume { get; private set; }
 
-        public event EventHandler<Song> OnCompleted = delegate { };
-        public event EventHandler<Song> OnStarted = delegate { };
+        public event Action<MusicPlayer, Song> OnCompleted = delegate { };
+        public event Action<MusicPlayer, Song> OnStarted = delegate {  };
         public event Action<bool> OnPauseChanged = delegate { };
 
         public IVoiceChannel PlaybackVoiceChannel { get; private set; }
+        public ITextChannel OutputTextChannel { get; set; }
 
         private bool Destroyed { get; set; } = false;
         public bool RepeatSong { get; private set; } = false;
@@ -53,12 +79,18 @@ namespace NadekoBot.Modules.Music.Classes
         public bool Autoplay { get; set; } = false;
         public uint MaxQueueSize { get; set; } = 0;
 
-        private ConcurrentQueue<Action> actionQueue { get; set; } = new ConcurrentQueue<Action>();
+        private ConcurrentQueue<Action> actionQueue { get; } = new ConcurrentQueue<Action>();
 
-        public MusicPlayer(IVoiceChannel startingVoiceChannel, float? defaultVolume)
+        public string PrettyVolume => $"🔉 {(int)(Volume * 100)}%";
+
+        public event Action<Song, int> SongRemoved = delegate { };
+
+        public MusicPlayer(IVoiceChannel startingVoiceChannel, ITextChannel outputChannel, float? defaultVolume)
         {
             if (startingVoiceChannel == null)
                 throw new ArgumentNullException(nameof(startingVoiceChannel));
+
+            OutputTextChannel = outputChannel;
             Volume = defaultVolume ?? 1.0f;
 
             PlaybackVoiceChannel = startingVoiceChannel;
@@ -107,16 +139,24 @@ namespace NadekoBot.Modules.Music.Classes
                         }
 
                         CurrentSong = GetNextSong();
-                        RemoveSongAt(0);
 
                         if (CurrentSong == null)
                             continue;
 
+                        var index = playlist.IndexOf(CurrentSong);
+                        if (index != -1)
+                            RemoveSongAt(index, true);
 
                         OnStarted(this, CurrentSong);
-                        await CurrentSong.Play(audioClient, cancelToken);
-
-                        OnCompleted(this, CurrentSong);
+                        try
+                        {
+                            await CurrentSong.Play(audioClient, cancelToken);
+                        }
+                        catch(OperationCanceledException)
+                        {
+                            OnCompleted(this, CurrentSong);
+                        }
+                        
 
                         if (RepeatPlaylist)
                             AddSong(CurrentSong, CurrentSong.QueuerName);
@@ -125,11 +165,11 @@ namespace NadekoBot.Modules.Music.Classes
                             AddSong(CurrentSong, 0);
 
                     }
-                    catch (OperationCanceledException) { }
                     catch (Exception ex)
                     {
                         Console.WriteLine("Music thread almost crashed.");
                         Console.WriteLine(ex);
+                        await Task.Delay(3000).ConfigureAwait(false);
                     }
                     finally
                     {
@@ -182,8 +222,26 @@ namespace NadekoBot.Modules.Music.Classes
             return volume;
         }
 
-        private Song GetNextSong() =>
-            playlist.FirstOrDefault();
+        private Song GetNextSong()
+        {
+            if (!FairPlay)
+            {
+                return playlist.FirstOrDefault();
+            }
+            var song = playlist.FirstOrDefault(c => !recentlyPlayedUsers.Contains(c.QueuerName))
+                ?? playlist.FirstOrDefault();
+
+            if (song == null)
+                return null;
+
+            if (recentlyPlayedUsers.Contains(song.QueuerName))
+            {
+                recentlyPlayedUsers.Clear();
+            }
+
+            recentlyPlayedUsers.Add(song.QueuerName);
+            return song;
+        }
 
         public void Shuffle()
         {
@@ -228,13 +286,18 @@ namespace NadekoBot.Modules.Music.Classes
             });
         }
 
-        public void RemoveSongAt(int index)
+        public void RemoveSongAt(int index, bool silent = false)
         {
             actionQueue.Enqueue(() =>
             {
                 if (index < 0 || index >= playlist.Count)
                     return;
-                playlist.RemoveAt(index);
+                var song = playlist.ElementAtOrDefault(index);
+                if (playlist.Remove(song) && !silent)
+                {
+                    SongRemoved(song, index);
+                }
+                
             });
         }
 
@@ -250,11 +313,11 @@ namespace NadekoBot.Modules.Music.Classes
         {
             var curSong = CurrentSong;
             var toUpdate = playlist.Where(s => s.SongInfo.ProviderType == MusicType.Normal &&
-                                                          s.TotalLength == TimeSpan.Zero);
+                                                            s.TotalTime == TimeSpan.Zero);
             if (curSong != null)
                 toUpdate = toUpdate.Append(curSong);
             var ids = toUpdate.Select(s => s.SongInfo.Query.Substring(s.SongInfo.Query.LastIndexOf("?v=") + 3))
-                              .Distinct();
+                                .Distinct();
 
             var durations = await NadekoBot.Google.GetVideoDurationsAsync(ids);
 
@@ -264,11 +327,12 @@ namespace NadekoBot.Modules.Music.Classes
                 {
                     if (s.SongInfo.Query.EndsWith(kvp.Key))
                     {
-                        s.TotalLength = kvp.Value;
+                        s.TotalTime = kvp.Value;
                         return;
                     }
                 }
             });
+
         }
 
         public void Destroy()
@@ -286,13 +350,13 @@ namespace NadekoBot.Modules.Music.Classes
             });
         }
 
-        public Task MoveToVoiceChannel(IVoiceChannel voiceChannel)
-        {
-            if (audioClient?.ConnectionState != ConnectionState.Connected)
-                throw new InvalidOperationException("Can't move while bot is not connected to voice channel.");
-            PlaybackVoiceChannel = voiceChannel;
-            return PlaybackVoiceChannel.ConnectAsync();
-        }
+        //public async Task MoveToVoiceChannel(IVoiceChannel voiceChannel)
+        //{
+        //    if (audioClient?.ConnectionState != ConnectionState.Connected)
+        //        throw new InvalidOperationException("Can't move while bot is not connected to voice channel.");
+        //    PlaybackVoiceChannel = voiceChannel;
+        //    audioClient = await voiceChannel.ConnectAsync().ConfigureAwait(false);
+        //}
 
         public bool ToggleRepeatSong() => this.RepeatSong = !this.RepeatSong;
 

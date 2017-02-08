@@ -229,10 +229,10 @@
     <value>logserver</value>
   </data>
   <data name="logserver_desc" xml:space="preserve">
-    <value>Logs server activity in this channel.</value>
+    <value>Enables or Disables ALL log events. If enabled, all log events will log to this channel.</value>
   </data>
   <data name="logserver_usage" xml:space="preserve">
-    <value>`{0}logserver`</value>
+    <value>`{0}logserver enable` or `{0}logserver disable`</value>
   </data>
   <data name="logignore_cmd" xml:space="preserve">
     <value>logignore</value>
@@ -265,16 +265,16 @@
     <value>repeatinvoke repinv</value>
   </data>
   <data name="repeatinvoke_desc" xml:space="preserve">
-    <value>Immediately shows the repeat message and restarts the timer.</value>
+    <value>Immediately shows the repeat message on a certain index and restarts its timer.</value>
   </data>
   <data name="repeatinvoke_usage" xml:space="preserve">
-    <value>`{0}repinv`</value>
+    <value>`{0}repinv 1`</value>
   </data>
   <data name="repeat_cmd" xml:space="preserve">
     <value>repeat</value>
   </data>
   <data name="repeat_desc" xml:space="preserve">
-    <value>Repeat a message every X minutes. If no parameters are specified, repeat is disabled.</value>
+    <value>Repeat a message every X minutes in the current channel. You can have up to 5 repeating messages on the server in total.</value>
   </data>
   <data name="repeat_usage" xml:space="preserve">
     <value>`{0}repeat 5 Hello there`</value>
@@ -292,7 +292,7 @@
     <value>addplaying adpl</value>
   </data>
   <data name="addplaying_desc" xml:space="preserve">
-    <value>Adds a specified string to the list of playing strings to rotate. Supported placeholders: %servers%, %users%, %playing%, %queued%</value>
+    <value>Adds a specified string to the list of playing strings to rotate. Supported placeholders: %servers%, %users%, %playing%, %queued%, %time%,%shardid%,%shardcount%, %shardguilds%</value>
   </data>
   <data name="addplaying_usage" xml:space="preserve">
     <value>`{0}adpl`</value>
@@ -340,7 +340,7 @@
     <value>Creates a text channel for each voice channel only users in that voice channel can see.If you are server owner, keep in mind you will see them all the time regardless.</value>
   </data>
   <data name="voiceplustext_usage" xml:space="preserve">
-    <value>`{0}voice+text`</value>
+    <value>`{0}v+t`</value>
   </data>
   <data name="scsc_cmd" xml:space="preserve">
     <value>scsc</value>
@@ -988,7 +988,7 @@
     <value>Sets a module's permission at the server level.</value>
   </data>
   <data name="srvrmdl_usage" xml:space="preserve">
-    <value>`{0}sm "module name" enable`</value>
+    <value>`{0}sm ModuleName enable`</value>
   </data>
   <data name="srvrcmd_cmd" xml:space="preserve">
     <value>srvrcmd sc</value>
@@ -1006,7 +1006,7 @@
     <value>Sets a module's permission at the role level.</value>
   </data>
   <data name="rolemdl_usage" xml:space="preserve">
-    <value>`{0}rm "module name" enable MyRole`</value>
+    <value>`{0}rm ModuleName enable MyRole`</value>
   </data>
   <data name="rolecmd_cmd" xml:space="preserve">
     <value>rolecmd rc</value>
@@ -1024,7 +1024,7 @@
     <value>Sets a module's permission at the channel level.</value>
   </data>
   <data name="chnlmdl_usage" xml:space="preserve">
-    <value>`{0}cm "module name" enable SomeChannel`</value>
+    <value>`{0}cm ModuleName enable SomeChannel`</value>
   </data>
   <data name="chnlcmd_cmd" xml:space="preserve">
     <value>chnlcmd cc</value>
@@ -1042,7 +1042,7 @@
     <value>Sets a module's permission at the user level.</value>
   </data>
   <data name="usrmdl_usage" xml:space="preserve">
-    <value>`{0}um "module name" enable SomeUsername`</value>
+    <value>`{0}um ModuleName enable SomeUsername`</value>
   </data>
   <data name="usrcmd_cmd" xml:space="preserve">
     <value>usrcmd uc</value>
@@ -1183,7 +1183,7 @@
     <value>betflip bf</value>
   </data>
   <data name="betflip_desc" xml:space="preserve">
-    <value>Bet to guess will the result be heads or tails. Guessing awards you 1.8x the currency you've bet.</value>
+    <value>Bet to guess will the result be heads or tails. Guessing awards you 1.95x the currency you've bet (rounded up). Multiplier can be changed by the bot owner.</value>
   </data>
   <data name="betflip_usage" xml:space="preserve">
     <value>`{0}bf 5 heads` or `{0}bf 3 t`</value>
@@ -1192,10 +1192,10 @@
     <value>roll</value>
   </data>
   <data name="roll_desc" xml:space="preserve">
-    <value>Rolls 0-100. If you supply a number [x] it rolls up to 30 normal dice. If you split 2 numbers with letter d (xdy) it will roll x dice from 1 to y.</value>
+    <value>Rolls 0-100. If you supply a number [x] it rolls up to 30 normal dice. If you split 2 numbers with letter d (xdy) it will roll x dice from 1 to y. Y can be a letter 'F' if you want to roll fate dice instead of dnd.</value>
   </data>
   <data name="roll_usage" xml:space="preserve">
-    <value>`{0}roll` or `{0}roll 7` or `{0}roll 3d5`</value>
+    <value>`{0}roll` or `{0}roll 7` or `{0}roll 3d5` or `{0}roll 5dF`</value>
   </data>
   <data name="rolluo_cmd" xml:space="preserve">
     <value>rolluo</value>
@@ -1363,7 +1363,7 @@
     <value>pick sip</value>
   </data>
   <data name="pick_desc" xml:space="preserve">
-    <value>Picks the currency planted in this channel.</value>
+    <value>Picks the currency planted in this channel. 60 seconds cooldown.</value>
   </data>
   <data name="pick_usage" xml:space="preserve">
     <value>`{0}pick` or `{0}sip`</value>
@@ -1372,10 +1372,10 @@
     <value>plant pour</value>
   </data>
   <data name="plant_desc" xml:space="preserve">
-    <value>Spend a unit of currency to plant it in this channel. (If bot is restarted or crashes, the currency will be lost)</value>
+    <value>Spend an amount of currency to plant it in this channel. Default is 1. (If bot is restarted or crashes, the currency will be lost)</value>
   </data>
   <data name="plant_usage" xml:space="preserve">
-    <value>`{0}plant` or `{0}pour`</value>
+    <value>`{0}plant` or `{0}pour 5`</value>
   </data>
   <data name="gencurrency_cmd" xml:space="preserve">
     <value>gencurrency gc</value>
@@ -1692,15 +1692,6 @@
   <data name="goto_usage" xml:space="preserve">
     <value>`{0}goto 30`</value>
   </data>
-  <data name="getlink_cmd" xml:space="preserve">
-    <value>getlink gl</value>
-  </data>
-  <data name="getlink_desc" xml:space="preserve">
-    <value>Shows a link to the song in the queue by index, or the currently playing song by default.</value>
-  </data>
-  <data name="getlink_usage" xml:space="preserve">
-    <value>`{0}gl`</value>
-  </data>
   <data name="autoplay_cmd" xml:space="preserve">
     <value>autoplay ap</value>
   </data>
@@ -1876,10 +1867,10 @@
     <value>weather we</value>
   </data>
   <data name="weather_desc" xml:space="preserve">
-    <value>Shows weather data for a specified city and a country. BOTH ARE REQUIRED. Use country abbrevations.</value>
+    <value>Shows weather data for a specified city. You can also specify a country after a comma.</value>
   </data>
   <data name="weather_usage" xml:space="preserve">
-    <value>`{0}we Moscow RF`</value>
+    <value>`{0}we Moscow, RU`</value>
   </data>
   <data name="youtube_cmd" xml:space="preserve">
     <value>youtube yt</value>
@@ -1935,23 +1926,23 @@
   <data name="randomdog_usage" xml:space="preserve">
     <value>`{0}woof`</value>
   </data>
-  <data name="i_cmd" xml:space="preserve">
-    <value>img i</value>
+  <data name="image_cmd" xml:space="preserve">
+    <value>image img</value>
   </data>
-  <data name="i_desc" xml:space="preserve">
-    <value>Pulls the first image found using a search parameter. Use {0}ir for different results.</value>
+  <data name="image_desc" xml:space="preserve">
+    <value>Pulls the first image found using a search parameter. Use {0}rimg for different results.</value>
   </data>
-  <data name="i_usage" xml:space="preserve">
-    <value>`{0}i cute kitten`</value>
+  <data name="image_usage" xml:space="preserve">
+    <value>`{0}img cute kitten`</value>
   </data>
-  <data name="ir_cmd" xml:space="preserve">
-    <value>ir</value>
+  <data name="randomimage_cmd" xml:space="preserve">
+    <value>randomimage rimg</value>
   </data>
-  <data name="ir_desc" xml:space="preserve">
+  <data name="randomimage_desc" xml:space="preserve">
     <value>Pulls a random image using a search parameter.</value>
   </data>
-  <data name="ir_usage" xml:space="preserve">
-    <value>`{0}ir cute kitten`</value>
+  <data name="randomimage_usage" xml:space="preserve">
+    <value>`{0}rimg cute kitten`</value>
   </data>
   <data name="lmgtfy_cmd" xml:space="preserve">
     <value>lmgtfy</value>
@@ -2798,7 +2789,7 @@
   <data name="crstats_usage" xml:space="preserve">
     <value>`{0}crstats` or `{0}crstats 3`</value>
   </data>
-    <data name="overwatch_cmd" xml:space="preserve">
+  <data name="overwatch_cmd" xml:space="preserve">
     <value>overwatch ow</value>
   </data>
   <data name="overwatch_desc" xml:space="preserve">
@@ -2806,5 +2797,302 @@
   </data>
   <data name="overwatch_usage" xml:space="preserve">
     <value>`{0}ow us Battletag#1337` or  `{0}overwatch eu Battletag#2016`</value>
+  </data>
+  <data name="acro_cmd" xml:space="preserve">
+    <value>acrophobia acro</value>
+  </data>
+  <data name="acro_desc" xml:space="preserve">
+    <value>Starts an Acrophobia game. Second argment is optional round length in seconds. (default is 60)</value>
+  </data>
+  <data name="acro_usage" xml:space="preserve">
+    <value>`{0}acro` or `{0}acro 30`</value>
+  </data>
+  <data name="logevents_cmd" xml:space="preserve">
+    <value>logevents</value>
+  </data>
+  <data name="logevents_desc" xml:space="preserve">
+    <value>Shows a list of all events you can subscribe to with `{0}log`</value>
+  </data>
+  <data name="logevents_usage" xml:space="preserve">
+    <value>`{0}logevents`</value>
+  </data>
+  <data name="log_cmd" xml:space="preserve">
+    <value>log</value>
+  </data>
+  <data name="log_desc" xml:space="preserve">
+    <value>Toggles logging event. Disables it if it's active anywhere on the server. Enables if it's not active. Use `{0}logevents` to see a list of all events you can subscribe to.</value>
+  </data>
+  <data name="log_usage" xml:space="preserve">
+    <value>`{0}log userpresence` or `{0}log userbanned`</value>
+  </data>
+  <data name="fairplay_cmd" xml:space="preserve">
+    <value>fairplay fp</value>
+  </data>
+  <data name="fairplay_desc" xml:space="preserve">
+    <value>Toggles fairplay. While enabled, music player will prioritize songs from users who didn't have their song recently played instead of the song's position in the queue.</value>
+  </data>
+  <data name="fairplay_usage" xml:space="preserve">
+    <value>`{0}fp`</value>
+  </data>
+  <data name="define_cmd" xml:space="preserve">
+    <value>define def</value>
+  </data>
+  <data name="define_desc" xml:space="preserve">
+    <value>Finds a definition of a word.</value>
+  </data>
+  <data name="define_usage" xml:space="preserve">
+    <value>`{0}def heresy`</value>
+  </data>
+  <data name="setmaxplaytime_cmd" xml:space="preserve">
+    <value>setmaxplaytime smp</value>
+  </data>
+  <data name="setmaxplaytime_desc" xml:space="preserve">
+    <value>Sets a maximum number of seconds (&gt;14) a song can run before being skipped automatically. Set 0 to have no limit.</value>
+  </data>
+  <data name="setmaxplaytime_usage" xml:space="preserve">
+    <value>`{0}smp 0` or `{0}smp 270`</value>
+  </data>
+  <data name="activity_cmd" xml:space="preserve">
+    <value>activity</value>
+  </data>
+  <data name="activity_desc" xml:space="preserve">
+    <value>Checks for spammers.</value>
+  </data>
+  <data name="activity_usage" xml:space="preserve">
+    <value>`{0}activity`</value>
+  </data>
+  <data name="autohentai_cmd" xml:space="preserve">
+    <value>autohentai</value>
+  </data>
+  <data name="autohentai_desc" xml:space="preserve">
+    <value>Posts a hentai every X seconds with a random tag from the provided tags. Use `|` to separate tags. 20 seconds minimum. Provide no arguments to disable.</value>
+  </data>
+  <data name="autohentai_usage" xml:space="preserve">
+    <value>`{0}autohentai 30 yuri|tail|long_hair` or `{0}autohentai`</value>
+  </data>
+  <data name="setstatus_cmd" xml:space="preserve">
+    <value>setstatus</value>
+  </data>
+  <data name="setstatus_desc" xml:space="preserve">
+    <value>Sets the bot's status. (Online/Idle/Dnd/Invisible)</value>
+  </data>
+  <data name="setstatus_usage" xml:space="preserve">
+    <value>`{0}setstatus Idle`</value>
+  </data>
+  <data name="rotaterolecolor_cmd" xml:space="preserve">
+    <value>rotaterolecolor rrc</value>
+  </data>
+  <data name="rotaterolecolor_desc" xml:space="preserve">
+    <value>Rotates a roles color on an interval with a list of supplied colors. First argument is interval in seconds (Minimum 60). Second argument is a role, followed by a space-separated list of colors in hex. Provide a rolename with a 0 interval to disable.</value>
+  </data>
+  <data name="rotaterolecolor_usage" xml:space="preserve">
+    <value>`{0}rrc 60 MyLsdRole #ff0000 #00ff00 #0000ff` or `{0}rrc 0 MyLsdRole`</value>
+  </data>
+  <data name="createinvite_cmd" xml:space="preserve">
+    <value>createinvite crinv</value>
+  </data>
+  <data name="createinvite_desc" xml:space="preserve">
+    <value>Creates a new invite which has infinite max uses and never expires.</value>
+  </data>
+  <data name="createinvite_usage" xml:space="preserve">
+    <value>`{0}crinv`</value>
+  </data>
+  <data name="pollstats_cmd" xml:space="preserve">
+    <value>pollstats</value>
+  </data>
+  <data name="pollstats_desc" xml:space="preserve">
+    <value>Shows the poll results without stopping the poll on this server.</value>
+  </data>
+  <data name="pollstats_usage" xml:space="preserve">
+    <value>`{0}pollstats`</value>
+  </data>
+  <data name="repeatlist_cmd" xml:space="preserve">
+    <value>repeatlist replst</value>
+  </data>
+  <data name="repeatlist_desc" xml:space="preserve">
+    <value>Shows currently repeating messages and their indexes.</value>
+  </data>
+  <data name="repeatlist_usage" xml:space="preserve">
+    <value>`{0}repeatlist`</value>
+  </data>
+  <data name="repeatremove_cmd" xml:space="preserve">
+    <value>repeatremove reprm</value>
+  </data>
+  <data name="repeatremove_desc" xml:space="preserve">
+    <value>Removes a repeating message on a specified index. Use `{0}repeatlist` to see indexes.</value>
+  </data>
+  <data name="repeatremove_usage" xml:space="preserve">
+    <value>`{0}reprm 2`</value>
+  </data>
+  <data name="antilist_cmd" xml:space="preserve">
+    <value>antilist antilst</value>
+  </data>
+  <data name="antilist_desc" xml:space="preserve">
+    <value>Shows currently enabled protection features.</value>
+  </data>
+  <data name="antilist_usage" xml:space="preserve">
+    <value>`{0}antilist`</value>
+  </data>
+  <data name="antispamignore_cmd" xml:space="preserve">
+    <value>antispamignore</value>
+  </data>
+  <data name="antispamignore_desc" xml:space="preserve">
+    <value>Toggles whether antispam ignores current channel. Antispam must be enabled.</value>
+  </data>
+  <data name="antispamignore_usage" xml:space="preserve">
+    <value>`{0}antispamignore`</value>
+  </data>
+  <data name="cmdcosts_cmd" xml:space="preserve">
+    <value>cmdcosts</value>
+  </data>
+  <data name="cmdcosts_desc" xml:space="preserve">
+    <value>Shows a list of command costs. Paginated with 9 command per page.</value>
+  </data>
+  <data name="cmdcosts_usage" xml:space="preserve">
+    <value>`{0}cmdcosts` or `{0}cmdcosts 2`</value>
+  </data>
+  <data name="commandcost_cmd" xml:space="preserve">
+    <value>commandcost cmdcost</value>
+  </data>
+  <data name="commandcost_desc" xml:space="preserve">
+    <value>Sets a price for a command. Running that command will take currency from users. Set 0 to remove the price.</value>
+  </data>
+  <data name="commandcost_usage" xml:space="preserve">
+    <value>`{0}cmdcost 0 !!q` or `{0}cmdcost 1 &gt;8ball`</value>
+  </data>
+  <data name="startevent_cmd" xml:space="preserve">
+    <value>startevent</value>
+  </data>
+  <data name="startevent_desc" xml:space="preserve">
+    <value>Starts one of the events seen on public nadeko.</value>
+  </data>
+  <data name="startevent_usage" xml:space="preserve">
+    <value>`{0}startevent flowerreaction`</value>
+  </data>
+  <data name="slotstats_cmd" xml:space="preserve">
+    <value>slotstats</value>
+  </data>
+  <data name="slotstats_desc" xml:space="preserve">
+    <value>Shows the total stats of the slot command for this bot's session.</value>
+  </data>
+  <data name="slotstats_usage" xml:space="preserve">
+    <value>`{0}slotstats`</value>
+  </data>
+  <data name="slottest_cmd" xml:space="preserve">
+    <value>slottest</value>
+  </data>
+  <data name="slottest_desc" xml:space="preserve">
+    <value>Tests to see how much slots payout for X number of plays.</value>
+  </data>
+  <data name="slottest_usage" xml:space="preserve">
+    <value>`{0}slottest 1000`</value>
+  </data>
+  <data name="slot_cmd" xml:space="preserve">
+    <value>slot</value>
+  </data>
+  <data name="slot_desc" xml:space="preserve">
+    <value>Play Nadeko slots. Max bet is 999. 3 seconds cooldown per user.</value>
+  </data>
+  <data name="slot_usage" xml:space="preserve">
+    <value>`{0}slot 5`</value>
+  </data>
+  <data name="waifuclaimeraffinity_cmd" xml:space="preserve">
+    <value>affinity</value>
+  </data>
+  <data name="waifuclaimeraffinity_desc" xml:space="preserve">
+    <value>Sets your affinity towards someone you want to be claimed by. Setting affinity will reduce their `{0}claim` on you by 20%. You can leave second argument empty to clear your affinity. 30 minutes cooldown.</value>
+  </data>
+  <data name="waifuclaimeraffinity_usage" xml:space="preserve">
+    <value>`{0}affinity @MyHusband` or `{0}affinity`</value>
+  </data>
+  <data name="waifuclaim_cmd" xml:space="preserve">
+    <value>claimwaifu claim</value>
+  </data>
+  <data name="waifuclaim_desc" xml:space="preserve">
+    <value>Claim a waifu for yourself by spending currency.  You must spend atleast 10% more than her current value unless she set `{0}affinity` towards you.</value>
+  </data>
+  <data name="waifuclaim_usage" xml:space="preserve">
+    <value>`{0}claim 50 @Himesama`</value>
+  </data>
+  <data name="waifuleaderboard_cmd" xml:space="preserve">
+    <value>waifus waifulb</value>
+  </data>
+  <data name="waifuleaderboard_desc" xml:space="preserve">
+    <value>Shows top 9 waifus.</value>
+  </data>
+  <data name="waifuleaderboard_usage" xml:space="preserve">
+    <value>`{0}waifus`</value>
+  </data>
+  <data name="divorce_cmd" xml:space="preserve">
+    <value>divorce</value>
+  </data>
+  <data name="divorce_desc" xml:space="preserve">
+    <value>Releases your claim on a specific waifu. You will get some of the money you've spent back unless that waifu has an affinity towards you. 6 hours cooldown.</value>
+  </data>
+  <data name="divorce_usage" xml:space="preserve">
+    <value>`{0}divorce @CheatingSloot`</value>
+  </data>
+  <data name="waifuinfo_cmd" xml:space="preserve">
+    <value>waifuinfo waifustats</value>
+  </data>
+  <data name="waifuinfo_desc" xml:space="preserve">
+    <value>Shows waifu stats for a target person. Defaults to you if no user is provided.</value>
+  </data>
+  <data name="waifuinfo_usage" xml:space="preserve">
+    <value>`{0}waifuinfo @MyCrush` or `{0}waifuinfo`</value>
+  </data>
+  <data name="mal_cmd" xml:space="preserve">
+    <value>mal</value>
+  </data>
+  <data name="mal_desc" xml:space="preserve">
+    <value>Shows basic info from myanimelist profile.</value>
+  </data>
+  <data name="mal_usage" xml:space="preserve">
+    <value>`{0}mal straysocks`</value>
+  </data>
+  <data name="setmusicchannel_cmd" xml:space="preserve">
+    <value>setmusicchannel smch</value>
+  </data>
+  <data name="setmusicchannel_desc" xml:space="preserve">
+    <value>Sets the current channel as the default music output channel. This will output playing, finished, paused and removed songs to that channel instead of the channel where the first song was queued in.</value>
+  </data>
+  <data name="setmusicchannel_usage" xml:space="preserve">
+    <value>`{0}smch`</value>
+  </data>
+  <data name="reloadimages_cmd" xml:space="preserve">
+    <value>reloadimages</value>
+  </data>
+  <data name="reloadimages_desc" xml:space="preserve">
+    <value>Reloads images bot is using. Safe to use even when bot is being used heavily.</value>
+  </data>
+  <data name="reloadimages_usage" xml:space="preserve">
+    <value>`{0}reloadimages`</value>
+  </data>
+  <data name="shardstats_cmd" xml:space="preserve">
+    <value>shardstats</value>
+  </data>
+  <data name="shardstats_desc" xml:space="preserve">
+    <value>Stats for shards. Paginated with 25 shards per page.</value>
+  </data>
+  <data name="shardstats_usage" xml:space="preserve">
+    <value>`{0}shardstats` or `{0}shardstats 2`</value>
+  </data>
+  <data name="connectshard_cmd" xml:space="preserve">
+    <value>connectshard</value>
+  </data>
+  <data name="connectshard_desc" xml:space="preserve">
+    <value>Try (re)connecting a shard with a certain shardid when it dies. No one knows will it work. Keep an eye on the console for errors.</value>
+  </data>
+  <data name="connectshard_usage" xml:space="preserve">
+    <value>`{0}connectshard 2`</value>
+  </data>
+  <data name="shardid_cmd" xml:space="preserve">
+    <value>shardid</value>
+  </data>
+  <data name="shardid_desc" xml:space="preserve">
+    <value>Shows which shard is a certain guild on, by guildid.</value>
+  </data>
+  <data name="shardid_usage" xml:space="preserve">
+    <value>`{0}shardid 117523346618318850`</value>
   </data>
 </root>
