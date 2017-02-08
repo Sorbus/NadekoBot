@@ -392,7 +392,7 @@ namespace NadekoBot.Services
                 if (!UsersOnShortCooldown.Add(context.Message.Author.Id))
                     return new ExecuteCommandResult(cmd, null, SearchResult.FromError(CommandError.Exception, $"You are on a global cooldown."));
 
-                if (CmdCdsCommands.HasCooldown(cmd, context.Guild, context.User))
+                if (CmdCdsCommands.HasCooldown(cmd, context.Guild, context.User, context.Channel))
                     return new ExecuteCommandResult(cmd, null, SearchResult.FromError(CommandError.Exception, $"That command is on a cooldown for you."));
 
                 return new ExecuteCommandResult(cmd, null, await commands[i].ExecuteAsync(context, parseResult, dependencyMap));

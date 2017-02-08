@@ -1,6 +1,5 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using ImageProcessorCore;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

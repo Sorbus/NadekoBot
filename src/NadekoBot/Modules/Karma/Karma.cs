@@ -77,7 +77,8 @@ namespace NadekoBot.Modules.Karma
 
                     if (match.Groups[1].Value.Length > 0)
                     {
-                        target = channel.Guild.GetUsers().FirstOrDefault(x => (x.Username.ToLowerInvariant() == match.Groups[1].Value.Trim()));
+                        var collect = await channel.Guild.GetUsersAsync();
+                        target = collect.FirstOrDefault(x => (x.Username.ToLowerInvariant() == match.Groups[1].Value.Trim()));
                         if (target == null)
                         {
                             break;
@@ -87,7 +88,7 @@ namespace NadekoBot.Modules.Karma
                     {
                         try
                         {
-                            target = channel.Guild.GetUser(ulong.Parse(match.Groups[2].Value));
+                            target = await channel.Guild.GetUserAsync(ulong.Parse(match.Groups[2].Value));
                         }
                         catch
                         {

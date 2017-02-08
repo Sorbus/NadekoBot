@@ -144,19 +144,11 @@ namespace NadekoBot.Modules.Games
 
                     await Task.WhenAll(msgs.Where(m => m != null).Select(toDelete => toDelete.DeleteAsync())).ConfigureAwait(false);
 
-<<<<<<< HEAD
-                await CurrencyHandler.AddCurrencyAsync((IGuildUser)imsg.Author, "Picked flower(s).", msgs.Count, false).ConfigureAwait(false);
-
-                var msg = await channel.SendMessageAsync($"**{imsg.Author.Username}** was awarded {msgs.Count}{Gambling.Gambling.CurrencySign} for their services to alcoholism!").ConfigureAwait(false);
-
-                var t = Task.Run(async () =>
-=======
-                    await CurrencyHandler.AddCurrencyAsync((IGuildUser)Context.User, $"Picked {NadekoBot.BotConfig.CurrencyPluralName}", msgs.Count, false).ConfigureAwait(false);
-                    var msg = await channel.SendConfirmAsync($"**{Context.User}** picked {msgs.Count}{NadekoBot.BotConfig.CurrencySign}!").ConfigureAwait(false);
+                    await CurrencyHandler.AddCurrencyAsync((IGuildUser)Context.User, $"Drank {NadekoBot.BotConfig.CurrencyPluralName}", msgs.Count, false).ConfigureAwait(false);
+                    var msg = await channel.SendConfirmAsync($"**{Context.User}** was awarded {msgs.Count}{NadekoBot.BotConfig.CurrencySign} for their services to alcoholism!").ConfigureAwait(false);
                     msg.DeleteAfter(10);
                 }
                 finally
->>>>>>> refs/remotes/Kwoth/dev
                 {
 #if GLOBAL_NADEKO
                     await Task.Delay(60000);
@@ -182,19 +174,11 @@ namespace NadekoBot.Modules.Games
                 var imgData = GetRandomCurrencyImage();
                 var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(NadekoBot.BotConfig.CurrencyName[0]);
 
-                var msgToSend = $"Oh how Nice! **{Context.User.Username}** planted {(amount == 1 ? (vowelFirst ? "an" : "a") : amount.ToString())} {(amount > 1 ? NadekoBot.BotConfig.CurrencyPluralName : NadekoBot.BotConfig.CurrencyName)}. Pick it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}pick";
+                var msgToSend = $"Oh how Nice! **{Context.User.Username}** poured {(amount == 1 ? (vowelFirst ? "an" : "a") : amount.ToString())} {(amount > 1 ? NadekoBot.BotConfig.CurrencyPluralName : NadekoBot.BotConfig.CurrencyName)}. Drink it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
 
                 IUserMessage msg;
-<<<<<<< HEAD
-                var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(Gambling.Gambling.CurrencyName[0]);
-                
-                var msgToSend = $"Oh how Swell! **{imsg.Author.Username}** poured {(vowelFirst ? "an" : "a")} {Gambling.Gambling.CurrencyName}. Claim it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
-                await imsg.DeleteAsync();
 
-                if (file == null)
-=======
                 using (var toSend = imgData.Value.ToStream())
->>>>>>> refs/remotes/Kwoth/dev
                 {
                     msg = await Context.Channel.SendFileAsync(toSend, imgData.Key, msgToSend).ConfigureAwait(false);
                 }
