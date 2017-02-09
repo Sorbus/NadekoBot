@@ -42,6 +42,7 @@ namespace NadekoBot.Services.Database.Repositories.Impl
                         .Include(wi => wi.Affinity)
                         .Include(wi => wi.Claimer)
                     .OrderByDescending(wi => wi.Price)
+                    .Where(wi => wi.Price != 9999999)
                     .Take(count)
                     .ToList();
         }

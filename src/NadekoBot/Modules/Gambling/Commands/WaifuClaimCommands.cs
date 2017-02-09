@@ -431,7 +431,14 @@ namespace NadekoBot.Modules.Gambling
                     .AddField(efb => efb.WithName("Divorces").WithValue(divorces.ToString()).WithIsInline(true))
                     .AddField(efb => efb.WithName($"Waifus ({claims.Count})").WithValue(claims.Count == 0 ? "Nobody" : string.Join("\n", claims.Select(x => x.Waifu))).WithIsInline(true));
 
-                await Context.Channel.EmbedAsync(embed).ConfigureAwait(false);
+                if(w.Price == 9999999)
+                {
+                    await Context.Channel.EmbedAsync(embed).ConfigureAwait(false);
+                }
+                else
+                {
+                    await Context.Channel.SendMessageAsync("Error: not a waifu.").ConfigureAwait(false);
+                }
             }
 
 
@@ -475,7 +482,7 @@ namespace NadekoBot.Modules.Gambling
                 else if (count < 17)
                     title = ClaimTitles.Veteran;
                 else if (count < 25)
-                    title = ClaimTitles.Incubis;
+                    title = ClaimTitles.Incubus;
                 else if (count < 50)
                     title = ClaimTitles.Harem_King;
                 else
