@@ -431,7 +431,7 @@ namespace NadekoBot.Modules.Gambling
                     .AddField(efb => efb.WithName("Divorces").WithValue(divorces.ToString()).WithIsInline(true))
                     .AddField(efb => efb.WithName($"Waifus ({claims.Count})").WithValue(claims.Count == 0 ? "Nobody" : string.Join("\n", claims.Select(x => x.Waifu))).WithIsInline(true));
 
-                if(w.Price == 9999999)
+                if(w.Price != 9999999)
                 {
                     await Context.Channel.EmbedAsync(embed).ConfigureAwait(false);
                 }
