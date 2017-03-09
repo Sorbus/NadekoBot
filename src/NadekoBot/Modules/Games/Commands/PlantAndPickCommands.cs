@@ -91,11 +91,11 @@ namespace NadekoBot.Modules.Games
                                 string firstPart;
                                 if (dropAmount == 1)
                                 {
-                                    firstPart = $"A random { NadekoBot.BotConfig.CurrencyName } appeared!";
+                                    firstPart = $"A random drink appeared!";
                                 }
                                 else
                                 {
-                                    firstPart = $"{dropAmount} random { NadekoBot.BotConfig.CurrencyPluralName } appeared!";
+                                    firstPart = $"{dropAmount} random drinks appeared!";
                                 }
                                 var file = GetRandomCurrencyImage();
                                 using (var fileStream = file.Value.ToStream())
@@ -103,7 +103,7 @@ namespace NadekoBot.Modules.Games
                                     var sent = await channel.SendFileAsync(
                                         fileStream,
                                         file.Key,
-                                        $"❗ {firstPart} Drink it down by typing `{NadekoBot.ModulePrefixes[typeof(Games).Name]}pick`")
+                                        $"❗ {firstPart} Drink it down by typing `{NadekoBot.ModulePrefixes[typeof(Games).Name]}sip`")
                                             .ConfigureAwait(false);
 
                                     msgs[0] = sent;
@@ -164,7 +164,7 @@ namespace NadekoBot.Modules.Games
                 if (amount < 1)
                     return;
 
-                var removed = await CurrencyHandler.RemoveCurrencyAsync((IGuildUser)Context.User, $"Planted a {NadekoBot.BotConfig.CurrencyName}", amount, false).ConfigureAwait(false);
+                var removed = await CurrencyHandler.RemoveCurrencyAsync((IGuildUser)Context.User, $"Poured a drink", amount, false).ConfigureAwait(false);
                 if (!removed)
                 {
                     await Context.Channel.SendErrorAsync($"You don't have any {NadekoBot.BotConfig.CurrencyPluralName}.").ConfigureAwait(false);
@@ -174,7 +174,7 @@ namespace NadekoBot.Modules.Games
                 var imgData = GetRandomCurrencyImage();
                 var vowelFirst = new[] { 'a', 'e', 'i', 'o', 'u' }.Contains(NadekoBot.BotConfig.CurrencyName[0]);
 
-                var msgToSend = $"Oh how Nice! **{Context.User.Username}** poured {(amount == 1 ? (vowelFirst ? "an" : "a") : amount.ToString())} {(amount > 1 ? NadekoBot.BotConfig.CurrencyPluralName : NadekoBot.BotConfig.CurrencyName)}. Drink it using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
+                var msgToSend = $"Oh how nice! **{Context.User.Username}** poured {(amount == 1 ? ("a drink") : (amount.ToString()) + " drinks")}. Drink {(amount == 1 ? "it" : "them")} using {NadekoBot.ModulePrefixes[typeof(Games).Name]}sip";
 
                 IUserMessage msg;
 
