@@ -1239,11 +1239,11 @@ Don't forget to leave your discord name or id in the message.
     <value>Currency generation has been enabled on this channel.</value>
   </data>
   <data name="games_curgen_pl" xml:space="preserve">
-    <value>{0} random {1} appeared!</value>
+    <value>{0} random drinks appeared!</value>
     <comment>plural</comment>
   </data>
   <data name="games_curgen_sn" xml:space="preserve">
-    <value>A random {0} appeared!</value>
+    <value>A random drink appeared!</value>
   </data>
   <data name="games_failed_loading_question" xml:space="preserve">
     <value>Failed loading a question.</value>
@@ -1273,11 +1273,11 @@ Don't forget to leave your discord name or id in the message.
     <value>No results</value>
   </data>
   <data name="games_picked" xml:space="preserve">
-    <value>picked {0}</value>
+    <value>drank {0}</value>
     <comment>Kwoth picked 5*</comment>
   </data>
   <data name="games_planted" xml:space="preserve">
-    <value>{0} planted {1}</value>
+    <value>{0} poured {1}</value>
     <comment>Kwoth planted 5*</comment>
   </data>
   <data name="games_trivia_already_running" xml:space="preserve">
@@ -2219,10 +2219,10 @@ Owner ID: {2}</value>
     <value>{0} total votes cast.</value>
   </data>
   <data name="games_pick_pl" xml:space="preserve">
-    <value>Pick them up by typing `{0}pick`</value>
+    <value>Drink them by typing `{0}sip`</value>
   </data>
   <data name="games_pick_sn" xml:space="preserve">
-    <value>Pick it up by typing `{0}pick`</value>
+    <value>Drink it by typing `{0}sip</value>
   </data>
   <data name="gambling_no_users_found" xml:space="preserve">
     <value>No user found.</value>

@@ -2986,7 +2986,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to {0} random {1} appeared!.
+        ///    Looks up a localized string similar to {0} random drinks appeared!.
         /// </summary>
         public static string games_curgen_pl {
             get {
@@ -2995,7 +2995,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to A random {0} appeared!.
+        ///    Looks up a localized string similar to A random drink appeared!.
         /// </summary>
         public static string games_curgen_sn {
             get {
@@ -3103,7 +3103,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Pick them up by typing `{0}pick`.
+        ///    Looks up a localized string similar to Drink them by typing `{0}sip`.
         /// </summary>
         public static string games_pick_pl {
             get {
@@ -3112,7 +3112,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Pick it up by typing `{0}pick`.
+        ///    Looks up a localized string similar to Drink it by typing `{0}sip.
         /// </summary>
         public static string games_pick_sn {
             get {
@@ -3121,7 +3121,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to picked {0}.
+        ///    Looks up a localized string similar to drank {0}.
         /// </summary>
         public static string games_picked {
             get {
@@ -3130,7 +3130,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to {0} planted {1}.
+        ///    Looks up a localized string similar to {0} poured {1}.
         /// </summary>
         public static string games_planted {
             get {

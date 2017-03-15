@@ -2373,7 +2373,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}delq abc`.
+        ///    Looks up a localized string similar to `{0}delq 123456`.
         /// </summary>
         public static string deletequote_usage {
             get {
@@ -4848,7 +4848,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Sets a cooldown for a module for an entire server. Set to 0 to remove the cooldown..
+        ///    Looks up a localized string similar to Sets a cooldown for a module for an entire channel. Set to 0 to remove the cooldown..
         /// </summary>
         public static string modcooldown_desc {
             get {
@@ -4857,7 +4857,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}modcd &quot;module&quot; 5`.
+        ///    Looks up a localized string similar to `{0}modcd &quot;module&quot; 5 #channel`.
         /// </summary>
         public static string modcooldown_usage {
             get {
@@ -5370,7 +5370,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to `{0}plant` or `{0}plant 5`.
+        ///    Looks up a localized string similar to `{0}plant` or `{0}pour 5`.
         /// </summary>
         public static string plant_usage {
             get {

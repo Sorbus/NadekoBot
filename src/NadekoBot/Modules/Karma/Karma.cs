@@ -21,7 +21,7 @@ using NLog;
 namespace NadekoBot.Modules.Karma
 {
     [NadekoModule("Karma", ".")]
-    public partial class Karma : DiscordModule
+    public partial class Karma : NadekoTopLevelModule
     {
         private ConcurrentDictionary<ulong, Boolean> karmaCooldowns = new ConcurrentDictionary<ulong, Boolean>();
         private String toMatch = @"(?:[Tt](?:hank(?:s*)(?:,*)(?: +you)*|h(?:n*)x|a(?:nk|ck))|[Ss]hot|[Dd]anke|[Pp]raise(?: +be +to)*|[Kk]udos) +(?:([\w]+)|<@!([0-9]{18})>)";

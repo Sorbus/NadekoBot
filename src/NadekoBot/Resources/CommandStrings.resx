@@ -2632,10 +2632,10 @@
     <value>modcooldown modcd</value>
   </data>
   <data name="modcooldown_desc" xml:space="preserve">
-    <value>Sets a cooldown for a module for an entire server. Set to 0 to remove the cooldown.</value>
+    <value>Sets a cooldown for a module for an entire channel. Set to 0 to remove the cooldown.</value>
   </data>
   <data name="modcooldown_usage" xml:space="preserve">
-    <value>`{0}modcd "module" 5`</value>
+    <value>`{0}modcd "module" 5 #channel`</value>
   </data>
   <data name="hentaibomb_cmd" xml:space="preserve">
     <value>hentaibomb</value>
