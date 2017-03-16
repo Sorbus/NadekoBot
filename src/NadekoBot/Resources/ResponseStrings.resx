@@ -1273,7 +1273,7 @@ Don't forget to leave your discord name or id in the message.
     <value>No results</value>
   </data>
   <data name="games_picked" xml:space="preserve">
-    <value>drank {0}</value>
+    <value>was awarded {0} for their services to alcoholism</value>
     <comment>Kwoth picked 5*</comment>
   </data>
   <data name="games_planted" xml:space="preserve">

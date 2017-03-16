@@ -3121,7 +3121,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to drank {0}.
+        ///    Looks up a localized string similar to was awarded {0} for their services to alcoholism.
         /// </summary>
         public static string games_picked {
             get {
