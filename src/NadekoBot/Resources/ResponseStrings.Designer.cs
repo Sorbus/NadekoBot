@@ -3103,7 +3103,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Drink them by typing `{0}sip`.
+        ///    Looks up a localized string similar to  Drink them by typing `{0}sip`.
         /// </summary>
         public static string games_pick_pl {
             get {
@@ -3112,7 +3112,7 @@ namespace NadekoBot.Resources {
         }
         
         /// <summary>
-        ///    Looks up a localized string similar to Drink it by typing `{0}sip.
+        ///    Looks up a localized string similar to  Drink it by typing `{0}sip`.
         /// </summary>
         public static string games_pick_sn {
             get {

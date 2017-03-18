@@ -2219,10 +2219,10 @@ Owner ID: {2}</value>
     <value>{0} total votes cast.</value>
   </data>
   <data name="games_pick_pl" xml:space="preserve">
-    <value>Drink them by typing `{0}sip`</value>
+    <value> Drink them by typing `{0}sip`</value>
   </data>
   <data name="games_pick_sn" xml:space="preserve">
-    <value>Drink it by typing `{0}sip</value>
+    <value> Drink it by typing `{0}sip`</value>
   </data>
   <data name="gambling_no_users_found" xml:space="preserve">
     <value>No user found.</value>
